@@ -22,7 +22,7 @@ public final class Hemponomics extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		// Plugin startup logic
-		this.instance = this;
+		instance = this;
 		registerCommand(new CommandInformation());
 	}
 
