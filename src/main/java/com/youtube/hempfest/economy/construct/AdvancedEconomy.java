@@ -1,8 +1,7 @@
 package com.youtube.hempfest.economy.construct;
 
-import com.youtube.hempfest.economy.construct.account.permissive.AccountType;
 import com.youtube.hempfest.economy.construct.account.Account;
-import com.youtube.hempfest.economy.construct.currency.CurrencyLayout;
+import com.youtube.hempfest.economy.construct.account.permissive.AccountType;
 import com.youtube.hempfest.economy.construct.currency.EconomyCurrency;
 import java.util.List;
 import java.util.Locale;
@@ -28,19 +27,19 @@ public interface AdvancedEconomy {
 
 	double getMaxWalletSize();
 
-    boolean isMultiWorld();
+	boolean isMultiWorld();
 
-    boolean isMultiCurrency();
+	boolean isMultiCurrency();
 
 	boolean isAccountsLimited();
 
-    boolean hasMultiAccountSupport();
+	boolean hasMultiAccountSupport();
 
-    boolean hasWalletSizeLimit();
+	boolean hasWalletSizeLimit();
 
-    boolean hasWalletAccount(String name);
+	boolean hasWalletAccount(String name);
 
-    boolean hasWalletAccount(String name, String world);
+	boolean hasWalletAccount(String name, String world);
 
 	boolean hasWalletAccount(OfflinePlayer player);
 
@@ -50,13 +49,13 @@ public interface AdvancedEconomy {
 
 	boolean hasWalletAccount(UUID uuid, String world);
 
-    boolean hasAccount(String name);
+	boolean hasAccount(String name);
 
 	boolean hasAccount(OfflinePlayer player);
 
 	boolean hasAccount(OfflinePlayer player, String world);
 
-    boolean hasAccount(String name, String world);
+	boolean hasAccount(String name, String world);
 
 	boolean hasAccount(UUID uuid);
 
@@ -81,9 +80,9 @@ public interface AdvancedEconomy {
 	boolean accountHasAmount(Account account, String world, double amount);
 
 	boolean accountHasAmount(String accountID, String world, double amount);
-	
+
 	double getWalletBalance(String name);
-	
+
 	double getWalletBalance(String name, String world);
 
 	double getWalletBalance(OfflinePlayer player);
@@ -93,26 +92,30 @@ public interface AdvancedEconomy {
 	double getWalletBalance(UUID uuid);
 
 	double getWalletBalance(UUID uuid, String world);
-	
+
 	double getAccountBalance(String accountID);
-	
+
 	double getAccountBalance(String accountID, String world);
-	
+
 	Account getAccount(String name);
 
 	Account getAccount(String name, String world);
-
-	Account getAccount(OfflinePlayer player);
-
-	Account getAccount(OfflinePlayer player, String world);
 
 	Account getAccount(String name, AccountType type);
 
 	Account getAccount(String name, AccountType type, String world);
 
+	Account getAccount(String accountId, String name, String world);
+
 	Account getAccount(OfflinePlayer player, AccountType type);
 
 	Account getAccount(OfflinePlayer player, AccountType type, String world);
+
+	Account getAccount(OfflinePlayer player);
+
+	Account getAccount(OfflinePlayer player, String world);
+
+	Account getAccount(String accountId, OfflinePlayer player, String world);
 
 	Account getAccount(UUID uuid);
 
@@ -121,6 +124,8 @@ public interface AdvancedEconomy {
 	Account getAccount(UUID uuid, AccountType type);
 
 	Account getAccount(UUID uuid, AccountType type, String world);
+
+	Account getAccount(String accountId, UUID uuid, String world);
 
 	EconomyAction walletWithdraw(String name, double amount);
 
@@ -156,27 +161,33 @@ public interface AdvancedEconomy {
 
 	EconomyAction createAccount(AccountType type, String name);
 
+	EconomyAction createAccount(AccountType type, String name, String accountId);
+
 	EconomyAction createAccount(AccountType type, String name, double amount);
 
-	EconomyAction createAccount(AccountType type, String name, String world);
+	EconomyAction createAccount(AccountType type, String name, String accountId, String world);
 
-	EconomyAction createAccount(AccountType type, String name, String world, double amount);
+	EconomyAction createAccount(AccountType type, String name, String accountId, String world, double amount);
 
 	EconomyAction createAccount(AccountType type, OfflinePlayer player);
 
+	EconomyAction createAccount(AccountType type, OfflinePlayer player, String accountId);
+
 	EconomyAction createAccount(AccountType type, OfflinePlayer player, double amount);
 
-	EconomyAction createAccount(AccountType type, OfflinePlayer player, String world);
+	EconomyAction createAccount(AccountType type, OfflinePlayer player, String accountId, String world);
 
-	EconomyAction createAccount(AccountType type, OfflinePlayer player, String world, double amount);
+	EconomyAction createAccount(AccountType type, OfflinePlayer player, String accountId, String world, double amount);
 
 	EconomyAction createAccount(AccountType type, UUID uuid);
 
+	EconomyAction createAccount(AccountType type, UUID uuid, String accountId);
+
 	EconomyAction createAccount(AccountType type, UUID uuid, double amount);
 
-	EconomyAction createAccount(AccountType type, UUID uuid, String world);
+	EconomyAction createAccount(AccountType type, UUID uuid, String accountId, String world);
 
-	EconomyAction createAccount(AccountType type, UUID uuid, String world, double amount);
+	EconomyAction createAccount(AccountType type, UUID uuid, String accountId, String world, double amount);
 
 	EconomyAction deleteWalletAccount(String name);
 

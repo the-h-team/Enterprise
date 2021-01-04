@@ -2,4 +2,5 @@ name: Hemponomics
 version: 1.0
 main: com.youtube.hempfest.economy.Hemponomics
 authors: [ Hempfest, ms5984 ]
+api-version: 1.13
 description: A more advanced vault like interface.
