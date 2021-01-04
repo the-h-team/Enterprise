@@ -35,20 +35,20 @@ A more advanced vault like economy interface.
 ```
 
 ### What is this?
-This is an economy interface standalone. Much similar to the game renound "Vault" plugin but with more extensive features. It allows any plugin to either provide or hook into
-its interface to execute economy operations such as transactions.
+``This is an economy interface standalone. Much similar to the game renound "Vault" plugin but with more extensive features. It allows any plugin to either provide or hook into
+its interface to execute economy operations such as transactions.``
 
 ### Why this? I have vault.
-The opportunity this interface presents exceeds that of vaults economy interface. This alterntive allows the user overriding to implement
-far more extensive features with both currency and money account support.
+``The opportunity this interface presents exceeds that of vaults economy interface. This alterntive allows the user overriding to implement
+far more extensive features with both currency and money account support.``
 
 ### Why so similar to vault?
-Vault had a great idea with their system. There just sadly isnt enough economy operations native to the interface. To keep things simple and easiest to implement
-into other plugins the registration and systems are similar to that of Vault primarily for familiarity. 
+``Vault had a great idea with their system. There just sadly isnt enough economy operations native to the interface. To keep things simple and easiest to implement
+into other plugins the registration and systems are similar to that of Vault primarily for familiarity.``
 
 ### Using the interface
-Doing this is very simple and requires very little knowledge on bukkit API. 
-You simply grab the registered implementation of the interface from cache the same way as Vault using Bukkit services api
+``Doing this is very simple and requires very little knowledge on bukkit API. 
+You simply grab the registered implementation of the interface from cache the same way as Vault using Bukkit services api``
 
 ---
 
@@ -129,8 +129,8 @@ public class ExamplePlugin extends JavaPlugin {
 ```
 
 ### Providing the interface
-To provide your own economy using the interface simply implement it within your class and register it within
-your servers onEnable this will in turn allow your plugin to be a Hemponomics Economy provider.
+``To provide your own economy using the interface simply implement it within your class and register it within
+your servers onEnable this will in turn allow your plugin to be a Hemponomics Economy provider.``
 
 ---
 
