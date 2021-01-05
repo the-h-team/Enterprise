@@ -37,8 +37,16 @@ public interface AdvancedEconomy {
 
 	boolean hasWalletSizeLimit();
 
+	/**
+	 * @deprecated String method dedicated to system/npc
+	 */
+	@Deprecated
 	boolean hasWalletAccount(String name);
 
+	/**
+	 * @deprecated String method dedicated to system/npc
+	 */
+	@Deprecated
 	boolean hasWalletAccount(String name, String world);
 
 	boolean hasWalletAccount(OfflinePlayer player);
@@ -49,20 +57,36 @@ public interface AdvancedEconomy {
 
 	boolean hasWalletAccount(UUID uuid, String world);
 
+	/**
+	 * @deprecated String method dedicated to system/npc
+	 */
+	@Deprecated
 	boolean hasAccount(String name);
 
 	boolean hasAccount(OfflinePlayer player);
 
 	boolean hasAccount(OfflinePlayer player, String world);
 
+	/**
+	 * @deprecated String method dedicated to system/npc
+	 */
+	@Deprecated
 	boolean hasAccount(String name, String world);
 
 	boolean hasAccount(UUID uuid);
 
 	boolean hasAccount(UUID uuid, String world);
 
+	/**
+	 * @deprecated String method dedicated to system/npc
+	 */
+	@Deprecated
 	boolean walletHasAmount(String name, double amount);
 
+	/**
+	 * @deprecated String method dedicated to system/npc
+	 */
+	@Deprecated
 	boolean walletHasAmount(String name, String world, double amount);
 
 	boolean walletHasAmount(OfflinePlayer player, double amount);
@@ -81,8 +105,16 @@ public interface AdvancedEconomy {
 
 	boolean accountHasAmount(String accountID, String world, double amount);
 
+	/**
+	 * @deprecated String method dedicated to system/npc
+	 */
+	@Deprecated
 	double getWalletBalance(String name);
 
+	/**
+	 * @deprecated String method dedicated to system/npc
+	 */
+	@Deprecated
 	double getWalletBalance(String name, String world);
 
 	double getWalletBalance(OfflinePlayer player);
@@ -97,14 +129,34 @@ public interface AdvancedEconomy {
 
 	double getAccountBalance(String accountID, String world);
 
+	/**
+	 * @deprecated String method dedicated to system/npc
+	 */
+	@Deprecated
 	Account getAccount(String name);
 
+	/**
+	 * @deprecated String method dedicated to system/npc
+	 */
+	@Deprecated
 	Account getAccount(String name, String world);
 
+	/**
+	 * @deprecated String method dedicated to system/npc
+	 */
+	@Deprecated
 	Account getAccount(String name, AccountType type);
 
+	/**
+	 * @deprecated String method dedicated to system/npc
+	 */
+	@Deprecated
 	Account getAccount(String name, AccountType type, String world);
 
+	/**
+	 * @deprecated String method dedicated to system/npc
+	 */
+	@Deprecated
 	Account getAccount(String accountId, String name, String world);
 
 	Account getAccount(OfflinePlayer player, AccountType type);
@@ -127,8 +179,16 @@ public interface AdvancedEconomy {
 
 	Account getAccount(String accountId, UUID uuid, String world);
 
+	/**
+	 * @deprecated String method dedicated to system/npc
+	 */
+	@Deprecated
 	EconomyAction walletWithdraw(String name, double amount);
 
+	/**
+	 * @deprecated String method dedicated to system/npc
+	 */
+	@Deprecated
 	EconomyAction walletWithdraw(String name, String world, double amount);
 
 	EconomyAction walletWithdraw(OfflinePlayer player, double amount);
@@ -143,8 +203,16 @@ public interface AdvancedEconomy {
 
 	EconomyAction accountWithdraw(Account account, String world, double amount);
 
+	/**
+	 * @deprecated String method dedicated to system/npc
+	 */
+	@Deprecated
 	EconomyAction walletDeposit(String name, double amount);
 
+	/**
+	 * @deprecated String method dedicated to system/npc
+	 */
+	@Deprecated
 	EconomyAction walletDeposit(String name, String world, double amount);
 
 	EconomyAction walletDeposit(OfflinePlayer player, double amount);
@@ -159,14 +227,34 @@ public interface AdvancedEconomy {
 
 	EconomyAction accountDeposit(Account account, String world, double amount);
 
+	/**
+	 * @deprecated String method dedicated to system/npc
+	 */
+	@Deprecated
 	EconomyAction createAccount(AccountType type, String name);
 
+	/**
+	 * @deprecated String method dedicated to system/npc
+	 */
+	@Deprecated
 	EconomyAction createAccount(AccountType type, String name, String accountId);
 
+	/**
+	 * @deprecated String method dedicated to system/npc
+	 */
+	@Deprecated
 	EconomyAction createAccount(AccountType type, String name, double amount);
 
+	/**
+	 * @deprecated String method dedicated to system/npc
+	 */
+	@Deprecated
 	EconomyAction createAccount(AccountType type, String name, String accountId, String world);
 
+	/**
+	 * @deprecated String method dedicated to system/npc
+	 */
+	@Deprecated
 	EconomyAction createAccount(AccountType type, String name, String accountId, String world, double amount);
 
 	EconomyAction createAccount(AccountType type, OfflinePlayer player);
@@ -189,8 +277,16 @@ public interface AdvancedEconomy {
 
 	EconomyAction createAccount(AccountType type, UUID uuid, String accountId, String world, double amount);
 
+	/**
+	 * @deprecated String method dedicated to system/npc
+	 */
+	@Deprecated
 	EconomyAction deleteWalletAccount(String name);
 
+	/**
+	 * @deprecated String method dedicated to system/npc
+	 */
+	@Deprecated
 	EconomyAction deleteWalletAccount(String name, String world);
 
 	EconomyAction deleteWalletAccount(OfflinePlayer player);
@@ -207,10 +303,22 @@ public interface AdvancedEconomy {
 
 	EconomyAction deleteAccount(Account account);
 
+	/**
+	 * @deprecated String method dedicated to system/npc
+	 */
+	@Deprecated
 	EconomyAction isAccountOwner(String name, String accountID);
 
+	/**
+	 * @deprecated String method dedicated to system/npc
+	 */
+	@Deprecated
 	EconomyAction isAccountOwner(String name, Account account);
 
+	/**
+	 * @deprecated String method dedicated to system/npc
+	 */
+	@Deprecated
 	EconomyAction isAccountOwner(String name, String accountID, String world);
 
 	EconomyAction isAccountOwner(OfflinePlayer player, String accountID);
@@ -225,10 +333,22 @@ public interface AdvancedEconomy {
 
 	EconomyAction isAccountOwner(UUID uuid, String accountID, String world);
 
+	/**
+	 * @deprecated String method dedicated to system/npc
+	 */
+	@Deprecated
 	EconomyAction isAccountMember(String name, String accountID);
 
+	/**
+	 * @deprecated String method dedicated to system/npc
+	 */
+	@Deprecated
 	EconomyAction isAccountMember(String name, Account account);
 
+	/**
+	 * @deprecated String method dedicated to system/npc
+	 */
+	@Deprecated
 	EconomyAction isAccountMember(String name, String accountID, String world);
 
 	EconomyAction isAccountMember(OfflinePlayer player, String accountID);
@@ -243,8 +363,16 @@ public interface AdvancedEconomy {
 
 	EconomyAction isAccountMember(UUID uuid, String accountID, String world);
 
+	/**
+	 * @deprecated String method dedicated to system/npc
+	 */
+	@Deprecated
 	EconomyAction addAccountMember(String name, String accountID);
 
+	/**
+	 * @deprecated String method dedicated to system/npc
+	 */
+	@Deprecated
 	EconomyAction addAccountMember(String name, String accountID, String world);
 
 	EconomyAction addAccountMember(OfflinePlayer player, String accountID);
@@ -255,8 +383,16 @@ public interface AdvancedEconomy {
 
 	EconomyAction addAccountMember(UUID uuid, String accountID, String world);
 
+	/**
+	 * @deprecated String method dedicated to system/npc
+	 */
+	@Deprecated
 	EconomyAction removeAccountMember(String name, String accountID);
 
+	/**
+	 * @deprecated String method dedicated to system/npc
+	 */
+	@Deprecated
 	EconomyAction removeAccountMember(String name, String accountID, String world);
 
 	EconomyAction removeAccountMember(OfflinePlayer player, String accountID);
