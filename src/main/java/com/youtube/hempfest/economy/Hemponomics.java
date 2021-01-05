@@ -66,8 +66,10 @@ public final class Hemponomics extends JavaPlugin {
 		public boolean execute(CommandSender sender, String commandLabel, String[] args) {
 			Collection<RegisteredServiceProvider<AdvancedEconomy>> economies = Hemponomics.getInstance().getServer().getServicesManager().getRegistrations(AdvancedEconomy.class);
 			if (sender instanceof Player) {
-				sendMessage(sender, "&c&oThis can only be done from console.");
-				return true;
+				if (!sender.hasPermission("hemponomics.staff")) {
+					sendMessage(sender, "&c&oThis is a staff only command.");
+					return true;
+				}
 			}
 			if (args.length == 0) {
 				String ecos = economies.stream().map(RegisteredServiceProvider::getProvider).map(AdvancedEconomy::getPlugin).map(Plugin::getName).collect(Collectors.toList()).toString();
