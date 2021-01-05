@@ -157,7 +157,7 @@ public class AdvancedEconomyHook {
 
 }
 ```
-
+String methods are reserved for system/npc economy operations while UUID and OfflinePlayer methods are reserved for players.
 ```JAVA
 public interface AdvancedEconomy {
 
