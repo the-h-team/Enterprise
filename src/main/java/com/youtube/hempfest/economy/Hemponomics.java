@@ -99,7 +99,7 @@ public final class Hemponomics extends JavaPlugin {
 					sendMessage(sender, "&e&oDepending on the amount of registrations this may take a while.");
 					long time = System.currentTimeMillis();
 					for (OfflinePlayer op : Bukkit.getServer().getOfflinePlayers()) {
-						if (econ1.hasAccount(op) && !econ2.hasAccount(op)) {
+						if (econ1.hasWalletAccount(op) && !econ2.hasWalletAccount(op)) {
 							econ2.createAccount(AccountType.ENTITY_ACCOUNT, op);
 							double diff = econ1.getWalletBalance(op) - econ2.getWalletBalance(op);
 							if (diff > 0.0D) {
