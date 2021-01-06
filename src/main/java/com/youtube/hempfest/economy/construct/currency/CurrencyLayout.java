@@ -2,15 +2,17 @@ package com.youtube.hempfest.economy.construct.currency;
 
 import java.util.Locale;
 
-public class CurrencyLayout extends EconomyCurrency {
+/**
+ * Fluent-api builder for an immutable EconomyCurrency
+ */
+public class CurrencyLayout { // builder won't implement the interface to enforce #toCurrency
 
-	private String plural;
+	protected String plural;
+	protected String singular;
+	protected Locale locale;
+	protected String world;
 
-	private String singular;
-
-	private Locale locale;
-
-	private String world;
+	protected CurrencyLayout() {} // Force use of EconomyCurrency static factory
 
 	public CurrencyLayout setWorld(String world) {
 		this.world = world;
@@ -32,28 +34,12 @@ public class CurrencyLayout extends EconomyCurrency {
 		return this;
 	}
 
-	@Override
-	public String getPlural() {
-		return plural;
-	}
-
-	@Override
-	public String getSingular() {
-		return singular;
-	}
-
-	@Override
-	public Locale getLocale() {
-		return locale;
-	}
-
-	@Override
-	public String getWorld() {
-		return world;
-	}
-
+	/**
+	 * Finish building an EconomyCurrency
+	 * @return an immutable EconomyCurrency object
+	 */
 	public EconomyCurrency toCurrency() {
-		return this;
+		return new ImmutableCurrencyLayout(this);
 	}
 
 	@Override
