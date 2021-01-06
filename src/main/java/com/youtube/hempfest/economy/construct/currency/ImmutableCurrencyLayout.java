@@ -6,35 +6,29 @@ import java.util.Locale;
  * Represents a fixed layout for an EconomyCurrency
  */
 public class ImmutableCurrencyLayout implements EconomyCurrency {
-    private final String plural;
-    private final String singular;
-    private final Locale locale;
-    private final String world;
+    private final CurrencyLayout currencyLayout;
 
     protected ImmutableCurrencyLayout(CurrencyLayout currencyLayout) {
-        this.plural = currencyLayout.plural;
-        this.singular = currencyLayout.singular;
-        this.locale = currencyLayout.locale;
-        this.world = currencyLayout.world;
+        this.currencyLayout = currencyLayout;
     }
 
     @Override
     public String getPlural() {
-        return plural;
+        return currencyLayout.plural;
     }
 
     @Override
     public String getSingular() {
-        return singular;
+        return currencyLayout.singular;
     }
 
     @Override
     public Locale getLocale() {
-        return locale;
+        return currencyLayout.locale;
     }
 
     @Override
     public String getWorld() {
-        return world;
+        return currencyLayout.world;
     }
 }
