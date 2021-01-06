@@ -82,14 +82,22 @@ public class ExamplePlugin extends JavaPlugin {
 	}
 
 	private boolean setupEconomy() {
-		if (getServer().getPluginManager().getPlugin("Hemponomics") == null) {
+		final Collection<RegisteredServiceProvider<AdvancedEconomy>> rsps = getServer().getServicesManager().getRegistrations(AdvancedEconomy.class);
+		if (rsps.isEmpty()) {
 			return false;
 		}
-		RegisteredServiceProvider<AdvancedEconomy> rsp = getServer().getServicesManager().getRegistration(AdvancedEconomy.class);
-		if (rsp == null) {
-			return false;
+		RegisteredServiceProvider<AdvancedEconomy> service = null;
+		for (RegisteredServiceProvider<AdvancedEconomy> rsp : rsps) {
+			EconomyPriority priority = rsp.getProvider().getPriority();
+			econ = rsp.getProvider();
+			service = rsp;
+			if (rsp.getProvider().getPriority().getPriNum() > priority.getPriNum()) {
+				econ = rsp.getProvider();
+				service = rsp;
+			}
 		}
-		econ = rsp.getProvider();
+		getLogger().info("- (" + rsps.size() + ") AdvancedEconomy provider(s)");
+		getLogger().info("- Using provider " + service.getProvider().getPlugin().getName() + " with priority " + service.getProvider().getPriority().name());
 		return true;
 	}
 
