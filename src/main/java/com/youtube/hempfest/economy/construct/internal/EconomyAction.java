@@ -1,26 +1,28 @@
-package com.youtube.hempfest.economy.construct;
+package com.youtube.hempfest.economy.construct.internal;
+
+import com.youtube.hempfest.economy.construct.entity.Entity;
+
+import java.math.BigDecimal;
 
 public class EconomyAction {
 
-	private double amount;
+	private final BigDecimal amount;
 
 	private final boolean success;
 
 	private final String info;
 
-	private final String holder;
+	private final Entity holder;
 
-	public EconomyAction(double amount, String holder, boolean success, String transactionInfo) {
+	public EconomyAction(BigDecimal amount, Entity holder, boolean success, String transactionInfo) {
 		this.amount = amount;
 		this.success = success;
 		this.info = transactionInfo != null ? transactionInfo : "";
 		this.holder = holder;
 	}
 
-	public EconomyAction(String holder, boolean success, String transactionInfo) {
-		this.success = success;
-		this.info = transactionInfo != null ? transactionInfo : "";
-		this.holder = holder;
+	public EconomyAction(Entity holder, boolean success, String transactionInfo) {
+		this(null, holder, success, transactionInfo);
 	}
 
 	/**
@@ -35,7 +37,7 @@ public class EconomyAction {
 	 * Get the entity involved with the transaction
 	 * @return holder in transaction
 	 */
-	public String getActiveHolder() {
+	public Entity getActiveHolder() {
 		return holder;
 	}
 
@@ -43,7 +45,7 @@ public class EconomyAction {
 	 * Gets the exact amount involved with the transaction
 	 * @return amount or null
 	 */
-	public double getAmount() {
+	public BigDecimal getAmount() {
 		return amount;
 	}
 

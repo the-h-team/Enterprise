@@ -1,410 +1,618 @@
 package com.youtube.hempfest.economy.construct;
 
+import com.sun.istack.internal.Nullable;
 import com.youtube.hempfest.economy.construct.account.Account;
+import com.youtube.hempfest.economy.construct.account.Wallet;
 import com.youtube.hempfest.economy.construct.account.permissive.AccountType;
 import com.youtube.hempfest.economy.construct.currency.EconomyCurrency;
+
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
+
+import com.youtube.hempfest.economy.construct.entity.NpcEntity;
+import com.youtube.hempfest.economy.construct.internal.EconomyAction;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.World;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
-public interface AdvancedEconomy {
+public abstract class AdvancedEconomy {
 
-	Plugin getPlugin();
+	public abstract Plugin getPlugin();
 
-	String getVersion();
+	public abstract String getVersion();
 
-	EconomyCurrency getCurrency();
+	public abstract EconomyCurrency getCurrency();
 
-	EconomyCurrency getCurrency(String world);
+	public abstract EconomyCurrency getCurrency(String world);
 
-	EconomyPriority getPriority();
+	public abstract EconomyPriority getPriority();
 
-	String format(double amount);
+	public abstract String format(BigDecimal amount);
 
-	String format(double amount, Locale locale);
+	public abstract String format(BigDecimal amount, Locale locale);
 
-	double getMaxWalletSize();
+	public abstract BigDecimal getMaxWalletSize();
 
-	boolean isMultiWorld();
+	public abstract boolean isMultiWorld();
 
-	boolean isMultiCurrency();
+	public abstract boolean isMultiCurrency();
 
-	boolean isAccountsLimited();
+	public abstract boolean isAccountsLimited();
 
-	boolean hasMultiAccountSupport();
+	public abstract boolean hasMultiAccountSupport();
 
-	boolean hasWalletSizeLimit();
+	public abstract boolean hasWalletSizeLimit();
 
-	/**
-	 * @deprecated String method dedicated to system/npc
-	 */
-	@Deprecated
-	boolean hasWalletAccount(String name);
+	public abstract EconomyInternals backing();
 
-	/**
-	 * @deprecated String method dedicated to system/npc
-	 */
-	@Deprecated
-	boolean hasWalletAccount(String name, String world);
-
-	boolean hasWalletAccount(OfflinePlayer player);
-
-	boolean hasWalletAccount(OfflinePlayer player, String world);
-
-	boolean hasWalletAccount(UUID uuid);
-
-	boolean hasWalletAccount(UUID uuid, String world);
-
-	/**
-	 * @deprecated String method dedicated to system/npc
-	 */
-	@Deprecated
-	boolean hasAccount(String name);
-
-	boolean hasAccount(OfflinePlayer player);
-
-	boolean hasAccount(OfflinePlayer player, String world);
-
-	/**
-	 * @deprecated String method dedicated to system/npc
-	 */
-	@Deprecated
-	boolean hasAccount(String name, String world);
-
-	boolean hasAccount(UUID uuid);
-
-	boolean hasAccount(UUID uuid, String world);
-
-	/**
-	 * @deprecated String method dedicated to system/npc
-	 */
-	@Deprecated
-	boolean walletHasAmount(String name, double amount);
-
-	/**
-	 * @deprecated String method dedicated to system/npc
-	 */
-	@Deprecated
-	boolean walletHasAmount(String name, String world, double amount);
-
-	boolean walletHasAmount(OfflinePlayer player, double amount);
-
-	boolean walletHasAmount(OfflinePlayer player, String world, double amount);
-
-	boolean walletHasAmount(UUID uuid, double amount);
-
-	boolean walletHasAmount(UUID uuid, String world, double amount);
-
-	boolean accountHasAmount(String accountID, double amount);
-
-	boolean accountHasAmount(Account account, double amount);
-
-	boolean accountHasAmount(Account account, String world, double amount);
-
-	boolean accountHasAmount(String accountID, String world, double amount);
+	public interface EconomyInternals {
+		@Nullable
+		Wallet getWallet(String string);
+		@Nullable
+		Wallet getWallet(String string, String world);
+		@Nullable
+		Wallet getWallet(OfflinePlayer player);
+		@Nullable
+		Wallet getWallet(OfflinePlayer player, World world);
+		@Nullable
+		Wallet getWallet(OfflinePlayer player, String world);
+		@Nullable
+		@Deprecated
+		default Account getAccount(String name) { // default/npc
+			return null;
+		}
+		@Nullable
+		Account getAccount(OfflinePlayer player);
+		@Nullable
+		Account getAccount(OfflinePlayer player, World world);
+		@Nullable
+		Account getAccount(OfflinePlayer player, String world);
+		@Nullable
+		@Deprecated
+		default Account getAccount(String name, String world) { // default/npc
+			return null;
+		}
+		@Nullable
+		Account getAccount(UUID uuid);
+		@Nullable
+		Account getAccount(UUID uuid, String world);
+		@Nullable
+		Wallet getWallet(NpcEntity npc, String world);
+		@Nullable
+		Wallet getWallet(UUID uuid);
+		@Nullable
+		Wallet getWallet(UUID uuid, String world);
+		@Nullable
+		Account getAccountByType(String name, AccountType type);
+		@Nullable
+		Account getAccountByType(String name, AccountType type, String world);
+		@Nullable
+		Account getAccountByType(OfflinePlayer player, AccountType type);
+		@Nullable
+		Account getAccountByType(OfflinePlayer player, AccountType type, String world);
+	}
 
 	/**
 	 * @deprecated String method dedicated to system/npc
 	 */
 	@Deprecated
-	double getWalletBalance(String name);
+	public boolean hasWalletAccount(String name) {
+		return backing().getWallet(name) != null;
+	}
 
 	/**
 	 * @deprecated String method dedicated to system/npc
 	 */
 	@Deprecated
-	double getWalletBalance(String name, String world);
+	public boolean hasWalletAccount(String name, String world) {
+		return backing().getWallet(name, world) != null;
+	}
 
-	double getWalletBalance(OfflinePlayer player);
+	/**
+	 * Method meant for online players, use for instances
+	 * where it makes sense to allow economy to infer/detect world
+	 * automatically
+	 * @param onlinePlayer a {@link Player} object
+	 */
+	public boolean hasWalletAccountDetectWorld(Player onlinePlayer) {
+		return hasWalletAccount(onlinePlayer, onlinePlayer.getWorld());
+	}
 
-	double getWalletBalance(OfflinePlayer player, String world);
+	public boolean hasWalletAccount(OfflinePlayer player) {
+		return backing().getWallet(player) != null;
+	}
 
-	double getWalletBalance(UUID uuid);
+	public boolean hasWalletAccount(OfflinePlayer player, World world) {
+		return backing().getWallet(player, world) != null;
+	}
 
-	double getWalletBalance(UUID uuid, String world);
+	public boolean hasWalletAccount(OfflinePlayer player, String worldName) {
+		return backing().getWallet(player, worldName) != null;
+	}
 
-	double getAccountBalance(String accountID);
-
-	double getAccountBalance(String accountID, String world);
+	// removed UUID methods in favor of player/NPC rails
 
 	/**
 	 * @deprecated String method dedicated to system/npc
 	 */
 	@Deprecated
-	Account getAccount(String name);
+	public boolean hasAccount(String name) {
+		return backing().getAccount(name) != null;
+	}
+
+	/**
+	 * Method meant for online players, use for instances
+	 * where it makes sense to allow economy to infer/detect world
+	 * automatically
+	 * @param onlinePlayer a {@link Player} object
+	 */
+	public boolean hasAccountDetectWorld(Player onlinePlayer) {
+		return backing().getAccount(onlinePlayer, onlinePlayer.getWorld()) != null;
+	}
+
+	public boolean hasAccount(OfflinePlayer player) {
+		return backing().getAccount(player) != null;
+	}
+
+	public boolean hasAccount(OfflinePlayer player, World world) {
+		return backing().getAccount(player, world) != null;
+	}
+
+	public boolean hasAccount(OfflinePlayer player, String world) {
+		return backing().getAccount(player, world) != null;
+	}
 
 	/**
 	 * @deprecated String method dedicated to system/npc
 	 */
 	@Deprecated
-	Account getAccount(String name, String world);
+	public boolean hasAccount(String name, String world) {
+		return backing().getAccount(name, world) != null;
+	}
+
+	public boolean hasAccount(UUID uuid) {
+		return backing().getAccount(uuid) != null;
+	}
+
+	public boolean hasAccount(UUID uuid, String world) {
+		return backing().getAccount(uuid, world) != null;
+	}
 
 	/**
 	 * @deprecated String method dedicated to system/npc
 	 */
 	@Deprecated
-	Account getAccount(String name, AccountType type);
+	public boolean walletHasAmount(String name, BigDecimal amount) {
+		final Wallet wallet = backing().getWallet(name);
+		if (wallet == null) return false;
+		return wallet.getBalance().compareTo(amount) >= 0;
+	}
+
+	public boolean walletHasAmount(Plugin plugin, String name, String world, BigDecimal amount) {
+		final Wallet wallet = backing().getWallet(new NpcEntity(plugin, name), world);
+		if (wallet == null) return false;
+		return wallet.getBalance().compareTo(amount) >= 0;
+	}
+
+	public boolean walletHasAmount(OfflinePlayer player, BigDecimal amount) {
+		final Wallet wallet = backing().getWallet(player);
+		if (wallet == null) return false;
+		return wallet.getBalance().compareTo(amount) >= 0;
+	}
+
+	public boolean walletHasAmount(OfflinePlayer player, String world, BigDecimal amount) {
+		final Wallet wallet = backing().getWallet(player, world);
+		if (wallet == null) return false;
+		return wallet.getBalance().compareTo(amount) >= 0;
+	}
+
+	public boolean walletHasAmount(UUID uuid, BigDecimal amount) {
+		final Wallet wallet = backing().getWallet(uuid);
+		if (wallet == null) return false;
+		return wallet.getBalance().compareTo(amount) >= 0;
+	}
+
+	public boolean walletHasAmount(UUID uuid, String world, BigDecimal amount) {
+		final Wallet wallet = backing().getWallet(uuid, world);
+		if (wallet == null) return false;
+		return wallet.getBalance().compareTo(amount) >= 0;
+	}
+
+/*	public boolean accountHasAmount(String accountID, BigDecimal amount) { TODO: refactor in favor of getById mechanism
+		final Account account = backing().getAccount(accountID, world);
+		if (account == null) return false;
+		return account.getBalance().compareTo(amount) >= 0;
+	}*/
+
+/*	public boolean accountHasAmount(Account account, BigDecimal amount) { // they can just use Account#getBalance, right?
+		return false;
+	}
+
+	public boolean accountHasAmount(Account account, String world, BigDecimal amount) {
+		return false;
+	}*/
+
+/*	public boolean accountHasAmount(String accountID, String world, BigDecimal amount) { // TODO: refactor in favor of getById
+		return false;
+	}*/
+
+	/**
+	 * @deprecated String method dedicated to system/npc
+	 */
+	@Nullable
+	@Deprecated
+	public BigDecimal getWalletBalance(String name) {
+		final Wallet wallet = backing().getWallet(name);
+		if (wallet == null) return null;
+		return wallet.getBalance();
+	}
+
+	/**
+	 * @deprecated String method dedicated to system/npc
+	 */
+	@Nullable
+	@Deprecated
+	public BigDecimal getWalletBalance(String name, String world) {
+		final Wallet wallet = backing().getWallet(name, world);
+		if (wallet == null) return null;
+		return wallet.getBalance();
+	}
+
+	@Nullable
+	public BigDecimal getWalletBalance(OfflinePlayer player) {
+		final Wallet wallet = backing().getWallet(player);
+		if (wallet == null) return null;
+		return wallet.getBalance();
+	}
+
+	@Nullable
+	public BigDecimal getWalletBalance(OfflinePlayer player, String world) {
+		final Wallet wallet = backing().getWallet(player, world);
+		if (wallet == null) return null;
+		return wallet.getBalance();
+	}
+
+	@Nullable
+	public BigDecimal getWalletBalance(UUID uuid){
+		final Wallet wallet = backing().getWallet(uuid);
+		if (wallet == null) return null;
+		return wallet.getBalance();
+	}
+
+	@Nullable
+	public BigDecimal getWalletBalance(UUID uuid, String world) {
+		final Wallet wallet = backing().getWallet(uuid, world);
+		if (wallet == null) return null;
+		return wallet.getBalance();
+	}
+
+/*	@Nullable // TODO: Refactor in getter for Account by id
+	public abstract BigDecimal getAccountBalance(String accountID);
+
+	@Nullable
+	public abstract BigDecimal getAccountBalance(String accountID, String world);*/
 
 	/**
 	 * @deprecated String method dedicated to system/npc
 	 */
 	@Deprecated
-	Account getAccount(String name, AccountType type, String world);
+	public Account getAccount(String name) {
+		return backing().getAccount(name);
+	}
 
 	/**
 	 * @deprecated String method dedicated to system/npc
 	 */
 	@Deprecated
-	Account getAccount(String accountId, String name, String world);
-
-	Account getAccount(OfflinePlayer player, AccountType type);
-
-	Account getAccount(OfflinePlayer player, AccountType type, String world);
-
-	Account getAccount(OfflinePlayer player);
-
-	Account getAccount(OfflinePlayer player, String world);
-
-	Account getAccount(String accountId, OfflinePlayer player, String world);
-
-	Account getAccount(UUID uuid);
-
-	Account getAccount(UUID uuid, String world);
-
-	Account getAccount(UUID uuid, AccountType type);
-
-	Account getAccount(UUID uuid, AccountType type, String world);
-
-	Account getAccount(String accountId, UUID uuid, String world);
+	public Account getAccount(String name, String world) {
+		return backing().getAccount(name, world);
+	}
 
 	/**
 	 * @deprecated String method dedicated to system/npc
 	 */
 	@Deprecated
-	EconomyAction walletWithdraw(String name, double amount);
+	public Account getAccount(String name, AccountType type) {
+		return backing().getAccountByType(name, type);
+	}
 
 	/**
 	 * @deprecated String method dedicated to system/npc
 	 */
 	@Deprecated
-	EconomyAction walletWithdraw(String name, String world, double amount);
+	public Account getAccount(String name, AccountType type, String world) {
+		return backing().getAccountByType(name, type, world);
+	}
 
-	EconomyAction walletWithdraw(OfflinePlayer player, double amount);
+//	/**
+//	 * @deprecated String method dedicated to system/npc
+//	 */
+//	@Deprecated
+//	public abstract Account getAccount(String accountId, String name, String world); // TODO: Replace with getter for Account by id
 
-	EconomyAction walletWithdraw(OfflinePlayer player, String world, double amount);
+	public Account getAccount(OfflinePlayer player, AccountType type) {
+		return backing().getAccountByType(player, type);
+	}
 
-	EconomyAction walletWithdraw(UUID uuid, double amount);
+	public Account getAccount(OfflinePlayer player, AccountType type, String world) {
+		return null;
+	}
 
-	EconomyAction walletWithdraw(UUID uuid, String world, double amount);
+	public Account getAccount(OfflinePlayer player) {
+		return null;
+	}
 
-	EconomyAction accountWithdraw(Account account, double amount);
+	public Account getAccount(OfflinePlayer player, String world) {
+		return null;
+	}
 
-	EconomyAction accountWithdraw(Account account, String world, double amount);
+	public Account getAccount(String accountId, OfflinePlayer player, String world) {
+		return null;
+	}
 
-	/**
-	 * @deprecated String method dedicated to system/npc
-	 */
-	@Deprecated
-	EconomyAction walletDeposit(String name, double amount);
+/*	public Account getAccount(UUID uuid) { // prevent misuse of this method by forcing world+type reference
+		return null;
+	}
 
-	/**
-	 * @deprecated String method dedicated to system/npc
-	 */
-	@Deprecated
-	EconomyAction walletDeposit(String name, String world, double amount);
+	public Account getAccount(UUID uuid, String world) {
+		return null;
+	}
 
-	EconomyAction walletDeposit(OfflinePlayer player, double amount);
+	public Account getAccount(UUID uuid, AccountType type) {
+		return null;
+	}*/
 
-	EconomyAction walletDeposit(OfflinePlayer player, String world, double amount);
+	public Account getAccount(UUID uuid, AccountType type, String world) {
+		return null;
+	}
 
-	EconomyAction walletDeposit(UUID uuid, double amount);
-
-	EconomyAction walletDeposit(UUID uuid, String world, double amount);
-
-	EconomyAction accountDeposit(Account account, double amount);
-
-	EconomyAction accountDeposit(Account account, String world, double amount);
-
-	/**
-	 * @deprecated String method dedicated to system/npc
-	 */
-	@Deprecated
-	EconomyAction createAccount(AccountType type, String name);
-
-	/**
-	 * @deprecated String method dedicated to system/npc
-	 */
-	@Deprecated
-	EconomyAction createAccount(AccountType type, String name, String accountId);
+//	public Account getAccount(String accountId, UUID uuid, String world); TODO: Refactor to getter by accountId
 
 	/**
 	 * @deprecated String method dedicated to system/npc
 	 */
 	@Deprecated
-	EconomyAction createAccount(AccountType type, String name, double amount);
+	public abstract EconomyAction walletWithdraw(String name, BigDecimal amount);
 
 	/**
 	 * @deprecated String method dedicated to system/npc
 	 */
 	@Deprecated
-	EconomyAction createAccount(AccountType type, String name, String accountId, String world);
+	public abstract EconomyAction walletWithdraw(String name, String world, BigDecimal amount);
+
+	public abstract EconomyAction walletWithdraw(OfflinePlayer player, BigDecimal amount);
+
+	public abstract EconomyAction walletWithdraw(OfflinePlayer player, String world, BigDecimal amount);
+
+	public abstract EconomyAction walletWithdraw(UUID uuid, BigDecimal amount);
+
+	public abstract EconomyAction walletWithdraw(UUID uuid, String world, BigDecimal amount);
+
+	public abstract EconomyAction accountWithdraw(Account account, BigDecimal amount);
+
+	public abstract EconomyAction accountWithdraw(Account account, String world, BigDecimal amount);
 
 	/**
 	 * @deprecated String method dedicated to system/npc
 	 */
 	@Deprecated
-	EconomyAction createAccount(AccountType type, String name, String accountId, String world, double amount);
-
-	EconomyAction createAccount(AccountType type, OfflinePlayer player);
-
-	EconomyAction createAccount(AccountType type, OfflinePlayer player, String accountId);
-
-	EconomyAction createAccount(AccountType type, OfflinePlayer player, double amount);
-
-	EconomyAction createAccount(AccountType type, OfflinePlayer player, String accountId, String world);
-
-	EconomyAction createAccount(AccountType type, OfflinePlayer player, String accountId, String world, double amount);
-
-	EconomyAction createAccount(AccountType type, UUID uuid);
-
-	EconomyAction createAccount(AccountType type, UUID uuid, String accountId);
-
-	EconomyAction createAccount(AccountType type, UUID uuid, double amount);
-
-	EconomyAction createAccount(AccountType type, UUID uuid, String accountId, String world);
-
-	EconomyAction createAccount(AccountType type, UUID uuid, String accountId, String world, double amount);
+	public abstract EconomyAction walletDeposit(String name, BigDecimal amount);
 
 	/**
 	 * @deprecated String method dedicated to system/npc
 	 */
 	@Deprecated
-	EconomyAction deleteWalletAccount(String name);
+	public abstract EconomyAction walletDeposit(String name, String world, BigDecimal amount);
+
+	public abstract EconomyAction walletDeposit(OfflinePlayer player, BigDecimal amount);
+
+	public abstract EconomyAction walletDeposit(OfflinePlayer player, String world, BigDecimal amount);
+
+	public abstract EconomyAction walletDeposit(UUID uuid, BigDecimal amount);
+
+	public abstract EconomyAction walletDeposit(UUID uuid, String world, BigDecimal amount);
+
+	public abstract EconomyAction accountDeposit(Account account, BigDecimal amount);
+
+	public abstract EconomyAction accountDeposit(Account account, String world, BigDecimal amount);
 
 	/**
 	 * @deprecated String method dedicated to system/npc
 	 */
 	@Deprecated
-	EconomyAction deleteWalletAccount(String name, String world);
-
-	EconomyAction deleteWalletAccount(OfflinePlayer player);
-
-	EconomyAction deleteWalletAccount(OfflinePlayer player, String world);
-
-	EconomyAction deleteWalletAccount(UUID uuid);
-
-	EconomyAction deleteWalletAccount(UUID uuid, String world);
-
-	EconomyAction deleteAccount(String accountID);
-
-	EconomyAction deleteAccount(String accountID, String world);
-
-	EconomyAction deleteAccount(Account account);
+	public abstract EconomyAction createAccount(AccountType type, String name);
 
 	/**
 	 * @deprecated String method dedicated to system/npc
 	 */
 	@Deprecated
-	EconomyAction isAccountOwner(String name, String accountID);
+	public abstract EconomyAction createAccount(AccountType type, String name, String accountId);
 
 	/**
 	 * @deprecated String method dedicated to system/npc
 	 */
 	@Deprecated
-	EconomyAction isAccountOwner(String name, Account account);
+	public abstract EconomyAction createAccount(AccountType type, String name, BigDecimal amount);
 
 	/**
 	 * @deprecated String method dedicated to system/npc
 	 */
 	@Deprecated
-	EconomyAction isAccountOwner(String name, String accountID, String world);
-
-	EconomyAction isAccountOwner(OfflinePlayer player, String accountID);
-
-	EconomyAction isAccountOwner(OfflinePlayer player, Account account);
-
-	EconomyAction isAccountOwner(OfflinePlayer player, String accountID, String world);
-
-	EconomyAction isAccountOwner(UUID uuid, String accountID);
-
-	EconomyAction isAccountOwner(UUID uuid, Account account);
-
-	EconomyAction isAccountOwner(UUID uuid, String accountID, String world);
+	public abstract EconomyAction createAccount(AccountType type, String name, String accountId, String world);
 
 	/**
 	 * @deprecated String method dedicated to system/npc
 	 */
 	@Deprecated
-	EconomyAction isAccountMember(String name, String accountID);
+	public abstract EconomyAction createAccount(AccountType type, String name, String accountId, String world, BigDecimal amount);
+
+	public abstract EconomyAction createAccount(AccountType type, OfflinePlayer player);
+
+	public abstract EconomyAction createAccount(AccountType type, OfflinePlayer player, String accountId);
+
+	public abstract EconomyAction createAccount(AccountType type, OfflinePlayer player, BigDecimal amount);
+
+	public abstract EconomyAction createAccount(AccountType type, OfflinePlayer player, String accountId, String world);
+
+	public abstract EconomyAction createAccount(AccountType type, OfflinePlayer player, String accountId, String world, BigDecimal amount);
+
+	public abstract EconomyAction createAccount(AccountType type, UUID uuid);
+
+	public abstract EconomyAction createAccount(AccountType type, UUID uuid, String accountId);
+
+	public abstract EconomyAction createAccount(AccountType type, UUID uuid, BigDecimal amount);
+
+	public abstract EconomyAction createAccount(AccountType type, UUID uuid, String accountId, String world);
+
+	public abstract EconomyAction createAccount(AccountType type, UUID uuid, String accountId, String world, BigDecimal amount);
 
 	/**
 	 * @deprecated String method dedicated to system/npc
 	 */
 	@Deprecated
-	EconomyAction isAccountMember(String name, Account account);
+	public abstract EconomyAction deleteWalletAccount(String name);
 
 	/**
 	 * @deprecated String method dedicated to system/npc
 	 */
 	@Deprecated
-	EconomyAction isAccountMember(String name, String accountID, String world);
+	public abstract EconomyAction deleteWalletAccount(String name, String world);
 
-	EconomyAction isAccountMember(OfflinePlayer player, String accountID);
+	public abstract EconomyAction deleteWalletAccount(OfflinePlayer player);
 
-	EconomyAction isAccountMember(OfflinePlayer player, Account account);
+	public abstract EconomyAction deleteWalletAccount(OfflinePlayer player, String world);
 
-	EconomyAction isAccountMember(OfflinePlayer player, String accountID, String world);
+	public abstract EconomyAction deleteWalletAccount(UUID uuid);
 
-	EconomyAction isAccountMember(UUID uuid, String accountID);
+	public abstract EconomyAction deleteWalletAccount(UUID uuid, String world);
 
-	EconomyAction isAccountMember(UUID uuid, Account account);
+	public abstract EconomyAction deleteAccount(String accountID);
 
-	EconomyAction isAccountMember(UUID uuid, String accountID, String world);
+	public abstract EconomyAction deleteAccount(String accountID, String world);
 
-	/**
-	 * @deprecated String method dedicated to system/npc
-	 */
-	@Deprecated
-	EconomyAction addAccountMember(String name, String accountID);
+	public abstract EconomyAction deleteAccount(Account account);
 
 	/**
 	 * @deprecated String method dedicated to system/npc
 	 */
 	@Deprecated
-	EconomyAction addAccountMember(String name, String accountID, String world);
-
-	EconomyAction addAccountMember(OfflinePlayer player, String accountID);
-
-	EconomyAction addAccountMember(OfflinePlayer player, String accountID, String world);
-
-	EconomyAction addAccountMember(UUID uuid, String accountID);
-
-	EconomyAction addAccountMember(UUID uuid, String accountID, String world);
+	public abstract EconomyAction isAccountOwner(String name, String accountID);
 
 	/**
 	 * @deprecated String method dedicated to system/npc
 	 */
 	@Deprecated
-	EconomyAction removeAccountMember(String name, String accountID);
+	public abstract EconomyAction isAccountOwner(String name, Account account);
 
 	/**
 	 * @deprecated String method dedicated to system/npc
 	 */
 	@Deprecated
-	EconomyAction removeAccountMember(String name, String accountID, String world);
+	public abstract EconomyAction isAccountOwner(String name, String accountID, String world);
 
-	EconomyAction removeAccountMember(OfflinePlayer player, String accountID);
+	public abstract EconomyAction isAccountOwner(OfflinePlayer player, String accountID);
 
-	EconomyAction removeAccountMember(OfflinePlayer player, String accountID, String world);
+	public abstract EconomyAction isAccountOwner(OfflinePlayer player, Account account);
 
-	EconomyAction removeAccountMember(UUID uuid, String accountID);
+	public abstract EconomyAction isAccountOwner(OfflinePlayer player, String accountID, String world);
 
-	EconomyAction removeAccountMember(UUID uuid, String accountID, String world);
+	public abstract EconomyAction isAccountOwner(UUID uuid, String accountID);
 
-	List<Account> getAccounts();
+	public abstract EconomyAction isAccountOwner(UUID uuid, Account account);
 
-	List<String> getAccountList();
+	public abstract EconomyAction isAccountOwner(UUID uuid, String accountID, String world);
+
+	/**
+	 * @deprecated String method dedicated to system/npc
+	 */
+	@Deprecated
+	public abstract EconomyAction isAccountMember(String name, String accountID);
+
+	/**
+	 * @deprecated String method dedicated to system/npc
+	 */
+	@Deprecated
+	public abstract EconomyAction isAccountMember(String name, Account account);
+
+	/**
+	 * @deprecated String method dedicated to system/npc
+	 */
+	@Deprecated
+	public abstract EconomyAction isAccountMember(String name, String accountID, String world);
+
+	public abstract EconomyAction isAccountMember(OfflinePlayer player, String accountID);
+
+	public abstract EconomyAction isAccountMember(OfflinePlayer player, Account account);
+
+	public abstract EconomyAction isAccountMember(OfflinePlayer player, String accountID, String world);
+
+	public abstract EconomyAction isAccountMember(UUID uuid, String accountID);
+
+	public abstract EconomyAction isAccountMember(UUID uuid, Account account);
+
+	public abstract EconomyAction isAccountMember(UUID uuid, String accountID, String world);
+
+	/**
+	 * @deprecated String method dedicated to system/npc
+	 */
+	@Deprecated
+	public abstract EconomyAction addAccountMember(String name, String accountID);
+
+	/**
+	 * @deprecated String method dedicated to system/npc
+	 */
+	@Deprecated
+	public abstract EconomyAction addAccountMember(String name, String accountID, String world);
+
+	/**
+	 * Method meant for online players, use for instances
+	 * where it makes sense to allow economy to infer/detect world
+	 * automatically
+	 * @param onlinePlayer a {@link Player} object
+	 */
+	public abstract EconomyAction addAccountMember(Player onlinePlayer, String accountID);
+
+	public abstract EconomyAction addAccountMember(OfflinePlayer player, String accountID);
+
+	public abstract EconomyAction addAccountMember(OfflinePlayer player, String accountID, String world);
+
+	public abstract EconomyAction addAccountMember(UUID uuid, String accountID);
+
+	public abstract EconomyAction addAccountMember(UUID uuid, String accountID, String world);
+
+	/**
+	 * @deprecated String method dedicated to system/npc
+	 */
+	@Deprecated
+	public abstract EconomyAction removeAccountMember(String name, String accountID);
+
+	/**
+	 * @deprecated String method dedicated to system/npc
+	 */
+	@Deprecated
+	public abstract EconomyAction removeAccountMember(String name, String accountID, String world);
+
+	/**
+	 * Method meant for online players, use for instances
+	 * where it makes sense to allow economy to infer/detect world
+	 * automatically
+	 * @param onlinePlayer a {@link Player} object
+	 */
+	public abstract EconomyAction removeAccountMember(Player onlinePlayer, String accountID);
+
+	public abstract EconomyAction removeAccountMember(OfflinePlayer player, String accountID);
+
+	public abstract EconomyAction removeAccountMember(OfflinePlayer player, String accountID, String world);
+
+	public abstract EconomyAction removeAccountMember(UUID uuid, String accountID);
+
+	public abstract EconomyAction removeAccountMember(UUID uuid, String accountID, String world);
+
+	public abstract List<Account> getAccounts();
+
+	public abstract List<String> getAccountList();
 
 }

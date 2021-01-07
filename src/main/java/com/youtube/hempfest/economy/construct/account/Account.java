@@ -1,10 +1,15 @@
 package com.youtube.hempfest.economy.construct.account;
 
 import com.youtube.hempfest.economy.construct.account.permissive.AccountType;
+
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import org.bukkit.NamespacedKey;
+import java.util.stream.Collectors;
+
+import com.youtube.hempfest.economy.construct.entity.Entity;
+import org.bukkit.World;
 
 public class Account extends Balance {
 
@@ -12,16 +17,10 @@ public class Account extends Balance {
 
 	private final List<String> members;
 
-	public Account(AccountType accountType, String holder, double balance, String world, String... members) {
+	public Account(AccountType accountType, Entity holder, BigDecimal balance, World world, Entity... members) {
 		super(holder, world, balance);
 		this.accountType = accountType;
-		this.members = Arrays.asList(members);
-	}
-
-	public Account(AccountType accountType, NamespacedKey holder, double balance, String world, String... members) {
-		super(holder, world, balance);
-		this.accountType = accountType;
-		this.members = Arrays.asList(members);
+		this.members = Arrays.stream(members).map(Entity::id).collect(Collectors.toList());
 	}
 
 	public AccountType getType() {

@@ -3,6 +3,7 @@ package com.youtube.hempfest.economy;
 import com.youtube.hempfest.economy.construct.AdvancedEconomy;
 import com.youtube.hempfest.economy.construct.account.permissive.AccountType;
 import java.lang.reflect.Field;
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.stream.Collectors;
 import org.bukkit.Bukkit;
@@ -101,11 +102,11 @@ public final class Hemponomics extends JavaPlugin {
 					for (OfflinePlayer op : Bukkit.getServer().getOfflinePlayers()) {
 						if (econ1.hasWalletAccount(op) && !econ2.hasWalletAccount(op)) {
 							econ2.createAccount(AccountType.ENTITY_ACCOUNT, op);
-							double diff = econ1.getWalletBalance(op) - econ2.getWalletBalance(op);
-							if (diff > 0.0D) {
+							BigDecimal diff = econ1.getWalletBalance(op).subtract(econ2.getWalletBalance(op));
+							if (diff.compareTo(BigDecimal.ZERO) > 0) { // read as "diff > ZERO"
 								econ2.walletDeposit(op, diff);
-							} else if (diff < 0.0D) {
-								econ2.walletDeposit(op, -diff);
+							} else if (diff.compareTo(BigDecimal.ZERO) < 0) { // read as "diff < ZERO"
+								econ2.walletDeposit(op, diff.negate());
 							}
 						}
 					}
