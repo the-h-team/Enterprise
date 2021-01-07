@@ -1,44 +1,39 @@
 package com.youtube.hempfest.economy.construct.account;
 
-import org.bukkit.NamespacedKey;
+import com.youtube.hempfest.economy.construct.entity.Entity;
+import org.bukkit.Bukkit;
+import org.bukkit.World;
 
-public class Balance {
+import java.math.BigDecimal;
+import java.util.UUID;
 
+/**
+ * The base class for all Balances (Accounts and Wallets)
+ */
+public abstract class Balance {
 
-	private String holder;
+	protected final Entity holder;
 
-	private NamespacedKey key;
+	protected final UUID worldUid;
 
-	private final String world;
+	protected BigDecimal balance;
 
-	private final double balance;
-
-	protected Balance(String holder, String world, double balance) {
+	protected Balance(Entity holder, World world, BigDecimal balance) {
 		this.holder = holder;
-		this.world = world;
+		this.worldUid = world.getUID();
 		this.balance = balance;
 	}
 
-	protected Balance(NamespacedKey holder, String world, double balance) {
-		this.key = holder;
-		this.world = world;
-		this.balance = balance;
+	public World getWorld() {
+		return Bukkit.getWorld(worldUid);
 	}
 
-	public String getWorld() {
-		return world;
-	}
-
-	public double getBalance() {
+	public BigDecimal getBalance() {
 		return balance;
 	}
 
-	public String getHolder() {
+	public Entity getHolder() {
 		return holder;
-	}
-
-	public NamespacedKey getNPC() {
-		return key;
 	}
 
 }
