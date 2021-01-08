@@ -1,6 +1,7 @@
 package com.youtube.hempfest.economy;
 
 import com.youtube.hempfest.economy.construct.AdvancedEconomy;
+import com.youtube.hempfest.economy.construct.account.Wallet;
 import com.youtube.hempfest.economy.construct.account.permissive.AccountType;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
@@ -68,7 +69,7 @@ public final class Hemponomics extends JavaPlugin {
 			Collection<RegisteredServiceProvider<AdvancedEconomy>> economies = Hemponomics.getInstance().getServer().getServicesManager().getRegistrations(AdvancedEconomy.class);
 			if (sender instanceof Player) {
 				if (!sender.hasPermission("hemponomics.staff")) {
-					sendMessage(sender, "&c&oThis is a staff only command.");
+					sendMessage(sender, "&c&oThis is a staff-only command.");
 					return true;
 				}
 			}
@@ -80,7 +81,7 @@ public final class Hemponomics extends JavaPlugin {
 			if (args.length == 3) {
 				if (args[0].equalsIgnoreCase("convert")) {
 					if (economies == null || economies.size() < 2) {
-						sendMessage(sender, "You must have at least 2 Hemponomics compatible economies loaded to convert.");
+						sendMessage(sender, "You must have at least 2 Hemponomics-compatible economies loaded to convert.");
 						return true;
 					}
 					AdvancedEconomy econ1 = economies.stream().filter(e -> e.getProvider().getPlugin().getName().equalsIgnoreCase(args[1])).findFirst().map(RegisteredServiceProvider::getProvider).orElse(null);
@@ -102,11 +103,13 @@ public final class Hemponomics extends JavaPlugin {
 					for (OfflinePlayer op : Bukkit.getServer().getOfflinePlayers()) {
 						if (econ1.hasWalletAccount(op) && !econ2.hasWalletAccount(op)) {
 							econ2.createAccount(AccountType.ENTITY_ACCOUNT, op);
-							BigDecimal diff = econ1.getWalletBalance(op).subtract(econ2.getWalletBalance(op));
+							final Wallet wallet1 = econ1.getWallet(op);
+							final Wallet wallet2 = econ2.getWallet(op);
+							BigDecimal diff = wallet1.getBalance().subtract(wallet2.getBalance());
 							if (diff.compareTo(BigDecimal.ZERO) > 0) { // read as "diff > ZERO"
-								econ2.walletDeposit(op, diff);
+								wallet2.deposit(diff);
 							} else if (diff.compareTo(BigDecimal.ZERO) < 0) { // read as "diff < ZERO"
-								econ2.walletDeposit(op, diff.negate());
+								wallet2.withdraw(diff.negate());
 							}
 						}
 					}
