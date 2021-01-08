@@ -1,12 +1,16 @@
 package com.youtube.hempfest.economy;
 
 import com.youtube.hempfest.economy.construct.AdvancedEconomy;
+import com.youtube.hempfest.economy.construct.EconomyAction;
 import com.youtube.hempfest.economy.construct.account.Wallet;
 import com.youtube.hempfest.economy.construct.account.permissive.AccountType;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.stream.Collectors;
+
+import com.youtube.hempfest.economy.construct.events.AsyncEconomyInfoEvent;
+import com.youtube.hempfest.economy.construct.events.AsyncTransactionEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
@@ -14,6 +18,8 @@ import org.bukkit.command.CommandMap;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.defaults.BukkitCommand;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -27,6 +33,7 @@ public final class Hemponomics extends JavaPlugin {
 		// Plugin startup logic
 		instance = this;
 		registerCommand(new CommandHemponomic());
+		getServer().getPluginManager().registerEvents(new LoggingListener(), this);
 	}
 
 	@Override
@@ -52,6 +59,27 @@ public final class Hemponomics extends JavaPlugin {
 		}
 
 
+	}
+
+	private static class LoggingListener implements Listener {
+		@EventHandler
+		public void onInfoEvent(AsyncEconomyInfoEvent e) {
+			final EconomyAction economyAction = e.getEconomyAction();
+			getInstance().getLogger().info(String.format("Entity: %s [%s] Info: %s",
+					economyAction.getActiveHolder().friendlyName(),
+					economyAction.isSuccess(),
+					economyAction.getInfo()));
+		}
+
+		@EventHandler
+		public void onInfoEvent(AsyncTransactionEvent e) {
+			final EconomyAction economyAction = e.getEconomyAction();
+			getInstance().getLogger().info(String.format("Entity: %s [%s] Amount: %s Info: %s",
+					economyAction.getActiveHolder().friendlyName(),
+					economyAction.isSuccess(),
+					economyAction.getAmount(),
+					economyAction.getInfo()));
+		}
 	}
 
 	private static class CommandHemponomic extends BukkitCommand {
