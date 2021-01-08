@@ -108,56 +108,72 @@ public interface AdvancedEconomy {
 	/**
 	 * @deprecated String method dedicated to system/npc
 	 */
+	@Nullable
 	@Deprecated
 	Account getAccount(String name);
 
 	/**
 	 * @deprecated String method dedicated to system/npc
 	 */
+	@Nullable
 	@Deprecated
 	Account getAccount(String name, String world);
 
 	/**
 	 * @deprecated String method dedicated to system/npc
 	 */
+	@Nullable
 	@Deprecated
 	Account getAccount(String name, AccountType type);
 
 	/**
 	 * @deprecated String method dedicated to system/npc
 	 */
+	@Nullable
 	@Deprecated
 	Account getAccount(String name, AccountType type, String world);
 
 	/**
 	 * @deprecated String method dedicated to system/npc
 	 */
+	@Nullable
 	@Deprecated
 	Account getAccount(String accountId, String name, String world);
 
+	@Nullable
 	Account getAccount(OfflinePlayer player, AccountType type);
 
+	@Nullable
 	Account getAccount(OfflinePlayer player, AccountType type, String world);
 
+	@Nullable
 	Account getAccount(OfflinePlayer player);
 
+	@Nullable
 	Account getAccount(OfflinePlayer player, String world);
 
+	@Nullable
 	Account getAccount(String accountId, OfflinePlayer player, String world);
 
+	@Nullable
 	Account getAccount(UUID uuid);
 
+	@Nullable
 	Account getAccount(UUID uuid, String world);
 
+	@Nullable
 	Account getAccount(UUID uuid, AccountType type);
 
+	@Nullable
 	Account getAccount(UUID uuid, AccountType type, String world);
 
+	@Nullable
 	Account getAccount(String accountId, UUID uuid, String world);
 
 	/**
 	 * @deprecated String method dedicated to system/npc
 	 */
+	@Nullable
 	@Deprecated
 	Wallet getWallet(String name);
 
