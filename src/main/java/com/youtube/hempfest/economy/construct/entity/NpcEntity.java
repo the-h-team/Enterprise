@@ -1,8 +1,11 @@
 package com.youtube.hempfest.economy.construct.entity;
 
+import com.sun.istack.internal.NotNull;
 import com.sun.istack.internal.Nullable;
 import org.bukkit.NamespacedKey;
 import org.bukkit.plugin.Plugin;
+
+import java.util.Objects;
 
 /**
  * Base class for NPCs (recommended over String)
@@ -12,7 +15,7 @@ public class NpcEntity implements Entity {
     protected final NamespacedKey namespacedKey;
     protected final String internalName;
     protected String friendlyName;
-    private final String pluginName;
+    protected final String pluginName;
 
     /**
      * The recommended constructor for NPC entities.
@@ -22,7 +25,7 @@ public class NpcEntity implements Entity {
      * @param plugin the plugin which is responsible for this NPC
      * @param name a String name for this npc
      */
-    public NpcEntity(Plugin plugin, String name) {
+    public NpcEntity(@NotNull Plugin plugin, @NotNull String name) {
         this.internalName = name;
         this.friendlyName = name;
         this.namespacedKey = new NamespacedKey(plugin, name);
@@ -59,5 +62,18 @@ public class NpcEntity implements Entity {
     @Override
     public String id() {
         return "npc=" + namespacedKey;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        NpcEntity npcEntity = (NpcEntity) o;
+        return namespacedKey.equals(npcEntity.namespacedKey);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(namespacedKey, internalName);
     }
 }

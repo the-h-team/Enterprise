@@ -4,12 +4,16 @@ import com.sun.istack.internal.NotNull;
 import com.youtube.hempfest.economy.construct.entity.AbstractPlayerEntity;
 import org.bukkit.entity.Player;
 
+/**
+ * Represent players by name only. Good for quick transactions but not suitable
+ * for offline transactions. Contains convenience method to grab live Player object.
+ */
 public final class TemporaryPlayerEntity extends AbstractPlayerEntity {
     private final Player player;
 
-    public TemporaryPlayerEntity(@NotNull Player offlinePlayer) {
-        super(offlinePlayer);
-        this.player = offlinePlayer;
+    public TemporaryPlayerEntity(@NotNull Player player) {
+        super(player);
+        this.player = player;
     }
 
     /**

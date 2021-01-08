@@ -1,10 +1,21 @@
-package com.youtube.hempfest.economy.construct.internal;
+package com.youtube.hempfest.economy.construct;
 
+import com.sun.istack.internal.Nullable;
 import com.youtube.hempfest.economy.construct.entity.Entity;
+import com.youtube.hempfest.economy.construct.events.AsyncEconomyInfoEvent;
+import com.youtube.hempfest.economy.construct.events.AsyncTransactionEvent;
+import org.bukkit.Bukkit;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.PluginManager;
+import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.math.BigDecimal;
 
 public class EconomyAction {
+
+	private static final Plugin PLUGIN = JavaPlugin.getProvidingPlugin(EconomyAction.class);
+	private static final PluginManager PM = Bukkit.getPluginManager();
 
 	private final BigDecimal amount;
 
@@ -19,6 +30,14 @@ public class EconomyAction {
 		this.success = success;
 		this.info = transactionInfo != null ? transactionInfo : "";
 		this.holder = holder;
+		final EconomyAction economyAction = this;
+		new BukkitRunnable() {
+			@Override
+			public void run() {
+				PM.callEvent(((amount != null) ? new AsyncTransactionEvent(economyAction) :
+						new AsyncEconomyInfoEvent(economyAction)));
+			}
+		}.runTaskAsynchronously(PLUGIN);
 	}
 
 	public EconomyAction(Entity holder, boolean success, String transactionInfo) {
@@ -45,6 +64,7 @@ public class EconomyAction {
 	 * Gets the exact amount involved with the transaction
 	 * @return amount or null
 	 */
+	@Nullable
 	public BigDecimal getAmount() {
 		return amount;
 	}
