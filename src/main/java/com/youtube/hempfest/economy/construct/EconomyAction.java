@@ -1,26 +1,47 @@
 package com.youtube.hempfest.economy.construct;
 
+import com.sun.istack.internal.Nullable;
+import com.youtube.hempfest.economy.construct.entity.Entity;
+import com.youtube.hempfest.economy.construct.events.AsyncEconomyInfoEvent;
+import com.youtube.hempfest.economy.construct.events.AsyncTransactionEvent;
+import org.bukkit.Bukkit;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.PluginManager;
+import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
+
+import java.math.BigDecimal;
+
 public class EconomyAction {
 
-	private double amount;
+	private static final Plugin PLUGIN = JavaPlugin.getProvidingPlugin(EconomyAction.class);
+	private static final PluginManager PM = Bukkit.getPluginManager();
+
+	private final BigDecimal amount;
 
 	private final boolean success;
 
 	private final String info;
 
-	private final String holder;
+	private final Entity holder;
 
-	public EconomyAction(double amount, String holder, boolean success, String transactionInfo) {
+	public EconomyAction(BigDecimal amount, Entity holder, boolean success, String transactionInfo) {
 		this.amount = amount;
 		this.success = success;
 		this.info = transactionInfo != null ? transactionInfo : "";
 		this.holder = holder;
+		final EconomyAction economyAction = this;
+		new BukkitRunnable() {
+			@Override
+			public void run() {
+				PM.callEvent(((amount != null) ? new AsyncTransactionEvent(economyAction) :
+						new AsyncEconomyInfoEvent(economyAction)));
+			}
+		}.runTaskAsynchronously(PLUGIN);
 	}
 
-	public EconomyAction(String holder, boolean success, String transactionInfo) {
-		this.success = success;
-		this.info = transactionInfo != null ? transactionInfo : "";
-		this.holder = holder;
+	public EconomyAction(Entity holder, boolean success, String transactionInfo) {
+		this(null, holder, success, transactionInfo);
 	}
 
 	/**
@@ -35,7 +56,7 @@ public class EconomyAction {
 	 * Get the entity involved with the transaction
 	 * @return holder in transaction
 	 */
-	public String getActiveHolder() {
+	public Entity getActiveHolder() {
 		return holder;
 	}
 
@@ -43,7 +64,8 @@ public class EconomyAction {
 	 * Gets the exact amount involved with the transaction
 	 * @return amount or null
 	 */
-	public double getAmount() {
+	@Nullable
+	public BigDecimal getAmount() {
 		return amount;
 	}
 

@@ -1,10 +1,16 @@
 package com.youtube.hempfest.economy;
 
 import com.youtube.hempfest.economy.construct.AdvancedEconomy;
+import com.youtube.hempfest.economy.construct.EconomyAction;
+import com.youtube.hempfest.economy.construct.account.Wallet;
 import com.youtube.hempfest.economy.construct.account.permissive.AccountType;
 import java.lang.reflect.Field;
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.stream.Collectors;
+
+import com.youtube.hempfest.economy.construct.events.AsyncEconomyInfoEvent;
+import com.youtube.hempfest.economy.construct.events.AsyncTransactionEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
@@ -12,6 +18,8 @@ import org.bukkit.command.CommandMap;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.defaults.BukkitCommand;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -25,6 +33,7 @@ public final class Hemponomics extends JavaPlugin {
 		// Plugin startup logic
 		instance = this;
 		registerCommand(new CommandHemponomic());
+		getServer().getPluginManager().registerEvents(new LoggingListener(), this);
 	}
 
 	@Override
@@ -52,6 +61,27 @@ public final class Hemponomics extends JavaPlugin {
 
 	}
 
+	private static class LoggingListener implements Listener {
+		@EventHandler
+		public void onInfoEvent(AsyncEconomyInfoEvent e) {
+			final EconomyAction economyAction = e.getEconomyAction();
+			getInstance().getLogger().info(String.format("Entity: %s [%s] Info: %s",
+					economyAction.getActiveHolder().friendlyName(),
+					economyAction.isSuccess(),
+					economyAction.getInfo()));
+		}
+
+		@EventHandler
+		public void onInfoEvent(AsyncTransactionEvent e) {
+			final EconomyAction economyAction = e.getEconomyAction();
+			getInstance().getLogger().info(String.format("Entity: %s [%s] Amount: %s Info: %s",
+					economyAction.getActiveHolder().friendlyName(),
+					economyAction.isSuccess(),
+					economyAction.getAmount(),
+					economyAction.getInfo()));
+		}
+	}
+
 	private static class CommandHemponomic extends BukkitCommand {
 
 		public CommandHemponomic() {
@@ -67,7 +97,7 @@ public final class Hemponomics extends JavaPlugin {
 			Collection<RegisteredServiceProvider<AdvancedEconomy>> economies = Hemponomics.getInstance().getServer().getServicesManager().getRegistrations(AdvancedEconomy.class);
 			if (sender instanceof Player) {
 				if (!sender.hasPermission("hemponomics.staff")) {
-					sendMessage(sender, "&c&oThis is a staff only command.");
+					sendMessage(sender, "&c&oThis is a staff-only command.");
 					return true;
 				}
 			}
@@ -79,7 +109,7 @@ public final class Hemponomics extends JavaPlugin {
 			if (args.length == 3) {
 				if (args[0].equalsIgnoreCase("convert")) {
 					if (economies == null || economies.size() < 2) {
-						sendMessage(sender, "You must have at least 2 Hemponomics compatible economies loaded to convert.");
+						sendMessage(sender, "You must have at least 2 Hemponomics-compatible economies loaded to convert.");
 						return true;
 					}
 					AdvancedEconomy econ1 = economies.stream().filter(e -> e.getProvider().getPlugin().getName().equalsIgnoreCase(args[1])).findFirst().map(RegisteredServiceProvider::getProvider).orElse(null);
@@ -101,11 +131,13 @@ public final class Hemponomics extends JavaPlugin {
 					for (OfflinePlayer op : Bukkit.getServer().getOfflinePlayers()) {
 						if (econ1.hasWalletAccount(op) && !econ2.hasWalletAccount(op)) {
 							econ2.createAccount(AccountType.ENTITY_ACCOUNT, op);
-							double diff = econ1.getWalletBalance(op) - econ2.getWalletBalance(op);
-							if (diff > 0.0D) {
-								econ2.walletDeposit(op, diff);
-							} else if (diff < 0.0D) {
-								econ2.walletDeposit(op, -diff);
+							final Wallet wallet1 = econ1.getWallet(op);
+							final Wallet wallet2 = econ2.getWallet(op);
+							BigDecimal diff = wallet1.getBalance().subtract(wallet2.getBalance());
+							if (diff.compareTo(BigDecimal.ZERO) > 0) { // read as "diff > ZERO"
+								wallet2.deposit(diff);
+							} else if (diff.compareTo(BigDecimal.ZERO) < 0) { // read as "diff < ZERO"
+								wallet2.withdraw(diff.negate());
 							}
 						}
 					}
