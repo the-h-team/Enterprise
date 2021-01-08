@@ -48,7 +48,9 @@
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
+                <!-- filtering: true activates replacements by Maven of the placeholders you now see in plugin.yml -->
                 <filtering>true</filtering>
+                <!-- If you ever need to embed binaries it's recommended to have a separate directory with filtering false -->
             </resource>
         </resources>
     </build>
