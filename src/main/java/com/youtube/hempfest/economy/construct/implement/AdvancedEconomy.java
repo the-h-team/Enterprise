@@ -46,15 +46,15 @@ public interface AdvancedEconomy {
 	 */
 	@Deprecated
 	default boolean hasWalletAccount(String name) {
-		return getWallet(name) != null;
+		return getWallet(name).exists();
 	}
 
 	default boolean hasWalletAccount(OfflinePlayer player) {
-		return getWallet(player) != null;
+		return getWallet(player).exists();
 	}
 
 	default boolean hasWalletAccount(UUID uuid) {
-		return getWallet(uuid) != null;
+		return getWallet(uuid).exists();
 	}
 
 	/**
@@ -62,11 +62,11 @@ public interface AdvancedEconomy {
 	 */
 	@Deprecated
 	default boolean hasAccount(String name) {
-		return getAccount(name) != null;
+		return getAccount(name).exists();
 	}
 
 	default boolean hasAccount(OfflinePlayer player) {
-		return getAccount(player) != null;
+		return getAccount(player).exists();
 	}
 
 	/**
@@ -74,11 +74,11 @@ public interface AdvancedEconomy {
 	 */
 	@Deprecated
 	default boolean hasAccount(String accountId, String name) {
-		return getAccount(accountId, name) != null;
+		return getAccount(accountId, name).exists();
 	}
 
 	default boolean hasAccount(UUID uuid) {
-		return getAccount(uuid) != null;
+		return getAccount(uuid).exists();
 	}
 
 	/**
