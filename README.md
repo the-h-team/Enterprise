@@ -130,7 +130,7 @@ public class ExamplePlugin extends JavaPlugin {
 			EconomyAction transaction = econ.getWallet(p).deposit(new BigDecimal(20.00));
 			p.sendMessage("Balance pre transaction: " + balance);
 			if (transaction.isSuccess()) {
-				double balanceAfter = econ.getWalletBalance(p);
+				double balanceAfter = econ.getWallet(p).getBalance().doubleValue();
 				p.sendMessage(transaction.getInfo());                      // Send the user the transaction information
 				p.sendMessage("Balance pro transaction: " + balanceAfter); // Or send the user your own message.
 			} else {
