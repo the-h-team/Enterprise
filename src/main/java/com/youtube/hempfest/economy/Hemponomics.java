@@ -1,6 +1,5 @@
 package com.youtube.hempfest.economy;
 
-import com.youtube.hempfest.economy.construct.EconomyPriority;
 import com.youtube.hempfest.economy.construct.implement.AdvancedEconomy;
 import com.youtube.hempfest.economy.construct.EconomyAction;
 import com.youtube.hempfest.economy.construct.account.Wallet;
@@ -8,6 +7,7 @@ import com.youtube.hempfest.economy.construct.account.permissive.AccountType;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.util.Collection;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import com.youtube.hempfest.economy.construct.events.AsyncEconomyInfoEvent;
@@ -132,9 +132,9 @@ public final class Hemponomics extends JavaPlugin {
 					for (OfflinePlayer op : Bukkit.getServer().getOfflinePlayers()) {
 						if (econ1.hasWalletAccount(op) && !econ2.hasWalletAccount(op)) {
 							econ2.createAccount(AccountType.ENTITY_ACCOUNT, op);
-							final Wallet wallet1 = econ1.getWallet(op);
-							final Wallet wallet2 = econ2.getWallet(op);
-							BigDecimal diff = wallet1.getBalance().subtract(wallet2.getBalance());
+							final Wallet wallet1 = Objects.requireNonNull(econ1.getWallet(op));
+							final Wallet wallet2 = Objects.requireNonNull(econ2.getWallet(op));
+							BigDecimal diff = Objects.requireNonNull(wallet1.getBalance()).subtract(wallet2.getBalance());
 							if (diff.compareTo(BigDecimal.ZERO) > 0) { // read as "diff > ZERO"
 								wallet2.deposit(diff);
 							} else if (diff.compareTo(BigDecimal.ZERO) < 0) { // read as "diff < ZERO"

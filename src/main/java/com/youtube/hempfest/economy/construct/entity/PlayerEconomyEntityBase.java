@@ -1,7 +1,7 @@
 package com.youtube.hempfest.economy.construct.entity;
 
-import com.sun.istack.internal.NotNull;
 import org.bukkit.OfflinePlayer;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 import java.util.UUID;
@@ -19,7 +19,7 @@ public abstract class PlayerEconomyEntityBase implements EconomyEntity {
     }
 
     @Override
-    public String friendlyName() {
+    public @NotNull String friendlyName() {
         return offlinePlayer.getName();
     }
 

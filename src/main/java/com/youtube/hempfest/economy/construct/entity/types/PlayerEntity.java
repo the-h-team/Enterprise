@@ -1,8 +1,8 @@
 package com.youtube.hempfest.economy.construct.entity.types;
 
-import com.sun.istack.internal.NotNull;
 import com.youtube.hempfest.economy.construct.entity.PlayerEconomyEntityBase;
 import org.bukkit.OfflinePlayer;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Designed to represent players, even persistently. Uses UniqueId internally.
@@ -17,7 +17,7 @@ public final class PlayerEntity extends PlayerEconomyEntityBase {
      * @return String following "p_uid=%uuid%" format
      */
     @Override
-    public String id() {
+    public @NotNull String id() {
         return "p_uid=" + uid;
     }
 }
