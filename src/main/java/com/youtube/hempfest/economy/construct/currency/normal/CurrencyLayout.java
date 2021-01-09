@@ -1,31 +1,43 @@
-package com.youtube.hempfest.economy.construct.currency;
+package com.youtube.hempfest.economy.construct.currency.normal;
 
 import java.util.Locale;
 
 /**
- * Fluent-api builder for an immutable EconomyCurrency
+ * Fluent-api builder for an immutable CurrencyType
  */
 public class CurrencyLayout { // builder won't implement the interface to enforce #toCurrency
 
 	protected String plural;
 	protected String singular;
+	protected String minorPlural;
+	protected String minorSingular;
 	protected Locale locale;
 	protected String world;
 
-	protected CurrencyLayout() {} // Force use of EconomyCurrency static factory
+	protected CurrencyLayout() {} // Force use of CurrencyType static factory
 
 	public CurrencyLayout setWorld(String world) {
 		this.world = world;
 		return this;
 	}
 
-	public CurrencyLayout setPlural(String plural) {
+	public CurrencyLayout setMajorPlural(String plural) {
 		this.plural = plural;
 		return this;
 	}
 
-	public CurrencyLayout setSingular(String singular) {
+	public CurrencyLayout setMajorSingular(String singular) {
 		this.singular = singular;
+		return this;
+	}
+
+	public CurrencyLayout setMinorPlural(String plural) {
+		this.minorPlural = plural;
+		return this;
+	}
+
+	public CurrencyLayout setMinorSingular(String singular) {
+		this.minorSingular = singular;
 		return this;
 	}
 
@@ -35,8 +47,8 @@ public class CurrencyLayout { // builder won't implement the interface to enforc
 	}
 
 	/**
-	 * Finish building an EconomyCurrency
-	 * @return an immutable EconomyCurrency object
+	 * Finish building an CurrencyType
+	 * @return an immutable CurrencyType object
 	 */
 	public EconomyCurrency toCurrency() {
 		return new ImmutableCurrencyLayout(this);
@@ -44,7 +56,7 @@ public class CurrencyLayout { // builder won't implement the interface to enforc
 
 	@Override
 	public String toString() {
-		return "CurrencyLayout{" +
+		return "SpecialCurrencyLayout{" +
 				"plural='" + plural + '\'' +
 				", singular='" + singular + '\'' +
 				", locale=" + locale +

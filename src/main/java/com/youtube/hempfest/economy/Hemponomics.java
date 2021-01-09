@@ -1,6 +1,7 @@
 package com.youtube.hempfest.economy;
 
-import com.youtube.hempfest.economy.construct.AdvancedEconomy;
+import com.youtube.hempfest.economy.construct.EconomyPriority;
+import com.youtube.hempfest.economy.construct.implement.AdvancedEconomy;
 import com.youtube.hempfest.economy.construct.EconomyAction;
 import com.youtube.hempfest.economy.construct.account.Wallet;
 import com.youtube.hempfest.economy.construct.account.permissive.AccountType;
@@ -65,7 +66,7 @@ public final class Hemponomics extends JavaPlugin {
 		@EventHandler
 		public void onInfoEvent(AsyncEconomyInfoEvent e) {
 			final EconomyAction economyAction = e.getEconomyAction();
-			getInstance().getLogger().info(String.format("Entity: %s [%s] Info: %s",
+			getInstance().getLogger().info(String.format("EconomyEntity: %s [%s] Info: %s",
 					economyAction.getActiveHolder().friendlyName(),
 					economyAction.isSuccess(),
 					economyAction.getInfo()));
@@ -74,7 +75,7 @@ public final class Hemponomics extends JavaPlugin {
 		@EventHandler
 		public void onInfoEvent(AsyncTransactionEvent e) {
 			final EconomyAction economyAction = e.getEconomyAction();
-			getInstance().getLogger().info(String.format("Entity: %s [%s] Amount: %s Info: %s",
+			getInstance().getLogger().info(String.format("EconomyEntity: %s [%s] Amount: %s Info: %s",
 					economyAction.getActiveHolder().friendlyName(),
 					economyAction.isSuccess(),
 					economyAction.getAmount(),
@@ -103,7 +104,7 @@ public final class Hemponomics extends JavaPlugin {
 			}
 			if (args.length == 0) {
 				String ecos = economies.stream().map(RegisteredServiceProvider::getProvider).map(AdvancedEconomy::getPlugin).map(Plugin::getName).collect(Collectors.toList()).toString();
-				sendMessage(sender, "Registered Advanced Economies:" + ecos);
+				sendMessage(sender, "Registered Advanced Economies: " + ecos);
 				return true;
 			}
 			if (args.length == 3) {

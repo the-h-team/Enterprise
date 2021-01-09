@@ -1,6 +1,6 @@
 package com.youtube.hempfest.economy.construct.account;
 
-import com.youtube.hempfest.economy.construct.entity.Entity;
+import com.youtube.hempfest.economy.construct.entity.EconomyEntity;
 import org.bukkit.World;
 
 import java.math.BigDecimal;
@@ -9,7 +9,7 @@ import java.math.BigDecimal;
  * The abstract base for all Wallets
  */
 public abstract class Wallet extends Balance {
-    protected Wallet(Entity holder, World world, BigDecimal balance) {
+    protected Wallet(EconomyEntity holder, World world, BigDecimal balance) {
         super(holder, world, balance);
     }
 }

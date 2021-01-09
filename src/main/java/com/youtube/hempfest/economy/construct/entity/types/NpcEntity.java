@@ -1,7 +1,8 @@
-package com.youtube.hempfest.economy.construct.entity;
+package com.youtube.hempfest.economy.construct.entity.types;
 
 import com.sun.istack.internal.NotNull;
 import com.sun.istack.internal.Nullable;
+import com.youtube.hempfest.economy.construct.entity.EconomyEntity;
 import org.bukkit.NamespacedKey;
 import org.bukkit.plugin.Plugin;
 
@@ -10,7 +11,7 @@ import java.util.Objects;
 /**
  * Base class for NPCs (recommended over String)
  */
-public class NpcEntity implements Entity {
+public class NpcEntity implements EconomyEntity {
 
     protected final NamespacedKey namespacedKey;
     protected final String internalName;

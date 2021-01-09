@@ -2,9 +2,9 @@ package com.youtube.hempfest.economy.construct.entity;
 
 import com.sun.istack.internal.NotNull;
 
-public interface Entity {
+public interface EconomyEntity {
     /**
-     * Define a friendly name for this Entity.
+     * Define a friendly name for this EconomyEntity.
      * for instance, player's name
      * @return non-empty friendly name (defaults to #id())
      */

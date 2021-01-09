@@ -1,7 +1,7 @@
 package com.youtube.hempfest.economy.construct;
 
 import com.sun.istack.internal.Nullable;
-import com.youtube.hempfest.economy.construct.entity.Entity;
+import com.youtube.hempfest.economy.construct.entity.EconomyEntity;
 import com.youtube.hempfest.economy.construct.events.AsyncEconomyInfoEvent;
 import com.youtube.hempfest.economy.construct.events.AsyncTransactionEvent;
 import org.bukkit.Bukkit;
@@ -23,9 +23,9 @@ public class EconomyAction {
 
 	private final String info;
 
-	private final Entity holder;
+	private final EconomyEntity holder;
 
-	public EconomyAction(BigDecimal amount, Entity holder, boolean success, String transactionInfo) {
+	public EconomyAction(BigDecimal amount, EconomyEntity holder, boolean success, String transactionInfo) {
 		this.amount = amount;
 		this.success = success;
 		this.info = transactionInfo != null ? transactionInfo : "";
@@ -40,7 +40,7 @@ public class EconomyAction {
 		}.runTaskAsynchronously(PLUGIN);
 	}
 
-	public EconomyAction(Entity holder, boolean success, String transactionInfo) {
+	public EconomyAction(EconomyEntity holder, boolean success, String transactionInfo) {
 		this(null, holder, success, transactionInfo);
 	}
 
@@ -56,7 +56,7 @@ public class EconomyAction {
 	 * Get the entity involved with the transaction
 	 * @return holder in transaction
 	 */
-	public Entity getActiveHolder() {
+	public EconomyEntity getActiveHolder() {
 		return holder;
 	}
 

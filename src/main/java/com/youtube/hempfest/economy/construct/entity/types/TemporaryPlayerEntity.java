@@ -1,14 +1,14 @@
-package com.youtube.hempfest.economy.construct.entity.concrete;
+package com.youtube.hempfest.economy.construct.entity.types;
 
 import com.sun.istack.internal.NotNull;
-import com.youtube.hempfest.economy.construct.entity.AbstractPlayerEntity;
+import com.youtube.hempfest.economy.construct.entity.EconomyAbstractEntity;
 import org.bukkit.entity.Player;
 
 /**
  * Represent players by name only. Good for quick transactions but not suitable
  * for offline transactions. Contains convenience method to grab live Player object.
  */
-public final class TemporaryPlayerEntity extends AbstractPlayerEntity {
+public final class TemporaryPlayerEntity extends EconomyAbstractEntity {
     private final Player player;
 
     public TemporaryPlayerEntity(@NotNull Player player) {

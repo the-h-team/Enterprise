@@ -55,7 +55,7 @@ You simply grab the registered implementation of the interface from cache the sa
 ```JAVA
 package your.plugin.information;
 
-import com.youtube.hempfest.economy.construct.AdvancedEconomy;
+import com.youtube.hempfest.economy.construct.implement.AdvancedEconomy;
 import com.youtube.hempfest.economy.construct.EconomyAction;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
