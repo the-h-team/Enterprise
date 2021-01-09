@@ -20,6 +20,9 @@ public abstract class Balance {
 	public abstract void setBalance(BigDecimal amount);
 	public abstract void setBalance(BigDecimal amount, String world);
 
+	public abstract boolean exists();
+	public abstract boolean exists(String world);
+
 	@Nullable
 	public abstract BigDecimal getBalance();
 	@Nullable

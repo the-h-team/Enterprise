@@ -14,7 +14,6 @@ import java.util.UUID;
 
 import org.bukkit.OfflinePlayer;
 import org.bukkit.plugin.Plugin;
-import org.jetbrains.annotations.Nullable;
 
 public interface AdvancedEconomy {
 
@@ -85,53 +84,41 @@ public interface AdvancedEconomy {
 	/**
 	 * @deprecated String method dedicated to system/npc
 	 */
-	@Nullable
 	@Deprecated
 	Account getAccount(String name);
 
 	/**
 	 * @deprecated String method dedicated to system/npc
 	 */
-	@Nullable
 	@Deprecated
 	Account getAccount(String name, AccountType type);
 
 	/**
 	 * @deprecated String method dedicated to system/npc
 	 */
-	@Nullable
 	@Deprecated
 	Account getAccount(String accountId, String name);
 
-	@Nullable
 	Account getAccount(OfflinePlayer player, AccountType type);
 
-	@Nullable
 	Account getAccount(OfflinePlayer player);
 
-	@Nullable
 	Account getAccount(String accountId, OfflinePlayer player);
 
-	@Nullable
 	Account getAccount(UUID uuid);
 
-	@Nullable
 	Account getAccount(UUID uuid, AccountType type);
 
-	@Nullable
 	Account getAccount(String accountId, UUID uuid);
 
 	/**
 	 * @deprecated String method dedicated to system/npc
 	 */
-	@Nullable
 	@Deprecated
 	Wallet getWallet(String name);
 
-	@Nullable
 	Wallet getWallet(OfflinePlayer player);
 
-	@Nullable
 	Wallet getWallet(UUID uuid);
 
 	/**
