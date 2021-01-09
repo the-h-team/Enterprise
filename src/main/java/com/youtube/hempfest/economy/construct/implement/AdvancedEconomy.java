@@ -8,6 +8,7 @@ import com.youtube.hempfest.economy.construct.account.Wallet;
 import com.youtube.hempfest.economy.construct.account.permissive.AccountType;
 import com.youtube.hempfest.economy.construct.currency.normal.EconomyCurrency;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
@@ -27,11 +28,11 @@ public interface AdvancedEconomy {
 
 	EconomyPriority getPriority();
 
-	String format(double amount);
+	String format(BigDecimal amount);
 
-	String format(double amount, Locale locale);
+	String format(BigDecimal amount, Locale locale);
 
-	double getMaxWalletSize();
+	BigDecimal getMaxWalletSize();
 
 	boolean isMultiWorld();
 
