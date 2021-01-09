@@ -7,6 +7,8 @@ import com.youtube.hempfest.economy.construct.account.Account;
 import com.youtube.hempfest.economy.construct.account.Wallet;
 import com.youtube.hempfest.economy.construct.account.permissive.AccountType;
 import com.youtube.hempfest.economy.construct.currency.special.TokenCurrency;
+
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 import org.bukkit.OfflinePlayer;
@@ -24,9 +26,9 @@ public interface TokenEconomy {
 
 	TokenCurrency getCurrency(String world);
 
-	String format(double amount);
+	String format(BigDecimal amount);
 
-	double getMaxWalletSize();
+	BigDecimal getMaxWalletSize();
 
 	boolean isMultiWorld();
 

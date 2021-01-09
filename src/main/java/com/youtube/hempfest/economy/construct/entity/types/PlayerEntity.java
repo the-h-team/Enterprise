@@ -1,13 +1,13 @@
 package com.youtube.hempfest.economy.construct.entity.types;
 
 import com.sun.istack.internal.NotNull;
-import com.youtube.hempfest.economy.construct.entity.EconomyAbstractEntity;
+import com.youtube.hempfest.economy.construct.entity.PlayerEconomyEntityBase;
 import org.bukkit.OfflinePlayer;
 
 /**
  * Designed to represent players, even persistently. Uses UniqueId internally.
  */
-public final class PlayerEntity extends EconomyAbstractEntity {
+public final class PlayerEntity extends PlayerEconomyEntityBase {
     public PlayerEntity(@NotNull OfflinePlayer offlinePlayer) {
         super(offlinePlayer);
     }
