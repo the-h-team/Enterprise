@@ -1,16 +1,17 @@
-package com.youtube.hempfest.economy.construct.account;
+package com.youtube.hempfest.economy.construct.account.helpers;
 
 import com.youtube.hempfest.economy.construct.EconomyAction;
+import com.youtube.hempfest.economy.construct.account.Balance;
 import com.youtube.hempfest.economy.construct.entity.EconomyEntity;
 import org.jetbrains.annotations.Nullable;
 
 import java.math.BigDecimal;
 
 /**
- * Null Object pattern -- return this if no Balance
+ * Null Object pattern -- return this type if no Balance
  * exists for an entity in a particular context
  */
-public final class NullBalance extends Balance {
+public abstract class NullBalance extends Balance {
 
     protected NullBalance(EconomyEntity holder) {
         super(holder);
@@ -22,16 +23,6 @@ public final class NullBalance extends Balance {
 
     @Override
     public void setBalance(BigDecimal amount, String world) {
-    }
-
-    @Override
-    public boolean exists() {
-        return false;
-    }
-
-    @Override
-    public boolean exists(String world) {
-        return false;
     }
 
     @Override
