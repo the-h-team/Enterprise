@@ -125,9 +125,9 @@ public class ExamplePlugin extends JavaPlugin {
 		Player p = (Player) sender;
 
 		if (command.getLabel().equalsIgnoreCase("freemoney")) {
-			double balance = econ.getWalletBalance(p); // Getting the players private balance
-			                                           // Use (p, worldName) for a specific world
-			EconomyAction transaction = econ.walletDeposit(p, 20.00);
+			double balance = econ.getWallet(p).getBalance().doubleValue(); // Getting the players private balance
+			                                           // Use getBalance(worldName) for a specific world
+			EconomyAction transaction = econ.getWallet(p).deposit(new BigDecimal(20.00));
 			p.sendMessage("Balance pre transaction: " + balance);
 			if (transaction.isSuccess()) {
 				double balanceAfter = econ.getWalletBalance(p);
@@ -162,7 +162,7 @@ public class AdvancedEconomyHook { // You may create a class like this to help w
 	}
 
 	public void hook() {
-		provider = plugin.advancedEconomyInstance;
+		provider = plugin.yourImplForInterface;
 		Bukkit.getServicesManager().register(AdvancedEconomy.class, this.provider, this.plugin, ServicePriority.Normal);
 		plugin.getLogger().info("- Advanced economy hooked! Now registered as a provider");
 	}
