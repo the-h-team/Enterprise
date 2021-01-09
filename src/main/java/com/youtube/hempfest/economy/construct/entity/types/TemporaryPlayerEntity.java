@@ -1,8 +1,8 @@
 package com.youtube.hempfest.economy.construct.entity.types;
 
-import com.sun.istack.internal.NotNull;
 import com.youtube.hempfest.economy.construct.entity.PlayerEconomyEntityBase;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Represent players by name only. Good for quick transactions but not suitable
@@ -24,7 +24,7 @@ public final class TemporaryPlayerEntity extends PlayerEconomyEntityBase {
      * @return String following "p_name=%playerName%" format
      */
     @Override
-    public String id() {
+    public @NotNull String id() {
         return "p_name=".concat(offlinePlayer.getName());
     }
 
@@ -33,7 +33,7 @@ public final class TemporaryPlayerEntity extends PlayerEconomyEntityBase {
      * @return {@link Player} the online player
      */
     @Override
-    public Player getPlayer() {
+    public @NotNull Player getPlayer() {
         return player;
     }
 }

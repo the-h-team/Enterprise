@@ -1,6 +1,5 @@
 package com.youtube.hempfest.economy.construct;
 
-import com.sun.istack.internal.Nullable;
 import com.youtube.hempfest.economy.construct.entity.EconomyEntity;
 import com.youtube.hempfest.economy.construct.events.AsyncEconomyInfoEvent;
 import com.youtube.hempfest.economy.construct.events.AsyncTransactionEvent;
@@ -9,6 +8,7 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.jetbrains.annotations.Nullable;
 
 import java.math.BigDecimal;
 

@@ -1,10 +1,10 @@
 package com.youtube.hempfest.economy.construct.entity.types;
 
-import com.sun.istack.internal.NotNull;
-import com.sun.istack.internal.Nullable;
 import com.youtube.hempfest.economy.construct.entity.EconomyEntity;
 import org.bukkit.NamespacedKey;
 import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
@@ -56,12 +56,12 @@ public class NpcEntity implements EconomyEntity {
     }
 
     @Override
-    public String friendlyName() {
+    public @NotNull String friendlyName() {
         return friendlyName;
     }
 
     @Override
-    public String id() {
+    public @NotNull String id() {
         return "npc=" + namespacedKey;
     }
 

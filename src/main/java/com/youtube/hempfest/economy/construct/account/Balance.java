@@ -1,10 +1,10 @@
 package com.youtube.hempfest.economy.construct.account;
 
-import com.sun.istack.internal.Nullable;
 import com.youtube.hempfest.economy.construct.entity.EconomyEntity;
 import com.youtube.hempfest.economy.construct.EconomyAction;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
+import org.jetbrains.annotations.Nullable;
 
 import java.math.BigDecimal;
 import java.util.UUID;

@@ -1,6 +1,6 @@
 package com.youtube.hempfest.economy.construct.entity;
 
-import com.sun.istack.internal.NotNull;
+import org.jetbrains.annotations.NotNull;
 
 public interface EconomyEntity {
     /**

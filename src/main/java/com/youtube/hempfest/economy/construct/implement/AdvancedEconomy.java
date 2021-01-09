@@ -1,6 +1,5 @@
 package com.youtube.hempfest.economy.construct.implement;
 
-import com.sun.istack.internal.Nullable;
 import com.youtube.hempfest.economy.construct.EconomyAction;
 import com.youtube.hempfest.economy.construct.EconomyPriority;
 import com.youtube.hempfest.economy.construct.account.Account;
@@ -15,6 +14,7 @@ import java.util.UUID;
 
 import org.bukkit.OfflinePlayer;
 import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.Nullable;
 
 public interface AdvancedEconomy {
 
