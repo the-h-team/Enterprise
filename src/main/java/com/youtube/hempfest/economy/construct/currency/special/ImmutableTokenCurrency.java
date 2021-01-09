@@ -14,22 +14,22 @@ public class ImmutableTokenCurrency implements TokenCurrency {
 
 	@Override
 	public BigDecimal getTokenWorth(int ordinal) {
-		return system.ordinalMap.get(ordinal);
+		return system.ordinalMap.getOrDefault(ordinal, null);
 	}
 
 	@Override
 	public double getTokenWorthDouble(int ordinal) {
-		return system.ordinalMap.get(ordinal).doubleValue();
+		return system.ordinalMap.containsKey(ordinal) ? system.ordinalMap.get(ordinal).doubleValue() : 0;
 	}
 
 	@Override
 	public BigDecimal getTokenWorth(ItemStack item) {
-		return system.itemMap.get(item);
+		return system.itemMap.getOrDefault(item, null);
 	}
 
 	@Override
 	public double getTokenWorthDouble(ItemStack item) {
-		return system.itemMap.get(item).doubleValue();
+		return system.itemMap.containsKey(item) ? system.itemMap.get(item).doubleValue() : 0;
 	}
 
 }
