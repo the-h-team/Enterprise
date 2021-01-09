@@ -17,7 +17,7 @@ A more advanced vault like economy interface.
   	<dependency>
 	    <groupId>com.github.Hempfest</groupId>
 	    <artifactId>Hemponomics</artifactId>
-	    <version>1.0</version>
+	    <version>1.3-pre</version>
 	</dependency>
 ```
 ### Importing with gradle
@@ -30,25 +30,34 @@ A more advanced vault like economy interface.
 	}
 
 	dependencies {
-	        implementation 'com.github.Hempfest:Hemponomics:1.0'
+	        implementation 'com.github.Hempfest:Hemponomics:1.3'
 	}
 ```
 
 ### What is this?
-``This is an economy interface standalone. Much similar to the game renound "Vault" plugin but with more extensive features. It allows any plugin to either provide or hook into
-its interface to execute economy operations such as transactions.``
+``This is a standalone Economy Interface--similar in function to the Bukkit-renowned "Vault" plugin--with more extensive features!
+It allows any plugin to either provide or interface with providers to execute economy operations such as transactions/account creation.``
 
-### Why this? I have vault.
-``The opportunity this interface presents exceeds that of vaults economy interface. This alterntive allows the user overriding to implement
-far more extensive features with both currency and money account support.``
+### Why this? We already have Vault+VaultAPI.
+``The power (and ideally, ease of implementation) of this interface exceeds that of Vault's present economy interface. Hemponomics allows
+economy developers to implement complex logic quiently and offer far more extensive features with both currency and account support native to the API.``
 
-### Why so similar to vault?
-``Vault had a great idea with their system. There just sadly isnt enough economy operations native to the interface. To keep things simple and easiest to implement
-into other plugins the registration and systems are similar to that of Vault primarily for familiarity.``
+### Why so similar to Vault?
+``Vault had a great idea with their system: they connected economy plugins and users simply by defining a common series of operations that
+existing providers could map to their internal structures, new providers could start with a template, and users don't have to worry about the
+provider implementation. Hemponomics strives to do much the same while expanding functionality by inverting part of Vault's paridigm--its
+cluttered monolith interface. You see, despite its length, there simply aren't even enough economy operations native to Vault's Economy class.
+Hemponomics uses a lean main ``
+[``interface``](https://github.com/Hempfest/Hemponomics/blob/1.3-pre/src/main/java/com/youtube/hempfest/economy/construct/implement/AdvancedEconomy.java)``
+to make things simple and allow rapid implementation into other plugins with registrations and systems are similar to that of Vault for familiarity.``
 
-### Using the interface
-``Doing this is very simple and requires very little knowledge on bukkit API. 
-You simply grab the registered implementation of the interface from cache the same way as Vault using Bukkit services api``
+### Using the interface - For developers using a provider
+``Using a provider is very simple and does not requires much knowledge of the Bukkit API. Here we simply grab the registered implementation of the
+interface in essentially the same way as Vault using Bukkit's ServiceProvider API.``
+See [RegisteredServiceProvider](https://hub.spigotmc.org/javadocs/spigot/org/bukkit/plugin/RegisteredServiceProvider.html) on Spigot javadocs.
+
+_**Tip:**_ If you are outside of the main plugin class (ie do not have access to `JavaPlugin#getServer()`), note that `Bukkit.getServicesManager()` may
+also be used to get a `ServicesManager` to perform the registrations lookup.
 
 ---
 
@@ -136,14 +145,14 @@ public class ExamplePlugin extends JavaPlugin {
 }
 ```
 
-### Providing the interface
-``To provide your own economy using the interface simply implement it within your class and register it within
-your servers onEnable this will in turn allow your plugin to be a Hemponomics Economy provider.``
+### Providing the interface - For developers making economies
+``To provide your own economy using the interface simply implement it within your class and register it from
+your plugin's #onEnable(). This will in turn allow your plugin to be a Hemponomics Economy Provider.``
 
 ---
 
 ```JAVA
-public class AdvancedEconomyHook {
+public class AdvancedEconomyHook { // You may create a class like this to help with registration
 
 	private final JavaPlugin plugin;
 	private AdvancedEconomy provider;
@@ -165,405 +174,121 @@ public class AdvancedEconomyHook {
 
 }
 ```
-String methods are reserved for system/npc economy operations while UUID and OfflinePlayer methods are reserved for players.
-```JAVA
-public interface AdvancedEconomy {
-
-	Plugin getPlugin();
-
-	String getVersion();
-
-	EconomyCurrency getCurrency();
-
-	EconomyCurrency getCurrency(String world);
-
-	EconomyPriority getPriority();
-
-	String format(double amount);
-
-	String format(double amount, Locale locale);
-
-	double getMaxWalletSize();
-
-	boolean isMultiWorld();
-
-	boolean isMultiCurrency();
-
-	boolean isAccountsLimited();
-
-	boolean hasMultiAccountSupport();
-
-	boolean hasWalletSizeLimit();
-
-	/**
-	 * @deprecated String method dedicated to system/npc
-	 */
-	@Deprecated
-	boolean hasWalletAccount(String name);
-
-	/**
-	 * @deprecated String method dedicated to system/npc
-	 */
-	@Deprecated
-	boolean hasWalletAccount(String name, String world);
-
-	boolean hasWalletAccount(OfflinePlayer player);
-
-	boolean hasWalletAccount(OfflinePlayer player, String world);
-
-	boolean hasWalletAccount(UUID uuid);
-
-	boolean hasWalletAccount(UUID uuid, String world);
-
-	/**
-	 * @deprecated String method dedicated to system/npc
-	 */
-	@Deprecated
-	boolean hasAccount(String name);
-
-	boolean hasAccount(OfflinePlayer player);
-
-	boolean hasAccount(OfflinePlayer player, String world);
-
-	/**
-	 * @deprecated String method dedicated to system/npc
-	 */
-	@Deprecated
-	boolean hasAccount(String name, String world);
-
-	boolean hasAccount(UUID uuid);
-
-	boolean hasAccount(UUID uuid, String world);
-
-	/**
-	 * @deprecated String method dedicated to system/npc
-	 */
-	@Deprecated
-	boolean walletHasAmount(String name, double amount);
-
-	/**
-	 * @deprecated String method dedicated to system/npc
-	 */
-	@Deprecated
-	boolean walletHasAmount(String name, String world, double amount);
-
-	boolean walletHasAmount(OfflinePlayer player, double amount);
-
-	boolean walletHasAmount(OfflinePlayer player, String world, double amount);
-
-	boolean walletHasAmount(UUID uuid, double amount);
-
-	boolean walletHasAmount(UUID uuid, String world, double amount);
-
-	boolean accountHasAmount(String accountID, double amount);
-
-	boolean accountHasAmount(Account account, double amount);
-
-	boolean accountHasAmount(Account account, String world, double amount);
-
-	boolean accountHasAmount(String accountID, String world, double amount);
-
-	/**
-	 * @deprecated String method dedicated to system/npc
-	 */
-	@Deprecated
-	double getWalletBalance(String name);
-
-	/**
-	 * @deprecated String method dedicated to system/npc
-	 */
-	@Deprecated
-	double getWalletBalance(String name, String world);
-
-	double getWalletBalance(OfflinePlayer player);
-
-	double getWalletBalance(OfflinePlayer player, String world);
-
-	double getWalletBalance(UUID uuid);
-
-	double getWalletBalance(UUID uuid, String world);
-
-	double getAccountBalance(String accountID);
-
-	double getAccountBalance(String accountID, String world);
-
-	/**
-	 * @deprecated String method dedicated to system/npc
-	 */
-	@Deprecated
-	Account getAccount(String name);
-
-	/**
-	 * @deprecated String method dedicated to system/npc
-	 */
-	@Deprecated
-	Account getAccount(String name, String world);
-
-	/**
-	 * @deprecated String method dedicated to system/npc
-	 */
-	@Deprecated
-	Account getAccount(String name, AccountType type);
-
-	/**
-	 * @deprecated String method dedicated to system/npc
-	 */
-	@Deprecated
-	Account getAccount(String name, AccountType type, String world);
-
-	/**
-	 * @deprecated String method dedicated to system/npc
-	 */
-	@Deprecated
-	Account getAccount(String accountId, String name, String world);
-
-	Account getAccount(OfflinePlayer player, AccountType type);
-
-	Account getAccount(OfflinePlayer player, AccountType type, String world);
-
-	Account getAccount(OfflinePlayer player);
-
-	Account getAccount(OfflinePlayer player, String world);
-
-	Account getAccount(String accountId, OfflinePlayer player, String world);
-
-	Account getAccount(UUID uuid);
-
-	Account getAccount(UUID uuid, String world);
-
-	Account getAccount(UUID uuid, AccountType type);
-
-	Account getAccount(UUID uuid, AccountType type, String world);
-
-	Account getAccount(String accountId, UUID uuid, String world);
-
-	/**
-	 * @deprecated String method dedicated to system/npc
-	 */
-	@Deprecated
-	EconomyAction walletWithdraw(String name, double amount);
-
-	/**
-	 * @deprecated String method dedicated to system/npc
-	 */
-	@Deprecated
-	EconomyAction walletWithdraw(String name, String world, double amount);
-
-	EconomyAction walletWithdraw(OfflinePlayer player, double amount);
-
-	EconomyAction walletWithdraw(OfflinePlayer player, String world, double amount);
-
-	EconomyAction walletWithdraw(UUID uuid, double amount);
-
-	EconomyAction walletWithdraw(UUID uuid, String world, double amount);
-
-	EconomyAction accountWithdraw(Account account, double amount);
-
-	EconomyAction accountWithdraw(Account account, String world, double amount);
-
-	/**
-	 * @deprecated String method dedicated to system/npc
-	 */
-	@Deprecated
-	EconomyAction walletDeposit(String name, double amount);
-
-	/**
-	 * @deprecated String method dedicated to system/npc
-	 */
-	@Deprecated
-	EconomyAction walletDeposit(String name, String world, double amount);
-
-	EconomyAction walletDeposit(OfflinePlayer player, double amount);
-
-	EconomyAction walletDeposit(OfflinePlayer player, String world, double amount);
-
-	EconomyAction walletDeposit(UUID uuid, double amount);
-
-	EconomyAction walletDeposit(UUID uuid, String world, double amount);
-
-	EconomyAction accountDeposit(Account account, double amount);
-
-	EconomyAction accountDeposit(Account account, String world, double amount);
-
-	/**
-	 * @deprecated String method dedicated to system/npc
-	 */
-	@Deprecated
-	EconomyAction createAccount(AccountType type, String name);
-
-	/**
-	 * @deprecated String method dedicated to system/npc
-	 */
-	@Deprecated
-	EconomyAction createAccount(AccountType type, String name, String accountId);
-
-	/**
-	 * @deprecated String method dedicated to system/npc
-	 */
-	@Deprecated
-	EconomyAction createAccount(AccountType type, String name, double amount);
-
-	/**
-	 * @deprecated String method dedicated to system/npc
-	 */
-	@Deprecated
-	EconomyAction createAccount(AccountType type, String name, String accountId, String world);
-
-	/**
-	 * @deprecated String method dedicated to system/npc
-	 */
-	@Deprecated
-	EconomyAction createAccount(AccountType type, String name, String accountId, String world, double amount);
-
-	EconomyAction createAccount(AccountType type, OfflinePlayer player);
-
-	EconomyAction createAccount(AccountType type, OfflinePlayer player, String accountId);
-
-	EconomyAction createAccount(AccountType type, OfflinePlayer player, double amount);
-
-	EconomyAction createAccount(AccountType type, OfflinePlayer player, String accountId, String world);
-
-	EconomyAction createAccount(AccountType type, OfflinePlayer player, String accountId, String world, double amount);
-
-	EconomyAction createAccount(AccountType type, UUID uuid);
-
-	EconomyAction createAccount(AccountType type, UUID uuid, String accountId);
-
-	EconomyAction createAccount(AccountType type, UUID uuid, double amount);
-
-	EconomyAction createAccount(AccountType type, UUID uuid, String accountId, String world);
-
-	EconomyAction createAccount(AccountType type, UUID uuid, String accountId, String world, double amount);
-
-	/**
-	 * @deprecated String method dedicated to system/npc
-	 */
-	@Deprecated
-	EconomyAction deleteWalletAccount(String name);
-
-	/**
-	 * @deprecated String method dedicated to system/npc
-	 */
-	@Deprecated
-	EconomyAction deleteWalletAccount(String name, String world);
-
-	EconomyAction deleteWalletAccount(OfflinePlayer player);
-
-	EconomyAction deleteWalletAccount(OfflinePlayer player, String world);
-
-	EconomyAction deleteWalletAccount(UUID uuid);
-
-	EconomyAction deleteWalletAccount(UUID uuid, String world);
-
-	EconomyAction deleteAccount(String accountID);
-
-	EconomyAction deleteAccount(String accountID, String world);
-
-	EconomyAction deleteAccount(Account account);
-
-	/**
-	 * @deprecated String method dedicated to system/npc
-	 */
-	@Deprecated
-	EconomyAction isAccountOwner(String name, String accountID);
-
-	/**
-	 * @deprecated String method dedicated to system/npc
-	 */
-	@Deprecated
-	EconomyAction isAccountOwner(String name, Account account);
-
-	/**
-	 * @deprecated String method dedicated to system/npc
-	 */
-	@Deprecated
-	EconomyAction isAccountOwner(String name, String accountID, String world);
-
-	EconomyAction isAccountOwner(OfflinePlayer player, String accountID);
-
-	EconomyAction isAccountOwner(OfflinePlayer player, Account account);
-
-	EconomyAction isAccountOwner(OfflinePlayer player, String accountID, String world);
-
-	EconomyAction isAccountOwner(UUID uuid, String accountID);
-
-	EconomyAction isAccountOwner(UUID uuid, Account account);
-
-	EconomyAction isAccountOwner(UUID uuid, String accountID, String world);
-
-	/**
-	 * @deprecated String method dedicated to system/npc
-	 */
-	@Deprecated
-	EconomyAction isAccountMember(String name, String accountID);
-
-	/**
-	 * @deprecated String method dedicated to system/npc
-	 */
-	@Deprecated
-	EconomyAction isAccountMember(String name, Account account);
-
-	/**
-	 * @deprecated String method dedicated to system/npc
-	 */
-	@Deprecated
-	EconomyAction isAccountMember(String name, String accountID, String world);
-
-	EconomyAction isAccountMember(OfflinePlayer player, String accountID);
-
-	EconomyAction isAccountMember(OfflinePlayer player, Account account);
-
-	EconomyAction isAccountMember(OfflinePlayer player, String accountID, String world);
-
-	EconomyAction isAccountMember(UUID uuid, String accountID);
-
-	EconomyAction isAccountMember(UUID uuid, Account account);
-
-	EconomyAction isAccountMember(UUID uuid, String accountID, String world);
-
-	/**
-	 * @deprecated String method dedicated to system/npc
-	 */
-	@Deprecated
-	EconomyAction addAccountMember(String name, String accountID);
-
-	/**
-	 * @deprecated String method dedicated to system/npc
-	 */
-	@Deprecated
-	EconomyAction addAccountMember(String name, String accountID, String world);
-
-	EconomyAction addAccountMember(OfflinePlayer player, String accountID);
-
-	EconomyAction addAccountMember(OfflinePlayer player, String accountID, String world);
-
-	EconomyAction addAccountMember(UUID uuid, String accountID);
-
-	EconomyAction addAccountMember(UUID uuid, String accountID, String world);
-
-	/**
-	 * @deprecated String method dedicated to system/npc
-	 */
-	@Deprecated
-	EconomyAction removeAccountMember(String name, String accountID);
-
-	/**
-	 * @deprecated String method dedicated to system/npc
-	 */
-	@Deprecated
-	EconomyAction removeAccountMember(String name, String accountID, String world);
-
-	EconomyAction removeAccountMember(OfflinePlayer player, String accountID);
-
-	EconomyAction removeAccountMember(OfflinePlayer player, String accountID, String world);
-
-	EconomyAction removeAccountMember(UUID uuid, String accountID);
-
-	EconomyAction removeAccountMember(UUID uuid, String accountID, String world);
-
-	List<Account> getAccounts();
-
-	List<String> getAccountList();
-
+##### Now let's move onto AdvancedEconomy
+#### [AdvancedEconomy](https://github.com/Hempfest/Hemponomics/blob/1.3-pre/src/main/java/com/youtube/hempfest/economy/construct/implement/AdvancedEconomy.java)
+You may have noticed a couple new types on the way down through. What is a Wallet? What is an account?
+
+Let's take a look!
+#### [Account](https://github.com/Hempfest/Hemponomics/blob/1.3-pre/src/main/java/com/youtube/hempfest/economy/construct/account/Account.java)
+
+Awesome, and Wallet?
+#### [Wallet](https://github.com/Hempfest/Hemponomics/blob/1.3-pre/src/main/java/com/youtube/hempfest/economy/construct/account/Wallet.java)
+
+At this point, the keen observer may have noticed a few things. 
+- `Account` and `Wallet` are both subtypes of `Balance`
+- `Wallet` is further subclasses by a type called `PlayerWallet`
+
+**Balance and its subtypes are where behaviors are defined in Hemponomics**
+
+Instead of implementing a litany of overly-specific yet ambiguous method signatures like `#getBalanceOfSteveInWorld(String, String)`, all you need to do is
+return an object which appropriately implements economy logic for the parameters provided.
+
+Let's use the `Wallet` method`#getWallet(OfflinePlayer)`
+
+Start by extending Wallet or an applicable subtype. In the case of players, an abstract base
+([PlayerWallet](https://github.com/Hempfest/Hemponomics/blob/1.3-pre/src/main/java/com/youtube/hempfest/economy/construct/account/PlayerWallet.java)) is provided
+for you with easy access to the original OfflinePlayer object as needed.
+```java
+package com.example.wallet;
+
+import com.youtube.hempfest.economy.construct.EconomyAction;
+import com.youtube.hempfest.economy.construct.account.PlayerWallet;
+import org.bukkit.OfflinePlayer;
+import org.jetbrains.annotations.Nullable;
+
+import java.math.BigDecimal;
+import java.util.Map;
+import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
+/**
+ * Here I've extended PlayerWallet, a subtype of Wallet with helpful player-specific
+ * features. I have made a public constructor.
+ */
+public class ExampleWallet extends PlayerWallet {
+    private static final Map<String, BigDecimal> WALLETS = new ConcurrentHashMap<>();
+
+    public ExampleWallet(OfflinePlayer player) {
+        super(player);
+    }
+
+    @Override
+    public void setBalance(BigDecimal amount) {
+        // example code to set global balance.
+        WALLETS.put(holder.id(), amount);
+    }
+
+    @Override
+    public void setBalance(BigDecimal amount, String world) {
+        // code to set world-specific balance
+    }
+
+    @Override
+    public boolean exists() {
+        return WALLETS.containsKey(holder.id());
+    }
+
+    @Override
+    public boolean exists(String world) {
+        // You may return false if desired; in this case we simply return same as global
+        return exists();
+    }
+
+    @Override
+    public @Nullable BigDecimal getBalance() {
+        return WALLETS.get(holder.id());
+    }
+
+    @Override
+    public @Nullable BigDecimal getBalance(String world) {
+        return getBalance();
+    }
+
+    @Override
+    public boolean has(BigDecimal amount) {
+        return Optional.ofNullable(getBalance()).map(bigDecimal -> bigDecimal.compareTo(amount) >= 0).orElse(false);
+    }
+
+    @Override
+    public boolean has(BigDecimal amount, String world) {
+        return has(amount);
+    }
+
+    @Override
+    public EconomyAction deposit(BigDecimal amount) {
+        if (amount.compareTo(BigDecimal.ZERO) < 0) throw new IllegalArgumentException("Cannot deposit negative values");
+        return Optional.ofNullable(getBalance()).map(bigDecimal -> {
+            WALLETS.put(holder.id(), bigDecimal.add(amount));
+            return new EconomyAction(amount, holder, true, "Successful deposit!");
+        }).orElse(new EconomyAction(holder, false, "No account!"));
+    }
+
+    @Override
+    public EconomyAction deposit(BigDecimal amount, String world) {
+        return deposit(amount);
+    }
+
+    @Override
+    public EconomyAction withdraw(BigDecimal amount) {
+        if (amount.compareTo(BigDecimal.ZERO) < 0) throw new IllegalArgumentException("Cannot withdraw negative values");
+        return Optional.ofNullable(getBalance()).map(bigDecimal -> {
+            WALLETS.put(holder.id(), bigDecimal.subtract(amount));
+            return new EconomyAction(amount, holder, true, "Successful withdrawal!");
+        }).orElse(new EconomyAction(holder, false, "No account!"));
+    }
+
+    @Override
+    public EconomyAction withdraw(BigDecimal amount, String world) {
+        return withdraw(amount);
+    }
 }
 ```
