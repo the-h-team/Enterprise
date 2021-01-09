@@ -1,9 +1,9 @@
-package com.youtube.hempfest.economy.construct.currency;
+package com.youtube.hempfest.economy.construct.currency.normal;
 
 import java.util.Locale;
 
 /**
- * Represents a fixed layout for an EconomyCurrency
+ * Represents a fixed layout for an CurrencyType
  */
 public class ImmutableCurrencyLayout implements EconomyCurrency {
     private final CurrencyLayout currencyLayout;
@@ -13,13 +13,23 @@ public class ImmutableCurrencyLayout implements EconomyCurrency {
     }
 
     @Override
-    public String getPlural() {
+    public String majorPlural() {
         return currencyLayout.plural;
     }
 
     @Override
-    public String getSingular() {
+    public String majorSingular() {
         return currencyLayout.singular;
+    }
+
+    @Override
+    public String minorPlural() {
+        return currencyLayout.minorPlural;
+    }
+
+    @Override
+    public String minorSingular() {
+        return currencyLayout.minorSingular;
     }
 
     @Override

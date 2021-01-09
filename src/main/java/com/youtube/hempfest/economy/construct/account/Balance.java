@@ -1,7 +1,7 @@
 package com.youtube.hempfest.economy.construct.account;
 
 import com.sun.istack.internal.Nullable;
-import com.youtube.hempfest.economy.construct.entity.Entity;
+import com.youtube.hempfest.economy.construct.entity.EconomyEntity;
 import com.youtube.hempfest.economy.construct.EconomyAction;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
@@ -14,11 +14,11 @@ import java.util.UUID;
  */
 public abstract class Balance {
 
-	protected final Entity holder;
+	protected final EconomyEntity holder;
 
 	protected final UUID worldUid;
 
-	protected Balance(Entity holder, World world, BigDecimal balance) {
+	protected Balance(EconomyEntity holder, World world, BigDecimal balance) {
 		this.holder = holder;
 		this.worldUid = world.getUID();
 		setBalance(balance);
@@ -40,7 +40,7 @@ public abstract class Balance {
 
 	public abstract EconomyAction withdraw(BigDecimal amount);
 
-	public Entity getHolder() {
+	public EconomyEntity getHolder() {
 		return holder;
 	}
 

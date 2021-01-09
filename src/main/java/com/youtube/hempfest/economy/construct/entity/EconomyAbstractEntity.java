@@ -9,11 +9,11 @@ import java.util.UUID;
 /**
  * Base class for all player-based entities
  */
-public abstract class AbstractPlayerEntity implements Entity {
+public abstract class EconomyAbstractEntity implements EconomyEntity {
     protected final OfflinePlayer offlinePlayer;
     protected final UUID uid;
 
-    protected AbstractPlayerEntity(@NotNull OfflinePlayer offlinePlayer) {
+    protected EconomyAbstractEntity(@NotNull OfflinePlayer offlinePlayer) {
         this.offlinePlayer = Objects.requireNonNull(offlinePlayer);
         this.uid = offlinePlayer.getUniqueId();
     }
@@ -35,7 +35,7 @@ public abstract class AbstractPlayerEntity implements Entity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        return id().equals(((AbstractPlayerEntity) o).id());
+        return id().equals(((EconomyAbstractEntity) o).id());
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.youtube.hempfest.economy.construct.currency;
+package com.youtube.hempfest.economy.construct.currency.normal;
 
 import java.util.Locale;
 
@@ -7,16 +7,20 @@ import java.util.Locale;
  */
 public interface EconomyCurrency { // TODO: describe methods
 
-	String getPlural();
+	String majorPlural();
 
-	String getSingular();
+	String majorSingular();
+
+	String minorPlural();
+
+	String minorSingular();
 
 	Locale getLocale();
 
 	String getWorld();
 
 	/**
-	 * Static factory method to access CurrencyLayout builder util
+	 * Static factory method to access SpecialCurrencyLayout builder util
 	 */
 	static CurrencyLayout getCurrencyLayoutBuilder() {
 		return new CurrencyLayout();

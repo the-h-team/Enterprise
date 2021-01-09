@@ -2,6 +2,7 @@ package com.youtube.hempfest.economy.construct.account;
 
 import com.youtube.hempfest.economy.construct.account.permissive.AccountType;
 
+import com.youtube.hempfest.economy.construct.entity.EconomyEntity;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
@@ -9,7 +10,6 @@ import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import com.youtube.hempfest.economy.construct.entity.Entity;
 import com.youtube.hempfest.economy.construct.EconomyAction;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
@@ -23,10 +23,10 @@ public abstract class Account extends Balance {
 
 	private final List<String> members;
 
-	public Account(AccountType accountType, Entity holder, BigDecimal balance, World world, Entity... members) {
+	public Account(AccountType accountType, EconomyEntity holder, BigDecimal balance, World world, EconomyEntity... members) {
 		super(holder, world, balance);
 		this.accountType = accountType;
-		this.members = Arrays.stream(members).map(Entity::id).collect(Collectors.toList());
+		this.members = Arrays.stream(members).map(EconomyEntity::id).collect(Collectors.toList());
 	}
 
 	public AccountType getType() {
@@ -54,6 +54,22 @@ public abstract class Account extends Balance {
 	public abstract EconomyAction isOwner(OfflinePlayer player, String world);
 	public abstract EconomyAction isOwner(UUID uuid);
 	public abstract EconomyAction isOwner(UUID uuid, String world);
+
+	// Is joint owner
+	/**
+	 * @deprecated String method dedicated to system/npc
+	 */
+	@Deprecated
+	public abstract EconomyAction isJointOwner(String name);
+	/**
+	 * @deprecated String method dedicated to system/npc
+	 */
+	@Deprecated
+	public abstract EconomyAction isJointOwner(String name, String world);
+	public abstract EconomyAction isJointOwner(OfflinePlayer player);
+	public abstract EconomyAction isJointOwner(OfflinePlayer player, String world);
+	public abstract EconomyAction isJointOwner(UUID uuid);
+	public abstract EconomyAction isJointOwner(UUID uuid, String world);
 
 	// Is member
 	/**

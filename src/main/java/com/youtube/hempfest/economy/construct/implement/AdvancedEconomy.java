@@ -1,10 +1,12 @@
-package com.youtube.hempfest.economy.construct;
+package com.youtube.hempfest.economy.construct.implement;
 
 import com.sun.istack.internal.Nullable;
+import com.youtube.hempfest.economy.construct.EconomyAction;
+import com.youtube.hempfest.economy.construct.EconomyPriority;
 import com.youtube.hempfest.economy.construct.account.Account;
 import com.youtube.hempfest.economy.construct.account.Wallet;
 import com.youtube.hempfest.economy.construct.account.permissive.AccountType;
-import com.youtube.hempfest.economy.construct.currency.EconomyCurrency;
+import com.youtube.hempfest.economy.construct.currency.normal.EconomyCurrency;
 
 import java.util.List;
 import java.util.Locale;
@@ -34,8 +36,6 @@ public interface AdvancedEconomy {
 	boolean isMultiWorld();
 
 	boolean isMultiCurrency();
-
-	boolean isAccountsLimited();
 
 	boolean hasMultiAccountSupport();
 

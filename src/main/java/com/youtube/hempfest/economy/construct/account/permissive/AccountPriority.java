@@ -9,7 +9,12 @@ public enum AccountPriority {
 		this.priNum = priNum;
 	}
 
+	/**
+	 * Get's the persistent hierarchy of the enum value.
+	 * @return Position in hierarchy
+	 */
 	public int getPriNum() {
 		return priNum;
 	}
+
 }
