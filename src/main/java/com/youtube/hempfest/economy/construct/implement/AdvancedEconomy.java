@@ -49,11 +49,27 @@ public interface AdvancedEconomy {
 		return getWallet(name).exists();
 	}
 
+	/**
+	 * @deprecated String method dedicated to system/npc
+	 */
+	@Deprecated
+	default boolean hasWalletAccount(String name, String world) {
+		return getWallet(name).exists();
+	}
+
 	default boolean hasWalletAccount(OfflinePlayer player) {
 		return getWallet(player).exists();
 	}
 
+	default boolean hasWalletAccount(OfflinePlayer player, String world) {
+		return getWallet(player).exists();
+	}
+
 	default boolean hasWalletAccount(UUID uuid) {
+		return getWallet(uuid).exists();
+	}
+
+	default boolean hasWalletAccount(UUID uuid, String world) {
 		return getWallet(uuid).exists();
 	}
 
