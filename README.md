@@ -312,11 +312,46 @@ Returning to your `AdvancedEconomy` implementation
 import com.youtube.hempfest.economy.construct.implement.AdvancedEconomy;
 
 public class MyEconomyClass extends AdvancedEconomy {
-
+    /* ...implementation */
     @Override
     public Wallet getWallet(OfflinePlayer player) {
         return new ExampleWallet(player); // Our new class
     }
+    /* implementation continued... */
+}
+```
 
+Using a `Wallet` object
+```JAVA
+import com.youtube.hempfest.economy.construct.account.Wallet;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.defaults.BukkitCommand;
+import org.bukkit.entity.Player;
+
+import java.math.BigDecimal;
+
+public class DepositCommand extends BukkitCommand{
+    final AdvancedEconomy eco = MyPlugin.getHemponomicsProvider();
+
+    public DepositCommand() {
+        super("deposit");
+    }
+
+    @Override
+    public boolean execute(CommandSender sender, String commandLabel, String[] args) {
+        if (sender instanceof Player) {
+            final Wallet wallet = eco.getWallet((OfflinePlayer) sender);
+            if (wallet.exists()) {
+                sender.sendMessage("Initial balance: " + wallet.getBalance());
+                wallet.deposit(new BigDecimal("10.00"));
+                sender.sendMessage("New balance: " + wallet.getBalance());
+            } else {
+                sender.sendMessage("No wallet found.");
+            }
+            return true;
+        }
+        return false;
+    }
 }
 ```
