@@ -36,4 +36,8 @@ public final class TemporaryPlayerEntity extends PlayerEconomyEntityBase {
     public @NotNull Player getPlayer() {
         return player;
     }
+
+    public PlayerEntity toPersistent() {
+        return new PlayerEntity(player);
+    }
 }
