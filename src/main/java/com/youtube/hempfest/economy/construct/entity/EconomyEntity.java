@@ -23,4 +23,8 @@ public interface EconomyEntity {
      */
     @NotNull
     String id();
+
+    default String[] splitId() {
+        return id().split("=", 2);
+    }
 }
