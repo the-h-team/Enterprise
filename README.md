@@ -176,7 +176,7 @@ public class AdvancedEconomyHook { // You may create a class like this to help w
 ```
 ##### Now let's move onto AdvancedEconomy
 #### [AdvancedEconomy](https://github.com/Hempfest/Hemponomics/blob/1.3-pre/src/main/java/com/youtube/hempfest/economy/construct/implement/AdvancedEconomy.java)
-You may have noticed a couple new types on the way down through. What is a Wallet? What is an account?
+You may have noticed a couple new types on the way down through. What is a Wallet? What is an Account?
 
 Let's take a look!
 #### [Account](https://github.com/Hempfest/Hemponomics/blob/1.3-pre/src/main/java/com/youtube/hempfest/economy/construct/account/Account.java)
@@ -239,7 +239,7 @@ public class ExampleWallet extends PlayerWallet {
 
     @Override
     public boolean exists(String world) {
-        // You may return false if desired; in this case we simply return same as global
+        // You may return false if desired; in this case we'll simply return the same result as global
         return exists();
     }
 
@@ -255,6 +255,7 @@ public class ExampleWallet extends PlayerWallet {
 
     @Override
     public boolean has(BigDecimal amount) {
+        // if getBalance() does not return null, >= compare to amount. Return false otherwise
         return Optional.ofNullable(getBalance()).map(bigDecimal -> bigDecimal.compareTo(amount) >= 0).orElse(false);
     }
 
@@ -263,20 +264,30 @@ public class ExampleWallet extends PlayerWallet {
         return has(amount);
     }
 
+    /**
+     * @throws IllegalArgumentException if amount is less than BigDecimal.ZERO
+     */
     @Override
     public EconomyAction deposit(BigDecimal amount) {
         if (amount.compareTo(BigDecimal.ZERO) < 0) throw new IllegalArgumentException("Cannot deposit negative values");
+        // if getBalance does not return null, add amount and store in map, return success action. else return fail action
         return Optional.ofNullable(getBalance()).map(bigDecimal -> {
             WALLETS.put(holder.id(), bigDecimal.add(amount));
             return new EconomyAction(amount, holder, true, "Successful deposit!");
         }).orElse(new EconomyAction(holder, false, "No account!"));
     }
 
+    /**
+     * @throws IllegalArgumentException if amount is less than BigDecimal.ZERO
+     */
     @Override
     public EconomyAction deposit(BigDecimal amount, String world) {
         return deposit(amount);
     }
 
+    /**
+     * @throws IllegalArgumentException if amount is less than BigDecimal.ZERO
+     */
     @Override
     public EconomyAction withdraw(BigDecimal amount) {
         if (amount.compareTo(BigDecimal.ZERO) < 0) throw new IllegalArgumentException("Cannot withdraw negative values");
@@ -286,9 +297,26 @@ public class ExampleWallet extends PlayerWallet {
         }).orElse(new EconomyAction(holder, false, "No account!"));
     }
 
+    /**
+     * @throws IllegalArgumentException if amount is less than BigDecimal.ZERO
+     */
     @Override
     public EconomyAction withdraw(BigDecimal amount, String world) {
         return withdraw(amount);
     }
+}
+```
+
+Returning to your `AdvancedEconomy` implementation
+```java
+import com.youtube.hempfest.economy.construct.implement.AdvancedEconomy;
+
+public class MyEconomyClass extends AdvancedEconomy {
+
+    @Override
+    public Wallet getWallet(OfflinePlayer player) {
+        return new ExampleWallet(player); // Our new class
+    }
+
 }
 ```
