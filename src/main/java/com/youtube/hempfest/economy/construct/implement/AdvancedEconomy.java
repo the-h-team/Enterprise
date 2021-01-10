@@ -85,6 +85,10 @@ public interface AdvancedEconomy {
 		return getAccount(player).exists();
 	}
 
+	default boolean hasAccount(OfflinePlayer player, String world) {
+		return getAccount(player).exists(world);
+	}
+
 	/**
 	 * @deprecated String method dedicated to system/npc
 	 */
@@ -95,6 +99,10 @@ public interface AdvancedEconomy {
 
 	default boolean hasAccount(UUID uuid) {
 		return getAccount(uuid).exists();
+	}
+
+	default boolean hasAccount(UUID uuid, String world) {
+		return getAccount(uuid).exists(world);
 	}
 
 	/**
