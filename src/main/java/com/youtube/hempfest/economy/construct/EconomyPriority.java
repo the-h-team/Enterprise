@@ -1,7 +1,7 @@
 package com.youtube.hempfest.economy.construct;
 
 public enum EconomyPriority {
-	LOW(1), HIGH(2), HIGHER(4), HIGHEST(3);
+	LOW(1), HIGH(2), HIGHER(3), HIGHEST(4);
 
 	private final int priNum;
 
