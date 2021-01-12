@@ -3,8 +3,9 @@ package com.youtube.hempfest.economy.construct.account.helpers;
 import com.youtube.hempfest.economy.construct.entity.EconomyEntity;
 
 /**
- * Null Object pattern -- return this type if no Wallet
- * exists for an entity in a particular context
+ * Null Object pattern -- return an object subclassing this type if no Wallet
+ * exists for an entity in a particular context. You will need to override
+ * {@link #exists()} and {@link #exists(String)} based on the situation.
  */
 public abstract class NullWallet extends NullBalance {
 

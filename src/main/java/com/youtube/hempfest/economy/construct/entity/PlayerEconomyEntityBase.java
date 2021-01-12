@@ -18,6 +18,10 @@ public abstract class PlayerEconomyEntityBase implements EconomyEntity {
         this.uid = offlinePlayer.getUniqueId();
     }
 
+    /**
+     * Get the name of the contained OfflinePlayer
+     * @return Player name
+     */
     @Override
     public @NotNull String friendlyName() {
         return offlinePlayer.getName();

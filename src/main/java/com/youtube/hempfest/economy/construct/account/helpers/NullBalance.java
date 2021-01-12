@@ -8,8 +8,9 @@ import org.jetbrains.annotations.Nullable;
 import java.math.BigDecimal;
 
 /**
- * Null Object pattern -- return this type if no Balance
- * exists for an entity in a particular context
+ * Null Object pattern -- return an object subclassing this type if no Balance
+ * exists for an entity in a particular context. You will need to override
+ * {@link #exists()} and {@link #exists(String)} based on the situation.
  */
 public abstract class NullBalance extends Balance {
 
