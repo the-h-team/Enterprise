@@ -11,8 +11,9 @@ import java.math.BigDecimal;
 import java.util.UUID;
 
 /**
- * Null Object pattern -- return this type if no Account
- * exists for an entity in a particular context
+ * Null Object pattern -- return an object subclassing this type if no Account
+ * exists for an entity in a particular context. You will need to override
+ * {@link #exists()} and {@link #exists(String)} based on the situation.
  */
 public abstract class NullAccount extends Account {
 
