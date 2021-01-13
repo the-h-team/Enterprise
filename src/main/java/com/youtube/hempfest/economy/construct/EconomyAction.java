@@ -21,6 +21,8 @@ public class EconomyAction {
 
 	private final boolean success;
 
+	private boolean logged = false;
+
 	private final String info;
 
 	private final EconomyEntity holder;
@@ -30,14 +32,6 @@ public class EconomyAction {
 		this.success = success;
 		this.info = transactionInfo != null ? transactionInfo : "";
 		this.holder = holder;
-		final EconomyAction economyAction = this;
-		new BukkitRunnable() {
-			@Override
-			public void run() {
-				PM.callEvent(((amount != null) ? new AsyncTransactionEvent(economyAction) :
-						new AsyncEconomyInfoEvent(economyAction)));
-			}
-		}.runTaskAsynchronously(PLUGIN);
 	}
 
 	public EconomyAction(EconomyEntity holder, boolean success, String transactionInfo) {
@@ -76,5 +70,20 @@ public class EconomyAction {
 	 */
 	public String getInfo() {
 		return info;
+	}
+
+	public EconomyAction log() {
+		if (!logged) {
+			final EconomyAction economyAction = this;
+			new BukkitRunnable() {
+				@Override
+				public void run() {
+					PM.callEvent(((amount != null) ? new AsyncTransactionEvent(economyAction) :
+							new AsyncEconomyInfoEvent(economyAction)));
+				}
+			}.runTaskAsynchronously(PLUGIN);
+			logged = true;
+		}
+		return this;
 	}
 }
