@@ -35,6 +35,14 @@ public abstract class PlayerEconomyEntityBase implements EconomyEntity {
         return offlinePlayer;
     }
 
+    /**
+     * Get the OfflinePlayer's UniqueId
+     * @return {@link UUID} of the player
+     */
+    public UUID getUniqueId() {
+        return uid;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -44,6 +52,6 @@ public abstract class PlayerEconomyEntityBase implements EconomyEntity {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id(), uid);
+        return Objects.hash(id());
     }
 }
