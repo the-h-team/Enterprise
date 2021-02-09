@@ -24,7 +24,6 @@ import com.github.sanctum.economy.construct.entity.EconomyEntity;
 import com.github.sanctum.economy.construct.events.AsyncEconomyInfoEvent;
 import com.github.sanctum.economy.construct.events.AsyncTransactionEvent;
 import org.bukkit.Bukkit;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -37,7 +36,6 @@ import java.math.BigDecimal;
  */
 public class EconomyAction {
 
-	private static final Plugin PLUGIN = JavaPlugin.getProvidingPlugin(EconomyAction.class);
 	private static final PluginManager PM = Bukkit.getPluginManager();
 
 	private final BigDecimal amount;
@@ -107,7 +105,7 @@ public class EconomyAction {
 					PM.callEvent(((amount != null) ? new AsyncTransactionEvent(economyAction) :
 							new AsyncEconomyInfoEvent(economyAction)));
 				}
-			}.runTaskAsynchronously(PLUGIN);
+			}.runTaskAsynchronously(JavaPlugin.getProvidingPlugin(EconomyAction.class));
 			logged = true;
 		}
 		return this;
