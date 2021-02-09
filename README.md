@@ -5,7 +5,7 @@ A more advanced vault like economy interface.
 
 ---
 
-[![](https://jitpack.io/v/Hempfest/Enterprise.svg)](https://jitpack.io/#Hempfest/Enterprise)
+[![](https://jitpack.io/v/the-h-team/Enterprise.svg)](https://jitpack.io/#the-h-team/Enterprise)
 ### Importing with maven
 ```
 	<repositories>
@@ -15,7 +15,7 @@ A more advanced vault like economy interface.
 		</repository>
 	</repositories>
   	<dependency>
-	    <groupId>com.github.Sanctum</groupId>
+	    <groupId>com.github.the-h-team</groupId>
 	    <artifactId>Enterprise</artifactId>
 	    <version>1.4</version>
 	</dependency>
@@ -30,7 +30,7 @@ A more advanced vault like economy interface.
 	}
 
 	dependencies {
-	        implementation 'com.github.Sanctum:Enterprise:1.4'
+	        implementation 'com.github.the-h-team:Enterprise:1.4'
 	}
 ```
 
@@ -48,7 +48,7 @@ existing providers could map to their internal structures, new providers could s
 provider implementation. Enterprise strives to do much the same while expanding functionality by inverting part of Vault's paridigm--its
 cluttered monolith interface. You see, despite its length, there simply aren't even enough economy operations native to Vault's Economy class.
 Enterprise uses a lean main ``
-[``interface``](https://github.com/Hempfest/Enterprise/blob/1.3-pre/src/main/java/com/youtube/hempfest/economy/construct/implement/AdvancedEconomy.java)``
+[``interface``](https://github.com/the-h-team/Enterprise/blob/1.3-pre/src/main/java/com/github/the-h-team//economy/construct/implement/AdvancedEconomy.java)``
 to make things simple and allow rapid implementation into other plugins with registrations and systems are similar to that of Vault for familiarity.``
 
 ### Using the interface - For developers using a provider
@@ -80,7 +80,7 @@ public class ExamplePlugin extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		if (!setupEconomy() ) {
-			getLogger().severe("- Disabled due to no Hemponomic dependency found!");
+			getLogger().severe("- Disabled due to no Enterprise dependency found!");
 			getServer().getPluginManager().disablePlugin(this);
 		}
 	}
@@ -175,14 +175,14 @@ public class AdvancedEconomyHook { // You may create a class like this to help w
 }
 ```
 ##### Now let's move onto AdvancedEconomy
-#### [AdvancedEconomy](https://github.com/Hempfest/Enterprise/blob/1.3-pre/src/main/java/com/youtube/hempfest/economy/construct/implement/AdvancedEconomy.java)
+#### [AdvancedEconomy](https://github.com/the-h-team/Enterprise/blob/1.3-pre/src/main/java/com/github/sanctum/economy/construct/implement/AdvancedEconomy.java)
 You may have noticed a couple new types on the way down through. What is a Wallet? What is an Account?
 
 Let's take a look!
-#### [Account](https://github.com/Hempfest/Enterprise/blob/1.3-pre/src/main/java/com/youtube/hempfest/economy/construct/account/Account.java)
+#### [Account](https://github.com/the-h-team/Enterprise/blob/1.3-pre/src/main/java/com/github/sanctum/economy/construct/account/Account.java)
 
 Awesome, and Wallet?
-#### [Wallet](https://github.com/Hempfest/Enterprise/blob/1.3-pre/src/main/java/com/youtube/hempfest/economy/construct/account/Wallet.java)
+#### [Wallet](https://github.com/the-h-team/Enterprise/blob/1.3-pre/src/main/java/com/github/sanctum/economy/construct/account/Wallet.java)
 
 At this point, the keen observer may have noticed a few things. 
 - `Account` and `Wallet` are both subtypes of `Balance`
@@ -196,7 +196,7 @@ return an object which appropriately implements economy logic for the parameters
 Let's use the `Wallet` method`#getWallet(OfflinePlayer)`
 
 Start by extending Wallet or an applicable subtype. In the case of players, an abstract base
-([PlayerWallet](https://github.com/Hempfest/Enterprise/blob/1.3-pre/src/main/java/com/youtube/hempfest/economy/construct/account/PlayerWallet.java)) is provided
+([PlayerWallet](https://github.com/the-h-team/Enterprise/blob/1.3-pre/src/main/java/com/github/sanctum/economy/construct/account/PlayerWallet.java)) is provided
 for you with easy access to the original OfflinePlayer object as needed.
 ```java
 package com.example.wallet;

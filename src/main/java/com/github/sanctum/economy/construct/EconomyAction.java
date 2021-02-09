@@ -1,3 +1,23 @@
+/*
+ *  Copyright 2021 Sanctum <https://github.com/the-h-team>
+ *  Copyright 2020 Hempfest <https://github.com/Hempfest>
+ *  Copyright 2020 ms5984 (Matt) <https://github.com/ms5984>
+ *
+ *  This file is part of Enterprise.
+ *
+ *  Enterprise is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Lesser General Public License as
+ *  published by the Free Software Foundation, either version 3 of the
+ *  License, or (at your option) any later version.
+ *
+ *  Enterprise is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public License
+ *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
 package com.github.sanctum.economy.construct;
 
 import com.github.sanctum.economy.construct.entity.EconomyEntity;
@@ -12,6 +32,9 @@ import org.jetbrains.annotations.Nullable;
 
 import java.math.BigDecimal;
 
+/**
+ * An action. May constitute a transaction or simply provide information.
+ */
 public class EconomyAction {
 
 	private static final Plugin PLUGIN = JavaPlugin.getProvidingPlugin(EconomyAction.class);
@@ -65,13 +88,16 @@ public class EconomyAction {
 
 	/**
 	 * Gets the transaction result information.
-	 * @return The returned information from the constructor -
-	 * empty if absent
+	 * @return The returned information from the constructor - empty if absent
 	 */
 	public String getInfo() {
 		return info;
 	}
 
+	/**
+	 * Fluid-interface method to enable log for this EconomyAction.
+	 * @return this EconomyAction
+	 */
 	public EconomyAction log() {
 		if (!logged) {
 			final EconomyAction economyAction = this;
