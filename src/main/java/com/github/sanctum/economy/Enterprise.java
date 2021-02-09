@@ -37,7 +37,7 @@ public final class Enterprise extends JavaPlugin {
 	}
 
 	@Override
-	public void onDisable() {
+	public void onDisable() {//
 
 	}
 
