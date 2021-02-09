@@ -27,7 +27,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 /**
- * Base class for all player-based entities
+ * Base class for all player-based EconomyEntities
  */
 public abstract class PlayerEconomyEntityBase implements EconomyEntity {
     protected final OfflinePlayer offlinePlayer;

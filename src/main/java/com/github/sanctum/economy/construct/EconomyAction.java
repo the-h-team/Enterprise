@@ -32,6 +32,9 @@ import org.jetbrains.annotations.Nullable;
 
 import java.math.BigDecimal;
 
+/**
+ * An action. May constitute a transaction or simply provide information.
+ */
 public class EconomyAction {
 
 	private static final Plugin PLUGIN = JavaPlugin.getProvidingPlugin(EconomyAction.class);
@@ -85,13 +88,16 @@ public class EconomyAction {
 
 	/**
 	 * Gets the transaction result information.
-	 * @return The returned information from the constructor -
-	 * empty if absent
+	 * @return The returned information from the constructor - empty if absent
 	 */
 	public String getInfo() {
 		return info;
 	}
 
+	/**
+	 * Fluid-interface method to enable log for this EconomyAction.
+	 * @return this EconomyAction
+	 */
 	public EconomyAction log() {
 		if (!logged) {
 			final EconomyAction economyAction = this;

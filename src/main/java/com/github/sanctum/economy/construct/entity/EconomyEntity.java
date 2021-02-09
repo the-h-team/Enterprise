@@ -22,10 +22,13 @@ package com.github.sanctum.economy.construct.entity;
 
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Describes an entity engaged in economy transactions
+ */
 public interface EconomyEntity {
     /**
      * Define a friendly name for this EconomyEntity.
-     * for instance, player's name
+     * <p>For instance, a player's name, or an organization.</p>
      * @return non-empty friendly name (defaults to #id())
      */
     default @NotNull String friendlyName() {
@@ -33,17 +36,23 @@ public interface EconomyEntity {
     }
 
     /**
-     * Get a string which uniquely identifies this entity
+     * Get a string which uniquely identifies this entity.
+     * <p>Uses the following format:</p>
+     * <p>'type'='identity'</p>
      *
-     * Sample implementation:
-     * (Persistent Player/OfflinePlayer) UniqueId-based player id: 'p_uid=uuid'
-     * (Temporary Player) Session-based player id: 'p_name=PlayerName'
-     * (NPCs) NamespacedKey-based npc id: 'npc=plugin:string-key'
+     * <p>Sample implementations:</p>
+     * <p>(Persistent Player/OfflinePlayer) UniqueId-based player id: 'p_uid=uuid'</p>
+     * <p>(Temporary Player) Session-based player id: 'p_name=PlayerName'</p>
+     * <p>(NPCs) NamespacedKey-based npc id: 'npc=plugin:string-key'</p>
      * @return String which is unique to this entity
      */
     @NotNull
     String id();
 
+    /**
+     * Separate the 'type' and 'identity' components of {@link #id()}.
+     * @return array of length 2 where element one is type and two is identity
+     */
     default String[] splitId() {
         return id().split("=", 2);
     }
