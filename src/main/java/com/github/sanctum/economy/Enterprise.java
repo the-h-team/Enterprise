@@ -36,7 +36,7 @@ public final class Enterprise extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new LoggingListener(), this);
 	}
 
-	@Override
+	@Override//
 	public void onDisable() {//
 
 	}
