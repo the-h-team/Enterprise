@@ -24,6 +24,9 @@ import com.github.sanctum.economy.construct.EconomyAction;
 
 import java.math.BigDecimal;
 
+/**
+ * Describes an object to which funds can be paid.
+ */
 public interface Payable {
     /**
      * Attempt to deposit an amount

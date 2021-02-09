@@ -24,6 +24,9 @@ import com.github.sanctum.economy.construct.EconomyAction;
 
 import java.math.BigDecimal;
 
+/**
+ * Describes an object from which funds can be drawn.
+ */
 public interface Drawable {
     /**
      * Attempt to withdraw an amount
