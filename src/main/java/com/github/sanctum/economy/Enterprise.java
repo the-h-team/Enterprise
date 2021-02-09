@@ -35,9 +35,9 @@ import java.util.stream.Collectors;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.command.Command;
 import org.bukkit.command.CommandMap;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.defaults.BukkitCommand;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -52,40 +52,32 @@ public final class Enterprise extends JavaPlugin {
 	@Override
 	public void onEnable() {//
 		instance = this;
-		registerCommand(new CommandHemponomic());
+		registerCommand(new EnterpriseCommand());
 		getServer().getPluginManager().registerEvents(new LoggingListener(), this);
 	}
 
 	@Override
 	public void onDisable() {//
-
 	}
 
-	protected static Enterprise getInstance() {
-		return instance;
-	}
-
-	public void registerCommand(BukkitCommand command) {
+	private void registerCommand(Command command) {
 		try {
-
 			final Field commandMapField = getServer().getClass().getDeclaredField("commandMap");
 			commandMapField.setAccessible(true);
 
 			final CommandMap commandMap = (CommandMap) commandMapField.get(getServer());
-			commandMap.register(command.getLabel(), command);
+			commandMap.register(getName(), command);
 
-		} catch (final Exception e) {
+		} catch (final NoSuchFieldException | IllegalAccessException e) {
 			e.printStackTrace();
 		}
-
-
 	}
 
-	private static class LoggingListener implements Listener {
+	private class LoggingListener implements Listener {
 		@EventHandler
 		public void onInfoEvent(AsyncEconomyInfoEvent e) {
 			final EconomyAction economyAction = e.getEconomyAction();
-			getInstance().getLogger().info(String.format("EconomyEntity: %s [%s] Info: %s",
+			getLogger().info(String.format("EconomyEntity: %s [%s] Info: %s",
 					economyAction.getActiveHolder().friendlyName(),
 					economyAction.isSuccess(),
 					economyAction.getInfo()));
@@ -94,7 +86,7 @@ public final class Enterprise extends JavaPlugin {
 		@EventHandler
 		public void onInfoEvent(AsyncTransactionEvent e) {
 			final EconomyAction economyAction = e.getEconomyAction();
-			getInstance().getLogger().info(String.format("EconomyEntity: %s [%s] Amount: %s Info: %s",
+			getLogger().info(String.format("EconomyEntity: %s [%s] Amount: %s Info: %s",
 					economyAction.getActiveHolder().friendlyName(),
 					economyAction.isSuccess(),
 					economyAction.getAmount(),
@@ -102,19 +94,19 @@ public final class Enterprise extends JavaPlugin {
 		}
 	}
 
-	private static class CommandHemponomic extends BukkitCommand {
+	private class EnterpriseCommand extends Command {
 
-		public CommandHemponomic() {
+		public EnterpriseCommand() {
 			super("enterprise");
 		}
 
 		private void sendMessage(CommandSender player, String message) {
-			player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&f[&2Hemponomics&f] " + message));
+			player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&f[&2" + instance.getName() +"&f] " + message));
 		}
 
 		@Override
 		public boolean execute(CommandSender sender, String commandLabel, String[] args) {
-			Collection<RegisteredServiceProvider<AdvancedEconomy>> economies = Enterprise.getInstance().getServer().getServicesManager().getRegistrations(AdvancedEconomy.class);
+			Collection<RegisteredServiceProvider<AdvancedEconomy>> economies = getServer().getServicesManager().getRegistrations(AdvancedEconomy.class);
 			if (sender instanceof Player) {
 				if (!sender.hasPermission("enterprise.staff")) {
 					sendMessage(sender, "&c&oThis is a staff-only command.");
