@@ -31,7 +31,6 @@ public final class Enterprise extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
-		// Plugin startup logic
 		instance = this;
 		registerCommand(new CommandHemponomic());
 		getServer().getPluginManager().registerEvents(new LoggingListener(), this);
@@ -39,7 +38,7 @@ public final class Enterprise extends JavaPlugin {
 
 	@Override
 	public void onDisable() {
-		// Plugin shutdown logic
+
 	}
 
 	protected static Enterprise getInstance() {
