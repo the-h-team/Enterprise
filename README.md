@@ -1,11 +1,11 @@
-# Hemponomics
+# Enterprise
 
 
 A more advanced vault like economy interface.
 
 ---
 
-[![](https://jitpack.io/v/Hempfest/Hemponomics.svg)](https://jitpack.io/#Hempfest/Hemponomics)
+[![](https://jitpack.io/v/Hempfest/Enterprise.svg)](https://jitpack.io/#Hempfest/Enterprise)
 ### Importing with maven
 ```
 	<repositories>
@@ -15,9 +15,9 @@ A more advanced vault like economy interface.
 		</repository>
 	</repositories>
   	<dependency>
-	    <groupId>com.github.Hempfest</groupId>
-	    <artifactId>Hemponomics</artifactId>
-	    <version>1.3-pre</version>
+	    <groupId>com.github.Sanctum</groupId>
+	    <artifactId>Enterprise</artifactId>
+	    <version>1.4</version>
 	</dependency>
 ```
 ### Importing with gradle
@@ -30,7 +30,7 @@ A more advanced vault like economy interface.
 	}
 
 	dependencies {
-	        implementation 'com.github.Hempfest:Hemponomics:1.3'
+	        implementation 'com.github.Sanctum:Enterprise:1.4'
 	}
 ```
 
@@ -39,16 +39,16 @@ A more advanced vault like economy interface.
 It allows any plugin to either provide or interface with providers to execute economy operations such as transactions/account creation.``
 
 ### Why this? We already have Vault+VaultAPI.
-``The power (and ideally, ease of implementation) of this interface exceeds that of Vault's present economy interface. Hemponomics allows
+``The power (and ideally, ease of implementation) of this interface exceeds that of Vault's present economy interface. Enterprise allows
 economy developers to implement complex logic quiently and offer far more extensive features with both currency and account support native to the API.``
 
 ### Why so similar to Vault?
 ``Vault had a great idea with their system: they connected economy plugins and users simply by defining a common series of operations that
 existing providers could map to their internal structures, new providers could start with a template, and users don't have to worry about the
-provider implementation. Hemponomics strives to do much the same while expanding functionality by inverting part of Vault's paridigm--its
+provider implementation. Enterprise strives to do much the same while expanding functionality by inverting part of Vault's paridigm--its
 cluttered monolith interface. You see, despite its length, there simply aren't even enough economy operations native to Vault's Economy class.
-Hemponomics uses a lean main ``
-[``interface``](https://github.com/Hempfest/Hemponomics/blob/1.3-pre/src/main/java/com/youtube/hempfest/economy/construct/implement/AdvancedEconomy.java)``
+Enterprise uses a lean main ``
+[``interface``](https://github.com/Hempfest/Enterprise/blob/1.3-pre/src/main/java/com/youtube/hempfest/economy/construct/implement/AdvancedEconomy.java)``
 to make things simple and allow rapid implementation into other plugins with registrations and systems are similar to that of Vault for familiarity.``
 
 ### Using the interface - For developers using a provider
@@ -64,8 +64,8 @@ also be used to get a `ServicesManager` to perform the registrations lookup.
 ```JAVA
 package your.plugin.information;
 
-import com.youtube.hempfest.economy.construct.implement.AdvancedEconomy;
-import com.youtube.hempfest.economy.construct.EconomyAction;
+import AdvancedEconomy;
+import EconomyAction;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -147,7 +147,7 @@ public class ExamplePlugin extends JavaPlugin {
 
 ### Providing the interface - For developers making economies
 ``To provide your own economy using the interface simply implement it within your class and register it from
-your plugin's #onEnable(). This will in turn allow your plugin to be a Hemponomics Economy Provider.``
+your plugin's #onEnable(). This will in turn allow your plugin to be a Enterprise Economy Provider.``
 
 ---
 
@@ -175,20 +175,20 @@ public class AdvancedEconomyHook { // You may create a class like this to help w
 }
 ```
 ##### Now let's move onto AdvancedEconomy
-#### [AdvancedEconomy](https://github.com/Hempfest/Hemponomics/blob/1.3-pre/src/main/java/com/youtube/hempfest/economy/construct/implement/AdvancedEconomy.java)
+#### [AdvancedEconomy](https://github.com/Hempfest/Enterprise/blob/1.3-pre/src/main/java/com/youtube/hempfest/economy/construct/implement/AdvancedEconomy.java)
 You may have noticed a couple new types on the way down through. What is a Wallet? What is an Account?
 
 Let's take a look!
-#### [Account](https://github.com/Hempfest/Hemponomics/blob/1.3-pre/src/main/java/com/youtube/hempfest/economy/construct/account/Account.java)
+#### [Account](https://github.com/Hempfest/Enterprise/blob/1.3-pre/src/main/java/com/youtube/hempfest/economy/construct/account/Account.java)
 
 Awesome, and Wallet?
-#### [Wallet](https://github.com/Hempfest/Hemponomics/blob/1.3-pre/src/main/java/com/youtube/hempfest/economy/construct/account/Wallet.java)
+#### [Wallet](https://github.com/Hempfest/Enterprise/blob/1.3-pre/src/main/java/com/youtube/hempfest/economy/construct/account/Wallet.java)
 
 At this point, the keen observer may have noticed a few things. 
 - `Account` and `Wallet` are both subtypes of `Balance`
 - `Wallet` is further subclasses by a type called `PlayerWallet`
 
-**Balance and its subtypes are where behaviors are defined in Hemponomics**
+**Balance and its subtypes are where behaviors are defined in Enterprise**
 
 Instead of implementing a litany of overly-specific yet ambiguous method signatures like `#getBalanceOfSteveInWorld(String, String)`, all you need to do is
 return an object which appropriately implements economy logic for the parameters provided.
@@ -196,13 +196,13 @@ return an object which appropriately implements economy logic for the parameters
 Let's use the `Wallet` method`#getWallet(OfflinePlayer)`
 
 Start by extending Wallet or an applicable subtype. In the case of players, an abstract base
-([PlayerWallet](https://github.com/Hempfest/Hemponomics/blob/1.3-pre/src/main/java/com/youtube/hempfest/economy/construct/account/PlayerWallet.java)) is provided
+([PlayerWallet](https://github.com/Hempfest/Enterprise/blob/1.3-pre/src/main/java/com/youtube/hempfest/economy/construct/account/PlayerWallet.java)) is provided
 for you with easy access to the original OfflinePlayer object as needed.
 ```java
 package com.example.wallet;
 
-import com.youtube.hempfest.economy.construct.EconomyAction;
-import com.youtube.hempfest.economy.construct.account.PlayerWallet;
+import EconomyAction;
+import PlayerWallet;
 import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.Nullable;
 
@@ -309,7 +309,7 @@ public class ExampleWallet extends PlayerWallet {
 
 Returning to your `AdvancedEconomy` implementation
 ```java
-import com.youtube.hempfest.economy.construct.implement.AdvancedEconomy;
+import AdvancedEconomy;
 
 public class MyEconomyClass extends AdvancedEconomy {
     /* ...implementation */
@@ -323,7 +323,7 @@ public class MyEconomyClass extends AdvancedEconomy {
 
 Using a `Wallet` object
 ```JAVA
-import com.youtube.hempfest.economy.construct.account.Wallet;
+import Wallet;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.defaults.BukkitCommand;
@@ -332,7 +332,7 @@ import org.bukkit.entity.Player;
 import java.math.BigDecimal;
 
 public class DepositCommand extends BukkitCommand{
-    final AdvancedEconomy eco = MyPlugin.getHemponomicsProvider();
+    final AdvancedEconomy eco = MyPlugin.getEnterpriseProvider();
 
     public DepositCommand() {
         super("deposit");

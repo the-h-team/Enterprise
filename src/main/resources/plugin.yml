@@ -1,6 +1,6 @@
-name: Hemponomics
-version: 1.3
-main: com.youtube.hempfest.economy.Hemponomics
+name: Enterprise
+version: 1.4
+main: com.youtube.sanctum.economy.Enterprise
 authors: [ Hempfest, ms5984 ]
 api-version: 1.13
 description: ${project.description}
