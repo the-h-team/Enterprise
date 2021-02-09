@@ -30,7 +30,7 @@ public final class Enterprise extends JavaPlugin {
 	private static Enterprise instance;
 
 	@Override
-	public void onEnable() {
+	public void onEnable() {//
 		instance = this;
 		registerCommand(new CommandHemponomic());
 		getServer().getPluginManager().registerEvents(new LoggingListener(), this);
