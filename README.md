@@ -175,14 +175,14 @@ public class AdvancedEconomyHook { // You may create a class like this to help w
 }
 ```
 ##### Now let's move onto AdvancedEconomy
-#### [AdvancedEconomy](https://github.com/the-h-team/Enterprise/blob/1.3-pre/src/main/java/com/github/sanctum/economy/construct/implement/AdvancedEconomy.java)
+#### [AdvancedEconomy](https://github.com/the-h-team/Enterprise/blob/master/src/main/java/com/github/sanctum/economy/construct/implement/AdvancedEconomy.java)
 You may have noticed a couple new types on the way down through. What is a Wallet? What is an Account?
 
 Let's take a look!
-#### [Account](https://github.com/the-h-team/Enterprise/blob/1.3-pre/src/main/java/com/github/sanctum/economy/construct/account/Account.java)
+#### [Account](https://github.com/the-h-team/Enterprise/blob/master/src/main/java/com/github/sanctum/economy/construct/account/Account.java)
 
 Awesome, and Wallet?
-#### [Wallet](https://github.com/the-h-team/Enterprise/blob/1.3-pre/src/main/java/com/github/sanctum/economy/construct/account/Wallet.java)
+#### [Wallet](https://github.com/the-h-team/Enterprise/blob/master/src/main/java/com/github/sanctum/economy/construct/account/Wallet.java)
 
 At this point, the keen observer may have noticed a few things. 
 - `Account` and `Wallet` are both subtypes of `Balance`
