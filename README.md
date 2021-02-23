@@ -17,7 +17,7 @@ A more advanced vault like economy interface.
   	<dependency>
 	    <groupId>com.github.the-h-team</groupId>
 	    <artifactId>Enterprise</artifactId>
-	    <version>1.4</version>
+	    <version>1.5</version>
 	</dependency>
 ```
 ### Importing with gradle
@@ -30,7 +30,7 @@ A more advanced vault like economy interface.
 	}
 
 	dependencies {
-	        implementation 'com.github.the-h-team:Enterprise:1.4'
+	        implementation 'com.github.the-h-team:Enterprise:1.5'
 	}
 ```
 
