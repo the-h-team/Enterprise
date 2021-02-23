@@ -51,6 +51,8 @@ public abstract class Account extends Balance {
 		return accountType;
 	}
 
+	public String getId() { return "your-id-here"; }
+
 	public List<String> getMembers() {
 		return members;
 	}
