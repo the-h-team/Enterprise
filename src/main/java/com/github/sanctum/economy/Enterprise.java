@@ -142,7 +142,7 @@ public final class Enterprise extends JavaPlugin {
 					long time = System.currentTimeMillis();
 					for (OfflinePlayer op : Bukkit.getServer().getOfflinePlayers()) {
 						if (econ1.hasWalletAccount(op) && !econ2.hasWalletAccount(op)) {
-							econ2.createAccount(AccountType.ENTITY_ACCOUNT, op);
+							econ2.getWallet(op).setBalance(BigDecimal.ZERO);
 							final Wallet wallet1 = econ1.getWallet(op);
 							final Wallet wallet2 = econ2.getWallet(op);
 							BigDecimal diff = Objects.requireNonNull(wallet1.getBalance()).subtract(wallet2.getBalance());
