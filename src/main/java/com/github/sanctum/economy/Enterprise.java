@@ -22,7 +22,6 @@ package com.github.sanctum.economy;
 
 import com.github.sanctum.economy.construct.EconomyAction;
 import com.github.sanctum.economy.construct.account.Wallet;
-import com.github.sanctum.economy.construct.account.permissive.AccountType;
 import com.github.sanctum.economy.construct.events.AsyncEconomyInfoEvent;
 import com.github.sanctum.economy.construct.events.AsyncTransactionEvent;
 import com.github.sanctum.economy.construct.implement.AdvancedEconomy;
@@ -31,7 +30,6 @@ import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Objects;
 import java.util.stream.Collectors;
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
@@ -141,15 +139,11 @@ public final class Enterprise extends JavaPlugin {
 					sendMessage(sender, "&e&oDepending on the amount of registrations this may take a while.");
 					long time = System.currentTimeMillis();
 					for (OfflinePlayer op : Bukkit.getServer().getOfflinePlayers()) {
-						if (econ1.hasWalletAccount(op) && !econ2.hasWalletAccount(op)) {
-							econ2.getWallet(op).setBalance(BigDecimal.ZERO);
+						if (econ1.hasWalletAccount(op)) {
 							final Wallet wallet1 = econ1.getWallet(op);
 							final Wallet wallet2 = econ2.getWallet(op);
-							BigDecimal diff = Objects.requireNonNull(wallet1.getBalance()).subtract(wallet2.getBalance());
-							if (diff.compareTo(BigDecimal.ZERO) > 0) { // read as "diff > ZERO"
-								wallet2.deposit(diff);
-							} else if (diff.compareTo(BigDecimal.ZERO) < 0) { // read as "diff < ZERO"
-								wallet2.withdraw(diff.negate());
+							if (Objects.requireNonNull(wallet1.getBalance()).compareTo(BigDecimal.ZERO) > 0) {
+								wallet2.setBalance(wallet1.getBalance());
 							}
 						}
 					}
