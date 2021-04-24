@@ -1,5 +1,5 @@
 name: Enterprise
-version: 1.6
+version: 1.7
 main: com.github.sanctum.economy.Enterprise
 authors: [ Hempfest, ms5984 ]
 api-version: 1.13

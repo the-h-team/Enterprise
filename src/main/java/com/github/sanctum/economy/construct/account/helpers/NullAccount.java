@@ -20,15 +20,14 @@
  */
 package com.github.sanctum.economy.construct.account.helpers;
 
-import com.github.sanctum.economy.construct.account.Account;
-import com.github.sanctum.economy.construct.entity.EconomyEntity;
 import com.github.sanctum.economy.construct.EconomyAction;
+import com.github.sanctum.economy.construct.account.Account;
 import com.github.sanctum.economy.construct.account.permissive.AccountType;
-import org.bukkit.OfflinePlayer;
-import org.jetbrains.annotations.Nullable;
-
+import com.github.sanctum.economy.construct.entity.EconomyEntity;
 import java.math.BigDecimal;
 import java.util.UUID;
+import org.bukkit.OfflinePlayer;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Null Object pattern -- return an object subclassing this type if no Account
@@ -42,11 +41,13 @@ public abstract class NullAccount extends Account {
     }
 
     @Override
-    public void setBalance(BigDecimal amount) {
+    public EconomyAction setBalance(BigDecimal amount) {
+        return null;
     }
 
     @Override
-    public void setBalance(BigDecimal amount, String world) {
+    public EconomyAction setBalance(BigDecimal amount, String world) {
+        return null;
     }
 
     @Override

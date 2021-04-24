@@ -20,12 +20,12 @@
  */
 package com.github.sanctum.economy.construct.account;
 
-import com.github.sanctum.economy.construct.account.helpers.operation.Payable;
+import com.github.sanctum.economy.construct.EconomyAction;
 import com.github.sanctum.economy.construct.account.helpers.operation.Drawable;
+import com.github.sanctum.economy.construct.account.helpers.operation.Payable;
 import com.github.sanctum.economy.construct.entity.EconomyEntity;
-import org.jetbrains.annotations.Nullable;
-
 import java.math.BigDecimal;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * The base class for all Balances (Accounts and Wallets)
@@ -42,17 +42,22 @@ public abstract class Balance implements Payable, Drawable {
 	 * Set this Balance in a general context. {@link #exists()} might or
 	 * might not be referenced in an implementation; it is recommended
 	 * but not required.
+	 *
 	 * @param amount New amount
+	 * @return An economy action retaining information.
 	 */
-	public abstract void setBalance(BigDecimal amount);
+	public abstract EconomyAction setBalance(BigDecimal amount);
+
 	/**
 	 * Set this Balance in the specific World 'world' context.
 	 * {@link #exists(String)} might or might not be referenced in an
 	 * implementation; it is recommended but not required.
+	 *
 	 * @param amount New amount
-	 * @param world Name of world
+	 * @param world  Name of world
+	 * @return An economy action retaining information.
 	 */
-	public abstract void setBalance(BigDecimal amount, String world);
+	public abstract EconomyAction setBalance(BigDecimal amount, String world);
 
 	/**
 	 * Check if this Balance exists in a general context. Realistically,
