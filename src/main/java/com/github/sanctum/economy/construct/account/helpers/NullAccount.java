@@ -42,12 +42,12 @@ public abstract class NullAccount extends Account {
 
     @Override
     public EconomyAction setBalance(BigDecimal amount) {
-        return null;
+        return new EconomyAction(holder, false, "");
     }
 
     @Override
     public EconomyAction setBalance(BigDecimal amount, String world) {
-        return null;
+        return new EconomyAction(holder, false, "");
     }
 
     @Override
