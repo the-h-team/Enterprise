@@ -20,27 +20,13 @@
  */
 package com.github.sanctum.economy;
 
-import com.github.sanctum.economy.construct.EconomyAction;
-import com.github.sanctum.economy.construct.account.Wallet;
-import com.github.sanctum.economy.construct.events.AsyncEconomyInfoEvent;
-import com.github.sanctum.economy.construct.events.AsyncTransactionEvent;
-import com.github.sanctum.economy.construct.implement.AdvancedEconomy;
 import java.lang.reflect.Field;
-import java.math.BigDecimal;
-import java.util.Collection;
-import java.util.Objects;
-import java.util.stream.Collectors;
-import org.bukkit.Bukkit;
+
 import org.bukkit.ChatColor;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandMap;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class Enterprise extends JavaPlugin {
@@ -72,7 +58,7 @@ public final class Enterprise extends JavaPlugin {
 	}
 
 	private class LoggingListener implements Listener {
-		@EventHandler
+/*		@EventHandler
 		public void onInfoEvent(AsyncEconomyInfoEvent e) {
 			final EconomyAction economyAction = e.getEconomyAction();
 			getLogger().info(String.format("EconomyEntity: %s [%s] Info: %s",
@@ -89,7 +75,7 @@ public final class Enterprise extends JavaPlugin {
 					economyAction.isSuccess(),
 					economyAction.getAmount(),
 					economyAction.getInfo()));
-		}
+		}*/
 	}
 
 	private class EnterpriseCommand extends Command {
@@ -104,7 +90,7 @@ public final class Enterprise extends JavaPlugin {
 
 		@Override
 		public boolean execute(CommandSender sender, String commandLabel, String[] args) {
-			Collection<RegisteredServiceProvider<AdvancedEconomy>> economies = getServer().getServicesManager().getRegistrations(AdvancedEconomy.class);
+/*			Collection<RegisteredServiceProvider<AdvancedEconomy>> economies = getServer().getServicesManager().getRegistrations(AdvancedEconomy.class);
 			if (sender instanceof Player) {
 				if (!sender.hasPermission("enterprise.staff")) {
 					sendMessage(sender, "&c&oThis is a staff-only command.");
@@ -153,7 +139,7 @@ public final class Enterprise extends JavaPlugin {
 					return true;
 				}
 				return true;
-			}
+			}*/
 			return false;
 		}
 	}
