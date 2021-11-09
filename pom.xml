@@ -5,14 +5,18 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.youtube.sanctum.economy</groupId>
-    <artifactId>Enterprise</artifactId>
-    <version>1.7</version>
-    <packaging>jar</packaging>
+    <artifactId>enterprise-parent</artifactId>
+    <version>2.0.0-SNAPSHOT</version>
+    <modules>
+        <module>Enterprise-API</module>
+        <module>Enterprise-Plugin</module>
+    </modules>
+    <packaging>pom</packaging>
 
-    <name>Enterprise</name>
+    <name>Enterprise-Parent</name>
     <inceptionYear>2020</inceptionYear>
 
-    <description>A more advanced vault like interface.</description>
+    <description>A fresh, new Spigot economy system.</description>
     <properties>
         <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -33,14 +37,14 @@
 
     <developers>
         <developer>
-            <id>Hempfest</id>
-            <name>Hempfest</name>
-            <url>https://github.com/Hempfest</url>
-        </developer>
-        <developer>
             <id>ms5984</id>
             <name>Matt</name>
             <url>https://github.com/ms5984</url>
+        </developer>
+        <developer>
+            <id>Hempfest</id>
+            <name>Hempfest</name>
+            <url>https://github.com/Hempfest</url>
         </developer>
     </developers>
 
@@ -55,31 +59,7 @@
                     <target>${java.version}</target>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>3.2.4</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                        <configuration>
-                            <createDependencyReducedPom>false</createDependencyReducedPom>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
         </plugins>
-        <resources>
-            <resource>
-                <directory>src/main/resources</directory>
-                <!-- filtering: true activates replacements by Maven of the placeholders you now see in plugin.yml -->
-                <filtering>true</filtering>
-                <!-- If you ever need to embed binaries it's recommended to have a separate directory with filtering false -->
-            </resource>
-        </resources>
     </build>
 
     <repositories>
