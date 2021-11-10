@@ -29,6 +29,48 @@ public interface Settable {
      * Set an amount.
      *
      * @param amount an amount of an asset
+     * @throws SetError if <code>amount</code> cannot be set for this point
      */
-    void set(@NotNull Amount amount);
+    void set(@NotNull Amount amount) throws SetError;
+
+    /**
+     * Raised when an amount cannot be set for a point.
+     *
+     * @since 2.0.0
+     * @author ms5984
+     */
+    class SetError extends AmountException {
+        private static final long serialVersionUID = 5857783323258413601L;
+
+        /**
+         * Construct an exception with an Amount and a message.
+         *
+         * @param amount an amount of an asset
+         * @param message a message
+         */
+        public SetError(@NotNull Amount amount, String message) {
+            super(amount, message);
+        }
+
+        /**
+         * Construct an exception with an Amount, a message and cause.
+         *
+         * @param amount an amount of an asset
+         * @param message a message
+         * @param cause a cause throwable
+         */
+        public SetError(@NotNull Amount amount, String message, Throwable cause) {
+            super(amount, message, cause);
+        }
+
+        /**
+         * Construct an exception with an Amount and a cause.
+         *
+         * @param amount an amount of an asset
+         * @param cause a cause throwable
+         */
+        public SetError(@NotNull Amount amount, Throwable cause) {
+            super(amount, cause);
+        }
+    }
 }

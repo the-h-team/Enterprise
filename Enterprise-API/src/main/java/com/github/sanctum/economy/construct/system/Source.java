@@ -29,6 +29,48 @@ public interface Source {
      * Attempt to take an amount from this source.
      *
      * @param amount an amount of an asset
+     * @throws SupplyError if this point cannot produce the amount
      */
-    void take(@NotNull Amount amount);
+    void take(@NotNull Amount amount) throws SupplyError;
+
+    /**
+     * Raised when a source is unable to provide an amount.
+     *
+     * @since 2.0.0
+     * @author ms5984
+     */
+    class SupplyError extends AmountException {
+        private static final long serialVersionUID = 1018956534551717937L;
+
+        /**
+         * Construct an exception with an Amount and a message.
+         *
+         * @param amount an amount of an asset
+         * @param message a message
+         */
+        public SupplyError(@NotNull Amount amount, String message) {
+            super(amount, message);
+        }
+
+        /**
+         * Construct an exception with an Amount, a message and cause.
+         *
+         * @param amount an amount of an asset
+         * @param message a message
+         * @param cause a cause throwable
+         */
+        public SupplyError(@NotNull Amount amount, String message, Throwable cause) {
+            super(amount, message, cause);
+        }
+
+        /**
+         * Construct an exception with an Amount and a cause.
+         *
+         * @param amount an amount of an asset
+         * @param cause a cause throwable
+         */
+        public SupplyError(@NotNull Amount amount, Throwable cause) {
+            super(amount, cause);
+        }
+    }
 }
