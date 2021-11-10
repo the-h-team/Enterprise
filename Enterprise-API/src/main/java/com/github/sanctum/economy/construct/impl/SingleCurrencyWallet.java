@@ -31,7 +31,7 @@ import java.util.Optional;
  */
 public class SingleCurrencyWallet<T extends AbstractCurrency> extends AbstractWallet {
     final T asset;
-    BigDecimal amount;
+    BigDecimal amount = BigDecimal.ZERO; // TODO: configurable default?
 
     protected SingleCurrencyWallet(@NotNull T currency) {
         this.asset = currency;
@@ -49,6 +49,7 @@ public class SingleCurrencyWallet<T extends AbstractCurrency> extends AbstractWa
     public void give(@NotNull Amount amount) throws AcceptError {
         if (amount.getAsset().equals(asset)) {
             this.amount = this.amount.add(amount.getAmount());
+            return;
         }
         throw new AcceptError(amount, "This wallet does not support this asset!");
     }
@@ -57,6 +58,7 @@ public class SingleCurrencyWallet<T extends AbstractCurrency> extends AbstractWa
     public void set(@NotNull Amount amount) throws SetError {
         if (amount.getAsset().equals(asset)) {
             this.amount = amount.getAmount();
+            return;
         }
         throw new SetError(amount, "This wallet does not support this asset!");
     }
@@ -64,7 +66,12 @@ public class SingleCurrencyWallet<T extends AbstractCurrency> extends AbstractWa
     @Override
     public void take(@NotNull Amount amount) throws SupplyError {
         if (amount.getAsset().equals(asset)) {
-            this.amount = this.amount.add(amount.getAmount());
+            final BigDecimal theAmount = amount.getAmount();
+            if (this.amount.compareTo(theAmount) < 0) {
+                throw new SupplyError(amount, "Insufficient funds!");
+            }
+            this.amount = this.amount.subtract(theAmount);
+            return;
         }
         throw new SupplyError(amount, "This wallet does not support this asset!");
     }

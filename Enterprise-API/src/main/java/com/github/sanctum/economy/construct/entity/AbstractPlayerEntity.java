@@ -21,15 +21,13 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * Implements {@link EnterpriseEntity} for players while including
- * {@link PlayerEntity}'s function.
+ * Implements {@link EnterpriseEntity} for players.
  *
  * @since 2.0.0
  * @author ms5984
  * @see EnterpriseEntity
- * @see PlayerEntity
  */
-public abstract class AbstractPlayerEntity extends EnterpriseEntity implements PlayerEntity {
+public abstract class AbstractPlayerEntity extends EnterpriseEntity {
     transient final OfflinePlayer player;
 
     AbstractPlayerEntity(String namespace, String identity, OfflinePlayer player) {
@@ -37,12 +35,25 @@ public abstract class AbstractPlayerEntity extends EnterpriseEntity implements P
         this.player = player;
     }
 
-    @Override
+    /**
+     * Get the offline player represented by this entity.
+     * <p>
+     * Savvy users may know--{@link Player} subclasses OfflinePlayer,
+     * so it's perfectly reasonable to run an <code>instanceof
+     * {@link Player}</code> check on the object to see if that's
+     * the object returned here.
+     *
+     * @return an OfflinePlayer object
+     */
     public @NotNull OfflinePlayer getPlayer() {
         return player;
     }
 
-    @Override
+    /**
+     * Attempt to resolve this entity to an online player.
+     *
+     * @return an online player (if possible) or null
+     */
     public @Nullable Player getOnline() {
         return player.getPlayer();
     }
