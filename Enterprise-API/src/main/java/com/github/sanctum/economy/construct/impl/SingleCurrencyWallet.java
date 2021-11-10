@@ -46,27 +46,27 @@ public class SingleCurrencyWallet<T extends AbstractCurrency> extends AbstractWa
     }
 
     @Override
-    public void give(@NotNull Amount amount) {
+    public void give(@NotNull Amount amount) throws AcceptError {
         if (amount.getAsset().equals(asset)) {
             this.amount = this.amount.add(amount.getAmount());
         }
-        // TODO: throw on wrong asset
+        throw new AcceptError(amount, "This wallet does not support this asset!");
     }
 
     @Override
-    public void set(@NotNull Amount amount) {
+    public void set(@NotNull Amount amount) throws SetError {
         if (amount.getAsset().equals(asset)) {
             this.amount = amount.getAmount();
         }
-        // TODO: throw on wrong asset
+        throw new SetError(amount, "This wallet does not support this asset!");
     }
 
     @Override
-    public void take(@NotNull Amount amount) {
+    public void take(@NotNull Amount amount) throws SupplyError {
         if (amount.getAsset().equals(asset)) {
             this.amount = this.amount.add(amount.getAmount());
         }
-        // TODO: throw on wrong asset
+        throw new SupplyError(amount, "This wallet does not support this asset!");
     }
 
     @Override

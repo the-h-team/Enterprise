@@ -29,6 +29,48 @@ public interface Receiver {
      * Attempt to give an amount to this receiver.
      *
      * @param amount an amount of an asset
+     * @throws AcceptError if this point cannot accept the amount
      */
-    void give(@NotNull Amount amount);
+    void give(@NotNull Amount amount) throws AcceptError;
+
+    /**
+     * Raised when a receiver is unable to accept an amount.
+     *
+     * @since 2.0.0
+     * @author ms5984
+     */
+    class AcceptError extends AmountException {
+        private static final long serialVersionUID = -5318173096317818284L;
+
+        /**
+         * Construct an exception with an Amount and a message.
+         *
+         * @param amount an amount of an asset
+         * @param message a message
+         */
+        public AcceptError(@NotNull Amount amount, String message) {
+            super(amount, message);
+        }
+
+        /**
+         * Construct an exception with an Amount, a message and cause.
+         *
+         * @param amount an amount of an asset
+         * @param message a message
+         * @param cause a cause throwable
+         */
+        public AcceptError(@NotNull Amount amount, String message, Throwable cause) {
+            super(amount, message, cause);
+        }
+
+        /**
+         * Construct an exception with an Amount and a cause.
+         *
+         * @param amount an amount of an asset
+         * @param cause a cause throwable
+         */
+        public AcceptError(@NotNull Amount amount, Throwable cause) {
+            super(amount, cause);
+        }
+    }
 }
