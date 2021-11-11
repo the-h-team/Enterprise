@@ -18,6 +18,7 @@ package com.github.sanctum.economy.construct.impl;
 import com.github.sanctum.economy.construct.Amount;
 import com.github.sanctum.economy.construct.assets.AbstractCurrency;
 import com.github.sanctum.economy.construct.assets.Asset;
+import com.github.sanctum.economy.construct.system.Wallet;
 import org.jetbrains.annotations.NotNull;
 
 import java.math.BigDecimal;
@@ -30,7 +31,7 @@ import java.util.Optional;
  * @since 2.0.0
  * @author ms5984
  */
-public class AnyCurrencyWallet extends AbstractWallet {
+public class AnyCurrencyWallet implements Wallet {
     final HashMap<String, BigDecimal> amounts = new HashMap<>();
 
     @Override
