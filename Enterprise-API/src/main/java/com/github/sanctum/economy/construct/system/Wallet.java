@@ -13,16 +13,14 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package com.github.sanctum.economy.construct.impl;
-
-import com.github.sanctum.economy.construct.system.Balance;
+package com.github.sanctum.economy.construct.system;
 
 /**
- * An object suitable for managing limited amounts of assets
+ * Marks an object able to manage limited amounts of assets
  * being held by a player on their person/in hammerspace.
  *
  * @since 2.0.0
  * @author ms5984
  */
-public abstract class AbstractWallet implements Balance {
+public interface Wallet extends Balance {
 }
