@@ -57,4 +57,13 @@ public abstract class AbstractPlayerEntity extends EnterpriseEntity {
     public @Nullable Player getOnline() {
         return player.getPlayer();
     }
+
+    @Override
+    public @NotNull String friendlyName() {
+        final String playerName = player.getName();
+        if (playerName != null) {
+            return playerName;
+        }
+        return "Player:" + player.getUniqueId();
+    }
 }

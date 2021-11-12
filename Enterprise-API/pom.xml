@@ -14,5 +14,12 @@
     <description>The common Enterprise API</description>
     <inceptionYear>2021</inceptionYear>
 
+    <licenses>
+        <license>
+            <name>Apache License 2.0</name>
+            <url>https://opensource.org/licenses/Apache-2.0</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
 
 </project>

@@ -19,6 +19,8 @@ import com.github.sanctum.economy.construct.entity.EnterpriseEntity;
 import com.github.sanctum.economy.construct.entity.Fiduciary;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Optional;
+
 /**
  * Manage assets on account with a custodian.
  *
@@ -41,6 +43,62 @@ public interface Account {
      * @throws AccessDenied if the entity is not allowed access
      */
     @NotNull AccountView accessAs(@NotNull EnterpriseEntity entity) throws AccessDenied;
+
+    /**
+     * Allow an entity to access this account.
+     *
+     * @param entity an entity
+     * @param level an initial level of access
+     * @throws DuplicateEntity if <code>entity</code> is already on the account
+     */
+    void addEntity(@NotNull EnterpriseEntity entity, AccessLevel level) throws DuplicateEntity;
+
+    /**
+     * Set the access level of an entity.
+     *
+     * @param entity an entity
+     * @param level a level of access
+     * @return an Optional describing the previous level of access, if present
+     */
+    @NotNull Optional<AccessLevel> setEntityAccess(@NotNull EnterpriseEntity entity, AccessLevel level);
+
+    /**
+     * Remove an entity from this account.
+     *
+     * @param entity an entity
+     * @return true if access was present and removed
+     * @throws LastOwner if removing <code>entity</code>
+     * would leave the account with no owner
+     */
+    boolean removeEntity(@NotNull EnterpriseEntity entity) throws LastOwner;
+
+    /**
+     * Describes (in general) a level of account access.
+     * <p>
+     * <b>What action(s) are permitted by a level is
+     * left up to implementations:)</b>
+     *
+     * @since 2.0.0
+     * @author ms5984
+     */
+    enum AccessLevel {
+        /**
+         * Can check the account.
+         */
+        VIEWER,
+        /**
+         * Ordinary member.
+         */
+        MEMBER,
+        /**
+         * Can manage Viewers and Members but not Owners.
+         */
+        CO_OWNER,
+        /**
+         * Full account access.
+         */
+        OWNER
+    }
 
     /**
      * Raised if an entity is not permitted access to an account.
@@ -79,6 +137,146 @@ public interface Account {
          * @param cause a cause throwable
          */
         public AccessDenied(@NotNull EnterpriseEntity entity, Throwable cause) {
+            super(entity, cause);
+        }
+    }
+
+    /**
+     * Raised if an entity is already a member of an account.
+     *
+     * @since 2.0.0
+     * @author ms5984
+     */
+    class DuplicateEntity extends EntityException {
+        private static final long serialVersionUID = -6017977336788103629L;
+
+        /**
+         * Construct an exception with an Entity and a message.
+         *
+         * @param entity the duplicated entity
+         * @param message a message
+         */
+        public DuplicateEntity(@NotNull EnterpriseEntity entity, String message) {
+            super(entity, message);
+        }
+
+        /**
+         * Construct an exception with an Entity, a message and cause.
+         *
+         * @param entity the duplicated entity
+         * @param message a message
+         * @param cause a cause throwable
+         */
+        public DuplicateEntity(@NotNull EnterpriseEntity entity, String message, Throwable cause) {
+            super(entity, message, cause);
+        }
+
+        /**
+         * Construct an exception with an Entity and a cause.
+         *
+         * @param entity the duplicated entity
+         * @param cause a cause throwable
+         */
+        public DuplicateEntity(@NotNull EnterpriseEntity entity, Throwable cause) {
+            super(entity, cause);
+        }
+    }
+
+    /**
+     * Raised if the entity being removed from an account is the only owner.
+     *
+     * @since 2.0.0
+     * @author ms5984
+     */
+    class LastOwner extends EntityException {
+        private static final long serialVersionUID = -3459768126506047552L;
+        protected final Account account;
+
+        /**
+         * Construct an exception with an Entity, an Account and a message.
+         *
+         * @param owner the entity
+         * @param account the account
+         * @param message a message
+         */
+        public LastOwner(@NotNull EnterpriseEntity owner, @NotNull Account account, String message) {
+            super(owner, message);
+            this.account = account;
+        }
+
+        /**
+         * Construct an exception with an Entity,
+         * an Account, a message and cause.
+         *
+         * @param owner the entity
+         * @param account the account
+         * @param message a message
+         * @param cause a cause throwable
+         */
+        public LastOwner(@NotNull EnterpriseEntity owner, @NotNull Account account, String message, Throwable cause) {
+            super(owner, message, cause);
+            this.account = account;
+        }
+
+        /**
+         * Construct an exception with an Entity, an Account and a cause.
+         *
+         * @param owner the entity
+         * @param account the account
+         * @param cause a cause throwable
+         */
+        public LastOwner(@NotNull EnterpriseEntity owner, @NotNull Account account, Throwable cause) {
+            super(owner, cause);
+            this.account = account;
+        }
+
+        /**
+         * Get the account associated with this exception.
+         *
+         * @return the account associated with this exception
+         */
+        public final Account getAccount() {
+            return account;
+        }
+    }
+
+    /**
+     * Raised if an entity must be an existing account member.
+     *
+     * @since 2.0.0
+     * @author ms5984
+     */
+    class NotAMember extends EntityException {
+        private static final long serialVersionUID = 2094168851736743929L;
+
+        /**
+         * Construct an exception with an Entity and a message.
+         *
+         * @param entity the denied entity
+         * @param message a message
+         */
+        public NotAMember(@NotNull EnterpriseEntity entity, String message) {
+            super(entity, message);
+        }
+
+        /**
+         * Construct an exception with an Entity, a message and cause.
+         *
+         * @param entity the denied entity
+         * @param message a message
+         * @param cause a cause throwable
+         */
+        public NotAMember(@NotNull EnterpriseEntity entity, String message, Throwable cause) {
+            super(entity, message, cause);
+        }
+
+        /**
+         * Construct an exception with an Entity and a cause.
+         *
+         * @param entity the denied entity
+         * @param cause a cause throwable
+         */
+        public NotAMember(@NotNull EnterpriseEntity entity, Throwable cause) {
             super(entity, cause);
         }
     }

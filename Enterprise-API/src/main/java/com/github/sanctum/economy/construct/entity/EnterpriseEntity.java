@@ -97,6 +97,19 @@ public class EnterpriseEntity {
         return fqn;
     }
 
+    /**
+     * A friendly name for this entity.
+     * <p>
+     * <b>May be human-readable. Does not need be system-unique.</b>
+     *
+     * @return a friendly name for this entity
+     * @implSpec Prefer human-readable; does not need to be unique.
+     * @implNote Defaults to {@link #identity}.
+     */
+    public @NotNull String friendlyName() {
+        return identity;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

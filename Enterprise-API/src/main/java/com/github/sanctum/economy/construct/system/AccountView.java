@@ -15,6 +15,10 @@
  */
 package com.github.sanctum.economy.construct.system;
 
+import com.github.sanctum.economy.construct.entity.EnterpriseEntity;
+import com.github.sanctum.economy.construct.system.Account.*;
+import org.jetbrains.annotations.NotNull;
+
 /**
  * A specialization of {@link Balance}, exposing its functionality
  * from the context of an entity that is permitted access.
@@ -29,7 +33,7 @@ public interface AccountView extends Balance {
      * @return true if the context entity is an owner
      */
     default boolean isOwner() {
-        return true;
+        return accessLevel() == AccessLevel.OWNER;
     }
 
     /**
@@ -41,5 +45,75 @@ public interface AccountView extends Balance {
      */
     default boolean isJointOwner() {
         return false;
+    }
+
+    /**
+     * Get the access level of this view.
+     *
+     * @return the access level of this view
+     */
+    @NotNull AccessLevel accessLevel();
+
+    /**
+     * Get the entity whose context forms this view.
+     *
+     * @return the entity whose context forms this view
+     */
+    @NotNull EnterpriseEntity context();
+
+    /**
+     * Get the account associated with this view.
+     *
+     * @return the account associated with this view
+     */
+    @NotNull Account account();
+
+    /**
+     * Attempts to add a member to this account from the context of this view.
+     *
+     * @param entity an entity to add
+     * @param level an initial level of access
+     * @throws AccessDenied if viewer does not have permission to add members
+     * @throws DuplicateEntity if <code>entity</code> is already on the account
+     */
+    default void addMember(@NotNull EnterpriseEntity entity, AccessLevel level) throws AccessDenied, DuplicateEntity {
+        if (!isOwner()) {
+            throw new AccessDenied(context(), "This entity cannot add members.");
+        }
+        account().addEntity(entity, level);
+    }
+
+    /**
+     * Attempts to set a member's access from the context of this view.
+     *
+     * @param member the member to edit
+     * @param level a new access level
+     * @return <code>member</code>'s previous access level
+     * @throws AccessDenied if viewer does not have permission to set access
+     * @throws NotAMember if <code>member</code> is not yet on the account
+     */
+    default @NotNull AccessLevel setAccess(@NotNull EnterpriseEntity member, AccessLevel level) throws AccessDenied, NotAMember {
+        if (!isOwner()) {
+            throw new AccessDenied(context(), "This entity cannot edit others' access!");
+        }
+        throw new NotAMember(member, "This entity is not a member of the account.");
+    }
+
+    /**
+     * Attempts to remove a member from the context of this view.
+     *
+     * @param member the member to remove
+     * @return true if access was present and removed
+     * @throws AccessDenied if viewer is not permitted to remove
+     * @throws NotAMember if <code>member</code> is not yet on the account
+     * @throws LastOwner if removing <code>member</code> would leave the
+     * account with no owner
+     */
+    @SuppressWarnings("RedundantThrows")
+    default boolean removeMember(@NotNull EnterpriseEntity member) throws AccessDenied, NotAMember, LastOwner {
+        if (!isOwner()) {
+            throw new AccessDenied(context(), "This entity cannot edit others' access!");
+        }
+        throw new NotAMember(member, "This entity is not a member of the account.");
     }
 }
