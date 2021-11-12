@@ -13,6 +13,14 @@
     <name>Enterprise</name>
     <description>The Spigot plugin implementation module of Enterprise</description>
 
+    <licenses>
+        <license>
+            <name>GNU Lesser General Public License v3.0 or later</name>
+            <url>https://www.gnu.org/licenses/lgpl-3.0-standalone.html</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
     <build>
         <plugins>
             <plugin>

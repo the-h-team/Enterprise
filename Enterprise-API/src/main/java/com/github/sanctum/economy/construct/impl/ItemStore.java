@@ -29,8 +29,8 @@ import java.util.Optional;
  * @since 2.0.0
  * @author ms5984
  */
-public class AbstractItemStore implements Balance {
-    final HashMap<String, Integer> counts = new HashMap<>();
+public class ItemStore implements Balance {
+    protected final HashMap<String, Integer> counts = new HashMap<>();
 
     @Override
     public boolean has(@NotNull Amount amount) {
