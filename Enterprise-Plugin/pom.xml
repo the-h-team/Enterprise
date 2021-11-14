@@ -27,6 +27,22 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
                 <version>3.2.4</version>
+<!--                <configuration>
+                    <filters>
+                        <filter>
+                            <artifact>*:enterprise-api</artifact>
+                            <excludes>
+                                <exclude>META-INF/MANIFEST.MF</exclude>
+                            </excludes>
+                        </filter>
+                        <filter>
+                            <artifact>*:enterprise-spigot</artifact>
+                            <excludes>
+                                <exclude>META-INF/MANIFEST.MF</exclude>
+                            </excludes>
+                        </filter>
+                    </filters>
+                </configuration>-->
                 <executions>
                     <execution>
                         <phase>package</phase>
@@ -49,5 +65,19 @@
             </resource>
         </resources>
     </build>
+
+    <dependencies>
+<!--        <dependency>
+            <groupId>com.youtube.sanctum.economy</groupId>
+            <artifactId>enterprise-spigot</artifactId>
+            <version>${project.version}</version>
+            <scope>compile</scope>
+        </dependency>-->
+        <dependency>
+            <groupId>org.spigotmc</groupId>
+            <artifactId>spigot-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
 
 </project>

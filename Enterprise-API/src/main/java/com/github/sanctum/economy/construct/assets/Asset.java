@@ -15,16 +15,8 @@
  */
 package com.github.sanctum.economy.construct.assets;
 
-import org.bukkit.Material;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.util.io.BukkitObjectOutputStream;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.util.Base64;
-import java.util.EnumMap;
-import java.util.Map;
 import java.util.Objects;
 import java.util.regex.Pattern;
 
@@ -120,80 +112,5 @@ public class Asset {
     @Override
     public String toString() {
         return getFQN();
-    }
-
-    /**
-     * Native implementation of item-to-asset mappings.
-     *
-     * @since 2.0.0
-     * @author ms5984
-     */
-    public static class Items {
-        static final Items INSTANCE = new Items();
-        final EnumMap<Material, MaterialAsset> cache = new EnumMap<>(Material.class);
-
-        /**
-         * Get the asset representation of a simple Material.
-         *
-         * @param material a given item type
-         * @return the asset representation of the provided material
-         * @implNote This implementation uses an internal EnumMap cache and
-         * the following formula for generation:
-         * <ul>
-         *     <li>Group = "item"</li>
-         *     <li>Identifier = "<code>material_name</code>"</li>
-         * </ul>
-         */
-        public static MaterialAsset of(@NotNull Material material) {
-            synchronized (INSTANCE.cache) {
-                return INSTANCE.cache.computeIfAbsent(material, MaterialAsset::new);
-            }
-        }
-
-        /**
-         * Get an asset representation of the provided ItemStack.
-         *
-         * @param itemStack an item
-         * @return an asset representation of the provided item
-         * @implSpec This method is free to return both cached and new objects.
-         * @implNote This implementation uses this formula for generation:
-         * <ul>
-         *     <li>
-         *         <b>Items without meta:</b> Delegates to {@link Items#of(Material)}.
-         *         <p>
-         *         This is cached.
-         *     </li>
-         *     <li>
-         *         <b>Items with meta:</b>
-         *         <ul>
-         *             <li>Group = "complex_item", then:</li>
-         *             <ol>
-         *                 <li>Serialize ItemMeta</li>
-         *                 <li>Encode as base64</li>
-         *             </ol>
-         *             <li>Identifier =
-         *             "<code>material_name</code>#<code>base64meta</code>"
-         *             </li>
-         *         </ul>
-         *         This is not cached.
-         *     </li>
-         * </ul>
-         */
-        public static Asset of(@NotNull ItemStack itemStack) {
-            final Material mat = itemStack.getType();
-            // return simple Material representation if possible
-            if (!itemStack.hasItemMeta()) return of(mat);
-            // Serialize and encode ItemMeta
-            final ByteArrayOutputStream os = new ByteArrayOutputStream();
-            final Map<String, Object> serialized = itemStack.getItemMeta().serialize();
-            try (BukkitObjectOutputStream boos = new BukkitObjectOutputStream(os)) {
-                boos.writeObject(serialized);
-            } catch (IOException e) {
-                throw new IllegalStateException(e);
-            }
-            final String base64meta = Base64.getEncoder().encodeToString(os.toByteArray());
-            // Produce Asset as {group="complex_item",identifier="material_name#base64meta"
-            return new MetaItemAsset(mat, base64meta);
-        }
     }
 }
