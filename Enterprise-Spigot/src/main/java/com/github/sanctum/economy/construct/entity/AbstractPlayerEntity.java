@@ -27,7 +27,7 @@ import org.jetbrains.annotations.Nullable;
  * @author ms5984
  * @see EnterpriseEntity
  */
-public abstract class AbstractPlayerEntity extends EnterpriseEntity {
+public abstract class AbstractPlayerEntity extends BukkitEntity {
     transient final OfflinePlayer player;
 
     AbstractPlayerEntity(String namespace, String identity, OfflinePlayer player) {

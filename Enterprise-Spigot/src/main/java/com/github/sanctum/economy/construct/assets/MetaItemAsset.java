@@ -29,8 +29,9 @@ import java.util.Base64;
  *
  * @since 2.0.0
  * @author ms5984
+ * @see Asset
  */
-public final class MetaItemAsset extends Asset implements IntegralAsset {
+public final class MetaItemAsset extends BukkitAsset implements IntegralAsset {
     final Material material;
     final String meta;
 

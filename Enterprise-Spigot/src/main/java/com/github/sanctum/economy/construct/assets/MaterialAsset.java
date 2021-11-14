@@ -22,8 +22,9 @@ import org.bukkit.Material;
  *
  * @since 2.0.0
  * @author ms5984
+ * @see Asset
  */
-public final class MaterialAsset extends Asset implements IntegralAsset {
+public final class MaterialAsset extends BukkitAsset implements IntegralAsset {
     final Material material;
 
     /**
