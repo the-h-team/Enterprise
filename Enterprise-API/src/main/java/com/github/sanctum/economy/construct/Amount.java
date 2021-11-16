@@ -19,6 +19,7 @@ import com.github.sanctum.economy.construct.assets.Asset;
 import org.jetbrains.annotations.NotNull;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 /**
  * Represents an amount of an asset as a BigDecimal.
@@ -49,4 +50,19 @@ public abstract class Amount {
      * @implSpec Must not be negative.
      */
     public abstract @NotNull BigDecimal getAmount();
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o instanceof Amount) {
+            Amount amount = (Amount) o;
+            return asset.equals(amount.asset) && getAmount().compareTo(amount.getAmount()) == 0;
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(asset, getAmount().stripTrailingZeros());
+    }
 }
