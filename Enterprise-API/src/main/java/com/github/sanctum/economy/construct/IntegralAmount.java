@@ -43,4 +43,26 @@ public abstract class IntegralAmount extends Amount {
     public @NotNull BigDecimal getAmount() {
         return BigDecimal.valueOf(getIntegralAmount());
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o instanceof IntegralAmount) {
+            IntegralAmount integralAmount = (IntegralAmount) o;
+            if (getIntegralAmount() == integralAmount.getIntegralAmount()) {
+                return asset.equals(integralAmount.asset);
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        // 524309 designed to expand values from [0-4096] to fill up int space
+        /*
+        Larger values roll over; semi-arbitrary range chosen based on the max
+        contents count of a double-chest inventory: 9*6=54; 54*64 = 3456 total
+         */
+        return asset.hashCode() ^ getIntegralAmount() * 524309;
+    }
 }

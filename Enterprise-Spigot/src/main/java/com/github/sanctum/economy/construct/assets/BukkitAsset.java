@@ -17,14 +17,9 @@ package com.github.sanctum.economy.construct.assets;
 
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.util.io.BukkitObjectOutputStream;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.util.Base64;
 import java.util.EnumMap;
-import java.util.Map;
 
 /**
  * A type of asset derived from a Bukkit-native structure.
@@ -107,14 +102,7 @@ public class BukkitAsset extends Asset {
             // return simple Material representation if possible
             if (!itemStack.hasItemMeta()) return of(mat);
             // Serialize and encode ItemMeta
-            final ByteArrayOutputStream os = new ByteArrayOutputStream();
-            final Map<String, Object> serialized = itemStack.getItemMeta().serialize();
-            try (BukkitObjectOutputStream boos = new BukkitObjectOutputStream(os)) {
-                boos.writeObject(serialized);
-            } catch (IOException e) {
-                throw new IllegalStateException(e);
-            }
-            final String base64meta = Base64.getEncoder().encodeToString(os.toByteArray());
+            final String base64meta = MetaItemAsset.encodeMeta(itemStack);
             // Produce Asset as {group="complex_item",identifier="material_name#base64meta"
             return new MetaItemAsset(mat, base64meta);
         }

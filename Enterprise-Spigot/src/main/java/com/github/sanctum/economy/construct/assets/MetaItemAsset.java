@@ -19,10 +19,13 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.io.BukkitObjectInputStream;
+import org.bukkit.util.io.BukkitObjectOutputStream;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Base64;
+import java.util.Map;
 
 /**
  * Represents an ItemStack with meta as an asset.
@@ -78,5 +81,17 @@ public final class MetaItemAsset extends BukkitAsset implements IntegralAsset {
     @Override
     public ItemAmount getAmount(int count) throws IllegalArgumentException {
         return new ItemAmount(count, this);
+    }
+
+    static String encodeMeta(ItemStack item) {
+        // Serialize and encode ItemMeta
+        final ByteArrayOutputStream os = new ByteArrayOutputStream();
+        final Map<String, Object> serialized = item.getItemMeta().serialize();
+        try (BukkitObjectOutputStream boos = new BukkitObjectOutputStream(os)) {
+            boos.writeObject(serialized);
+        } catch (IOException e) {
+            throw new IllegalStateException(e);
+        }
+        return Base64.getEncoder().encodeToString(os.toByteArray());
     }
 }

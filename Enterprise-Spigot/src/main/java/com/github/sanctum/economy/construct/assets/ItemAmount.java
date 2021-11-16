@@ -46,4 +46,22 @@ public class ItemAmount extends IntegralAmount {
     public @NotNull BigDecimal getAmount() {
         return bigDecimal;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o instanceof ItemAmount) {
+            ItemAmount itemAmount = (ItemAmount) o;
+            if (amount == itemAmount.amount) {
+                return asset.equals(itemAmount.asset);
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        // 33554249 designed to expand amount range [0-64] to fill most of int space
+        return asset.hashCode() ^ amount * 33554249;
+    }
 }
