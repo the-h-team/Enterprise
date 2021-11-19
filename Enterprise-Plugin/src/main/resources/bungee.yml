@@ -2,5 +2,4 @@ name: Enterprise
 version: ${project.version}
 main: com.github.sanctum.economy.Enterprise
 author: Sanctum
-api-version: 1.13
 description: ${project.description}
