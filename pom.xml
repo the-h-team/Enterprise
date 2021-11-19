@@ -4,13 +4,14 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.youtube.sanctum.economy</groupId>
+    <groupId>com.github.the-h-team.economy</groupId>
     <artifactId>enterprise-parent</artifactId>
     <version>2.0.0-SNAPSHOT</version>
     <modules>
         <module>Enterprise-API</module>
         <module>Enterprise-Plugin</module>
         <module>Enterprise-Spigot</module>
+        <module>Enterprise-BungeeCord</module>
     </modules>
     <packaging>pom</packaging>
 
@@ -72,6 +73,10 @@
             <id>sonatype</id>
             <url>https://oss.sonatype.org/content/groups/public/</url>
         </repository>
+        <repository>
+            <id>bungeecord-repo</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </repository>
     </repositories>
 
     <dependencyManagement>
@@ -80,6 +85,20 @@
                 <groupId>org.spigotmc</groupId>
                 <artifactId>spigot-api</artifactId>
                 <version>1.8.8-R0.1-SNAPSHOT</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>net.md-5</groupId>
+                <artifactId>bungeecord-api</artifactId>
+                <version>1.16-R0.5-SNAPSHOT</version>
+                <type>jar</type>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>net.md-5</groupId>
+                <artifactId>bungeecord-api</artifactId>
+                <version>1.16-R0.5-SNAPSHOT</version>
+                <type>javadoc</type>
                 <scope>provided</scope>
             </dependency>
         </dependencies>

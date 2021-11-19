@@ -9,9 +9,9 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>enterprise-spigot</artifactId>
-    <name>Enterprise-Spigot</name>
-    <description>The Spigot-aware Enterprise API</description>
+    <artifactId>enterprise-bungeecord</artifactId>
+    <name>Enterprise-BungeeCord</name>
+    <description>The BungeeCord-aware Enterprise API</description>
     <inceptionYear>2021</inceptionYear>
 
     <licenses>
@@ -29,8 +29,15 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.spigotmc</groupId>
-            <artifactId>spigot-api</artifactId>
+            <groupId>net.md-5</groupId>
+            <artifactId>bungeecord-api</artifactId>
+            <type>jar</type>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>net.md-5</groupId>
+            <artifactId>bungeecord-api</artifactId>
+            <type>javadoc</type>
             <scope>provided</scope>
         </dependency>
     </dependencies>

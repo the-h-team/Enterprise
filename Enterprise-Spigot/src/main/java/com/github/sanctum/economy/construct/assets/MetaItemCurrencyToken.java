@@ -15,6 +15,7 @@
  */
 package com.github.sanctum.economy.construct.assets;
 
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -60,8 +61,8 @@ public abstract class MetaItemCurrencyToken implements AbstractCurrency.Token, P
         this.currency = currency;
         item = new ItemStack(material);
         final ItemMeta itemMeta = item.getItemMeta();
-        name().ifPresent(itemMeta::setDisplayName);
-        description().map(s -> s.split("\\\\n|\n")).map(Arrays::asList).ifPresent(itemMeta::setLore);
+        name().map(MetaItemCurrencyToken::applyColor).ifPresent(itemMeta::setDisplayName);
+        description().map(MetaItemCurrencyToken::applyColor).map(MetaItemCurrencyToken::splitAtNewline).map(Arrays::asList).ifPresent(itemMeta::setLore);
         asset = new MetaItemAsset(item.getType(), MetaItemAsset.encodeMeta(item));
     }
 
@@ -86,5 +87,13 @@ public abstract class MetaItemCurrencyToken implements AbstractCurrency.Token, P
     @Override
     public MetaItemAsset get() {
         return asset;
+    }
+
+    static String[] splitAtNewline(String s) {
+        return s.split("\\\\n|\n");
+    }
+
+    static String applyColor(String s) {
+        return ChatColor.translateAlternateColorCodes('&', s);
     }
 }
