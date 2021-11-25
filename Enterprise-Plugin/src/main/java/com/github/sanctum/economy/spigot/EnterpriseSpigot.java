@@ -18,7 +18,7 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package com.github.sanctum.economy;
+package com.github.sanctum.economy.spigot;
 
 import java.lang.reflect.Field;
 
@@ -29,9 +29,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public final class Enterprise extends JavaPlugin {
+public final class EnterpriseSpigot extends JavaPlugin {
 
-	private static Enterprise instance;
+	private static EnterpriseSpigot instance;
 
 	@Override
 	public void onEnable() {//
