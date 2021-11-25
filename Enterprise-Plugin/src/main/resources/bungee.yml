@@ -1,5 +1,5 @@
 name: Enterprise
 version: ${project.version}
-main: com.github.sanctum.economy.Enterprise
+main: com.github.sanctum.economy.bungee.EnterpriseBungee
 author: Sanctum
 description: ${project.description}

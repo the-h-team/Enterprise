@@ -1,6 +1,6 @@
 name: Enterprise
 version: ${project.version}
-main: com.github.sanctum.economy.Enterprise
+main: com.github.sanctum.economy.spigot.EnterpriseSpigot
 author: Sanctum
 api-version: 1.13
 description: ${project.description}
