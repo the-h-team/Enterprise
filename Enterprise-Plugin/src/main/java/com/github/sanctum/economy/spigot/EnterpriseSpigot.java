@@ -21,126 +21,128 @@
 package com.github.sanctum.economy.spigot;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 
-import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandMap;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.SimpleCommandMap;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
 
+/**
+ * Spigot plugin implementation.
+ */
 public final class EnterpriseSpigot extends JavaPlugin {
 
-	private static EnterpriseSpigot instance;
+	static SimpleCommandMap COMMAND_MAP = null;
+	static EnterpriseSpigot instance;
 
 	@Override
 	public void onEnable() {//
 		instance = this;
-		registerCommand(new EnterpriseCommand());
+		setupCommandMapField();
+		AsyncTransactionEvent.plugin = this;
+		new StaffCommand("enterprise", "enterprise.staff")
+				.setDescription("Manage the Enterprise plugin")
+				.setPermissionMessage(CustomCommand.translateColorCodes("&c&oThis is a staff-only command."))
+				.register(COMMAND_MAP);
 		getServer().getPluginManager().registerEvents(new LoggingListener(), this);
 	}
 
-	@Override//
-	public void onDisable() {//
-	}
-
-	private void registerCommand(Command command) {
+	private void setupCommandMapField() {
+		if (COMMAND_MAP != null) return;
+		final Field commandMapField;
 		try {
-			final Field commandMapField = getServer().getClass().getDeclaredField("commandMap");
-			commandMapField.setAccessible(true);
-
-			final CommandMap commandMap = (CommandMap) commandMapField.get(getServer());
-			commandMap.register(getName(), command);
-
-		} catch (final NoSuchFieldException | IllegalAccessException e) {
-			e.printStackTrace();
+			commandMapField = getServer().getClass().getDeclaredField("commandMap");
+		} catch (NoSuchFieldException e) {
+			throw new IllegalStateException(e);
+		}
+		commandMapField.setAccessible(true);
+		try {
+			COMMAND_MAP = (SimpleCommandMap) commandMapField.get(getServer());
+		} catch (IllegalAccessException e) {
+			throw new IllegalStateException(e);
 		}
 	}
 
 	private class LoggingListener implements Listener {
-/*		@EventHandler
-		public void onInfoEvent(AsyncEconomyInfoEvent e) {
-			final EconomyAction economyAction = e.getEconomyAction();
-			getLogger().info(String.format("EconomyEntity: %s [%s] Info: %s",
-					economyAction.getActiveHolder().friendlyName(),
-					economyAction.isSuccess(),
-					economyAction.getInfo()));
-		}
-
 		@EventHandler
-		public void onInfoEvent(AsyncTransactionEvent e) {
-			final EconomyAction economyAction = e.getEconomyAction();
-			getLogger().info(String.format("EconomyEntity: %s [%s] Amount: %s Info: %s",
-					economyAction.getActiveHolder().friendlyName(),
-					economyAction.isSuccess(),
-					economyAction.getAmount(),
-					economyAction.getInfo()));
-		}*/
+		public void onTransactionEvent(AsyncTransactionEvent<?> e) {
+			if (!e.isLogged()) return;
+			getLogger().info(e::toString);
+		}
 	}
 
-	private class EnterpriseCommand extends Command {
-
-		public EnterpriseCommand() {
-			super("enterprise");
-		}
-
-		private void sendMessage(CommandSender player, String message) {
-			player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&f[&2" + instance.getName() +"&f] " + message));
+	private class StaffCommand extends CustomCommand {
+		StaffCommand(@NotNull String label, @NotNull String permission) {
+			super(label, permission);
 		}
 
 		@Override
 		public boolean execute(CommandSender sender, String commandLabel, String[] args) {
-/*			Collection<RegisteredServiceProvider<AdvancedEconomy>> economies = getServer().getServicesManager().getRegistrations(AdvancedEconomy.class);
-			if (sender instanceof Player) {
-				if (!sender.hasPermission("enterprise.staff")) {
-					sendMessage(sender, "&c&oThis is a staff-only command.");
-					return true;
-				}
+			if (!testPermission(sender)) {
+				return true;
 			}
 			if (args.length == 0) {
-				String ecos = economies.stream().map(RegisteredServiceProvider::getProvider).map(AdvancedEconomy::getPlugin).map(Plugin::getName).collect(Collectors.toList()).toString();
-				sendMessage(sender, "Registered Advanced Economies: " + ecos);
+				// TODO: List registered ecos
+				final Plugin[] plugins = getServer().getPluginManager().getPlugins();
+				getServer().getScheduler().runTaskAsynchronously(EnterpriseSpigot.this, new DependencyFinder(plugins, sender)::findAndSend);
 				return true;
 			}
-			if (args.length == 3) {
-				if (args[0].equalsIgnoreCase("convert")) {
-					if (economies == null || economies.size() < 2) {
-						sendMessage(sender, "You must have at least 2 Enterprise-compatible economies loaded to convert.");
-						return true;
-					}
-					AdvancedEconomy econ1 = economies.stream().filter(e -> e.getProvider().getPlugin().getName().equalsIgnoreCase(args[1])).findFirst().map(RegisteredServiceProvider::getProvider).orElse(null);
-					if (econ1 == null) {
-						String ecos = economies.stream().map(RegisteredServiceProvider::getProvider).map(AdvancedEconomy::getPlugin).map(Plugin::getName).collect(Collectors.toList()).toString();
-						sendMessage(sender, "Economy " + args[1] + " was not found. Ensure you have it loaded properly.");
-						sendMessage(sender, "Valid economies are: " + ecos);
-						return true;
-					}
-					AdvancedEconomy econ2 = economies.stream().filter(e -> e.getProvider().getPlugin().getName().equalsIgnoreCase(args[2])).findFirst().map(RegisteredServiceProvider::getProvider).orElse(null);
-					if (econ2 == null) {
-						String ecos = economies.stream().map(RegisteredServiceProvider::getProvider).map(AdvancedEconomy::getPlugin).map(Plugin::getName).collect(Collectors.toList()).toString();
-						sendMessage(sender, "Economy " + args[2] + " was not found. Ensure you have it loaded properly.");
-						sendMessage(sender, "Valid economies are: " + ecos);
-						return true;
-					}
-					sendMessage(sender, "&e&oDepending on the amount of registrations this may take a while.");
-					long time = System.currentTimeMillis();
-					for (OfflinePlayer op : Bukkit.getServer().getOfflinePlayers()) {
-						if (econ1.hasWalletAccount(op)) {
-							final Wallet wallet1 = econ1.getWallet(op);
-							final Wallet wallet2 = econ2.getWallet(op);
-							if (Objects.requireNonNull(wallet1.getBalance()).compareTo(BigDecimal.ZERO) > 0) {
-								wallet2.setBalance(wallet1.getBalance());
-							}
-						}
-					}
-					long complete = (System.currentTimeMillis() - time) / 1000;
-					int second = Integer.parseInt(String.valueOf(complete));
-					sendMessage(sender, "&aConversion completed in " + second + " seconds.");
-					return true;
-				}
-				return true;
-			}*/
 			return false;
+		}
+
+		@Override
+		public Plugin getPlugin() {
+			return EnterpriseSpigot.this;
+		}
+
+		class DependencyFinder {
+			final Plugin[] plugins;
+			final CommandSender sender;
+
+			DependencyFinder(Plugin[] plugins, CommandSender sender) {
+				this.plugins = plugins;
+				this.sender = sender;
+			}
+
+			void findAndSend() {
+				final ArrayList<String> descriptions = new ArrayList<>();
+				for (Plugin plugin : plugins) {
+					if (!plugin.getDescription().getDepend().contains(EnterpriseSpigot.this.getName()) && !plugin.getDescription().getSoftDepend().contains(EnterpriseSpigot.this.getDescription().getName())) {
+						continue;
+					}
+					if (plugin.isEnabled()) {
+						descriptions.add("&a" + plugin.getDescription().getFullName() + "&7 by &f" + joinAuthors(plugin));
+					} else {
+						descriptions.add("&c" + plugin.getDescription().getFullName() + "&7 by &f" + joinAuthors(plugin));
+					}
+				}
+				if (descriptions.isEmpty()) {
+					sender.sendMessage(CustomCommand.translateColorCodes("&cNo detected Enterprise dependencies."));
+					return;
+				}
+				sendMessage(sender, "Detected plugins: " + String.join("; ", descriptions));
+			}
+
+			private String joinAuthors(Plugin plugin) {
+				final String[] strings = plugin.getDescription().getAuthors().toArray(new String[0]);
+				if (strings.length == 0) return "?";
+				if (strings.length == 1) return strings[0];
+				final StringBuilder sb = new StringBuilder(strings[0]);
+				for (int i = 1; i < strings.length; ++i) {
+					sb.append("&7");
+					if (i + 1 < strings.length) {
+						sb.append(", ");
+					} else {
+						sb.append(" and ");
+					}
+					sb.append("&f").append(strings[i]);
+				}
+				return sb.toString();
+			}
 		}
 	}
 
