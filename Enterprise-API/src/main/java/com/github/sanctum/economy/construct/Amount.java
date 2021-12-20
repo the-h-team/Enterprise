@@ -63,6 +63,44 @@ public abstract class Amount {
 
     @Override
     public int hashCode() {
-        return Objects.hash(asset, getAmount().stripTrailingZeros());
+        return Objects.hash(asset, normalize(getAmount()));
+    }
+
+    /**
+     * Convert values to the most compact but human-readable form.
+     *
+     * @param value a value to normalize
+     * @return a normalized value
+     * @implNote The normalization process seeks to represent values as
+     * full, unscaled integers OR compact decimals. It looks like this:
+     * <h3>For "0.50":</h3>
+     * <ul>
+     *     <li><code>0.50 -> 0.5</code></li>
+     *     <li>{@link BigDecimal#scale()} is <code>&lt;0</code></li>
+     *     <li>This indicates a decimal portion. We will try to strip
+     *     trailing zeros from the value: <code>0.5</code>
+     *     </li>
+     *     <li>This new value has a smaller scale, so we will use it.</li>
+     * </ul>
+     * <h3>For "200":</h3>
+     * <ul>
+     *     <li><code>2E+2 -> 200</code></li>
+     *     <li>Scale is negative: <code>-2</code></li>
+     *     <li>This indicates a scaled whole number; we will simply
+     *     the value by setting its scale to 0: <code>200</code>
+     *     </li>
+     *     <li>This value is more human-readable, so we will use it.</li>
+     * </ul>
+     */
+    public static BigDecimal normalize(@NotNull BigDecimal value) {
+        final int initialScale = value.scale();
+        // If the initial value has a decimal component
+        if (initialScale > 0) {
+            final BigDecimal stripped = value.stripTrailingZeros();
+            // ...and strip does nothing, return original value; otherwise stripped
+            return initialScale == stripped.scale() ? value : stripped;
+        }
+        // Number is whole, simply set scale to zero
+        return value.setScale(0, BigDecimal.ROUND_UNNECESSARY);
     }
 }

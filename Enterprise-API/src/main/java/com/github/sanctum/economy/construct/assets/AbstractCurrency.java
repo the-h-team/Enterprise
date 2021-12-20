@@ -20,7 +20,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.math.BigDecimal;
-import java.util.Optional;
+import java.util.Objects;
 
 /**
  * An abstract base for all currencies.
@@ -123,41 +123,28 @@ public abstract class AbstractCurrency extends AbstractAsset implements DecimalA
     }
 
     /**
-     * The contract of currency tokens (notes, bills or specie).
+     * Currency tokens (notes, bills or specie).
+     * <p>
+     * This class is designed such that you would first make your desired
+     * base Asset and then pass it as the first constructor parameter;
+     * this object will then mimic the Asset insofar as its group,
+     * identifier and fqn.
      *
      * @since 2.0.0
      * @author ms5984
      */
-    public interface Token {
-        /**
-         * Get the worth of this token.
-         *
-         * @return the worth of this token
-         */
-        @NotNull BigDecimal getWorth();
+    public final class Token extends Asset {
+        final BigDecimal worth;
+        final String name;
 
         /**
-         * Get the currency of this token.
+         * Initialize the match, worth and name of this token.
          *
-         * @return the currency represented by this token
-         */
-        @NotNull AbstractCurrency currency();
-
-        /**
-         * Get the token-equivalent Amount in the represented currency.
-         *
-         * @return an equivalent Amount of {@link #currency()}
-         */
-        default @NotNull Amount equivalentAmount() {
-            return currency().new CurrencyAmount(getWorth());
-        }
-
-        /**
-         * Get the display name for this token, if applicable.
-         *
-         * @return an Optional describing the display name for this token
-         * @implNote This default implementation produces a display name
-         * with the following format:
+         * @param match the asset that will match this token
+         * @param worth a face amount of base currency
+         * @param name a name for this token
+         * @implNote If <code>name</code> is null, this implementation
+         * automatically produces a name with the following format:
          * "<code>normalized_worth</code> <code>currency_display_name</code>".
          * <p>
          * As an example:
@@ -167,55 +154,52 @@ public abstract class AbstractCurrency extends AbstractAsset implements DecimalA
          * </ul>
          * = "10 Dollars" (concatenated, space-separated)
          */
-        default Optional<String> name() {
-            return Optional.of(normalize(getWorth()) + " " + currency().displayName());
+        public Token(@NotNull Asset match, @NotNull BigDecimal worth, @Nullable String name) {
+            super(match.group, match.identifier);
+            this.worth = worth;
+            this.name = name != null ? name : Amount.normalize(this.worth) + " " + displayName();
         }
 
         /**
-         * Get the description for this token, if applicable.
+         * Get the worth of this token.
          *
-         * @return an Optional describing the description for this token
+         * @return the worth of this token
          */
-        default Optional<String> description() {
-            return Optional.empty();
+        public BigDecimal getWorth() {
+            return worth;
         }
 
         /**
-         * Convert values to the most compact but human-readable form.
+         * Get the name of this token.
          *
-         * @param value a value to normalize
-         * @return a normalized value
-         * @implNote The normalization process seeks to represent values as
-         * full, unscaled integers OR compact decimals. It looks like this:
-         * <h3>For "0.50":</h3>
-         * <ul>
-         *     <li><code>0.50 -> 0.5</code></li>
-         *     <li>{@link BigDecimal#scale()} is <code>&lt;0</code></li>
-         *     <li>This indicates a decimal portion. We will try to strip
-         *     trailing zeros from the value: <code>0.5</code>
-         *     </li>
-         *     <li>This new value has a smaller scale, so we will use it.</li>
-         * </ul>
-         * <h3>For "200":</h3>
-         * <ul>
-         *     <li><code>2E+2 -> 200</code></li>
-         *     <li>Scale is negative: <code>-2</code></li>
-         *     <li>This indicates a scaled whole number; we will simply
-         *     the value by setting its scale to 0: <code>200</code>
-         *     </li>
-         *     <li>This value is more human-readable, so we will use it.</li>
-         * </ul>
+         * @return the name of this token
          */
-        static BigDecimal normalize(@NotNull BigDecimal value) {
-            final int initialScale = value.scale();
-            // If the initial value has a decimal component
-            if (initialScale > 0) {
-                final BigDecimal stripped = value.stripTrailingZeros();
-                // ...and strip does nothing, return original value; otherwise stripped
-                return initialScale == stripped.scale() ? value : stripped;
-            }
-            // Number is whole, simply set scale to zero
-            return value.setScale(0, BigDecimal.ROUND_UNNECESSARY);
+        public String getName() {
+            return name;
+        }
+
+        /**
+         * Get the token-equivalent Amount in the represented currency.
+         *
+         * @return an equivalent Amount of the base currency
+         */
+        public Amount equivalentAmount() {
+            return getAmount(worth);
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            if (!super.equals(o)) return false;
+            Token token = (Token) o;
+            return worth.equals(token.worth) &&
+                    name.equals(token.name);
+        }
+
+        @Override
+        public int hashCode() {
+            return super.hashCode() ^ Objects.hash(worth, name);
         }
     }
 }
