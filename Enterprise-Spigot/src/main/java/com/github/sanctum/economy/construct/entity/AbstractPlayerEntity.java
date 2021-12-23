@@ -26,12 +26,15 @@ import org.jetbrains.annotations.Nullable;
  * @since 2.0.0
  * @author ms5984
  * @see EnterpriseEntity
+ * @param <T> the type of the identifying property
  */
-public abstract class AbstractPlayerEntity extends BukkitEntity {
+public abstract class AbstractPlayerEntity<T> extends BukkitEntity implements EnterpriseEntity.PlayerEntity<T> {
     transient final OfflinePlayer player;
+    final T identifyingProperty;
 
-    AbstractPlayerEntity(String namespace, String identity, OfflinePlayer player) {
-        super(namespace, identity);
+    AbstractPlayerEntity(String namespace, T identifyingProperty, OfflinePlayer player) {
+        super(namespace, identifyingProperty.toString());
+        this.identifyingProperty = identifyingProperty;
         this.player = player;
     }
 
@@ -65,5 +68,10 @@ public abstract class AbstractPlayerEntity extends BukkitEntity {
             return playerName;
         }
         return "Player:" + player.getUniqueId();
+    }
+
+    @Override
+    public final @NotNull T getIdentifyingProperty() {
+        return identifyingProperty;
     }
 }

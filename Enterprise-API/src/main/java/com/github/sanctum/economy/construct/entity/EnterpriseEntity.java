@@ -18,6 +18,7 @@ package com.github.sanctum.economy.construct.entity;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
+import java.util.UUID;
 import java.util.regex.Pattern;
 
 /**
@@ -125,6 +126,59 @@ public class EnterpriseEntity {
     @Override
     public String toString() {
         return getFQN();
+    }
+
+    /**
+     * Marks an entity that represents a player using a typed property.
+     *
+     * @since 2.0.0
+     * @author ms5984
+     * @param <T> the type of the identifying property
+     */
+    public interface PlayerEntity<T> {
+        /**
+         * Get the identifying property of the player.
+         *
+         * @return an identifying property of the player
+         */
+        @NotNull T getIdentifyingProperty();
+
+        /**
+         * Access this object as its EnterpriseEntity form.
+         *
+         * @return this object as an EnterpriseEntity
+         */
+        EnterpriseEntity asEntity();
+
+        /**
+         * Marks an entity that represents a player using their username.
+         *
+         * @implSpec All implementations must use {@link ByUsername#NAMESPACE}.
+         * @since 2.0.0
+         * @author ms5984
+         */
+        interface ByUsername extends PlayerEntity<String> {
+            /**
+             * All entity implementations should use
+             * this value as their namespace.
+             */
+            String NAMESPACE = "p_username";
+        }
+
+        /**
+         * Marks an entity that represents a player using their UniqueId.
+         *
+         * @implSpec All implementations must use {@link ByUniqueId#NAMESPACE}.
+         * @since 2.0.0
+         * @author ms5984
+         */
+        interface ByUniqueId extends PlayerEntity<UUID> {
+            /**
+             * All entity implementations should use
+             * this value as their namespace.
+             */
+            String NAMESPACE = "p_uid";
+        }
     }
 
     static String validateNamespace(String namespace) {

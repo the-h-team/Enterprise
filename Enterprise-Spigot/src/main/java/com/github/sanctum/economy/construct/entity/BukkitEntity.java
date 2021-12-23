@@ -16,8 +16,11 @@
 package com.github.sanctum.economy.construct.entity;
 
 import org.bukkit.OfflinePlayer;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.UUID;
 
 /**
  * A type of entity derived from a Bukkit-native structure.
@@ -44,10 +47,15 @@ public class BukkitEntity extends EnterpriseEntity {
      * @since 2.0.0
      * @author ms5984
      */
-    public static class PlayerByUUID extends AbstractPlayerEntity {
+    public static class PlayerByUUID extends AbstractPlayerEntity<UUID> implements PlayerEntity.ByUniqueId {
 
         PlayerByUUID(OfflinePlayer player) {
-            super("p_uid", player.getUniqueId().toString(), player);
+            super(NAMESPACE, player.getUniqueId(), player);
+        }
+
+        @Override
+        public PlayerByUUID asEntity() {
+            return this;
         }
 
         /**
@@ -77,10 +85,15 @@ public class BukkitEntity extends EnterpriseEntity {
      * @since 2.0.0
      * @author ms5984
      */
-    public static class PlayerByUsername extends AbstractPlayerEntity {
+    public static class PlayerByUsername extends AbstractPlayerEntity<String> implements PlayerEntity.ByUsername {
 
         PlayerByUsername(OfflinePlayer player) {
-            super("p_username", player.getName(), player);
+            super(NAMESPACE, player.getName(), player);
+        }
+
+        @Override
+        public PlayerByUsername asEntity() {
+            return this;
         }
 
         /**
@@ -101,6 +114,49 @@ public class BukkitEntity extends EnterpriseEntity {
          */
         public static PlayerByUsername offline(@NotNull OfflinePlayer offlinePlayer) {
             return new PlayerByUsername(offlinePlayer);
+        }
+    }
+
+    /**
+     * Native implementation for the local server.
+     *
+     * @since 2.0.0
+     * @author ms5984
+     */
+    public static class Server extends BukkitEntity {
+        /**
+         * All implementations of this class use this value as their namespace.
+         */
+        public static final String NAMESPACE = "server";
+
+        Server(@NotNull String identity) {
+            super(NAMESPACE, identity);
+        }
+
+        /**
+         * Get an entity for the server that specifically
+         * identifies the console command sender.
+         *
+         * @param console the console command sender instance
+         * @return a new server entity
+         * @implNote Uses {@link ConsoleCommandSender#getName()}
+         * as the value for <code>identity</code>.
+         */
+        public static Server console(@NotNull ConsoleCommandSender console) {
+            return new Server(console.getName());
+        }
+
+        /**
+         * Get an entity associated with the server with
+         * an arbitrary identifier component.
+         *
+         * @param identity a custom identifier
+         * @return a new, custom server entity
+         * @throws IllegalArgumentException if <code>identity</code> does not
+         * meet the format of {@link EnterpriseEntity#VALID_IDENTIFIER}.
+         */
+        public static Server identity(@NotNull String identity) throws IllegalArgumentException {
+            return new Server(validateIdentity(identity));
         }
     }
 }
