@@ -15,9 +15,12 @@
  */
 package com.github.sanctum.economy.construct.entity;
 
+import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ConnectedPlayer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.UUID;
 
 /**
  * A type of entity derived from a Bungee-native structure.
@@ -26,6 +29,13 @@ import org.jetbrains.annotations.NotNull;
  * @author ms5984
  */
 public class BungeeEntity extends EnterpriseEntity {
+    /**
+     * Represents any Bungeecord proxy instance.
+     *
+     * @since 2.0.0
+     */
+    public static final BungeeEntity BUNGEECORD_PROXY = new BungeeEntity("proxy", "bungeecord");
+
     /**
      * Create an entity from a namespace and identifier.
      * <p>
@@ -44,10 +54,15 @@ public class BungeeEntity extends EnterpriseEntity {
      * @since 2.0.0
      * @author ms5984
      */
-    public static class ProxyPlayerByUUID extends AbstractProxyPlayerEntity {
+    public static class ProxyPlayerByUUID extends AbstractProxyPlayerEntity<UUID> implements PlayerEntity.ByUniqueId {
 
         ProxyPlayerByUUID(ProxiedPlayer player) {
-            super("p_uid", player.getUniqueId().toString(), player);
+            super(NAMESPACE, player.getUniqueId(), player);
+        }
+
+        @Override
+        public ProxyPlayerByUUID asEntity() {
+            return this;
         }
 
         /**
@@ -77,10 +92,15 @@ public class BungeeEntity extends EnterpriseEntity {
      * @since 2.0.0
      * @author ms5984
      */
-    public static class ProxyPlayerByUsername extends AbstractProxyPlayerEntity {
+    public static class ProxyPlayerByUsername extends AbstractProxyPlayerEntity<String> implements PlayerEntity.ByUsername {
 
         ProxyPlayerByUsername(ProxiedPlayer player) {
-            super("p_username", player.getName(), player);
+            super(NAMESPACE, player.getName(), player);
+        }
+
+        @Override
+        public ProxyPlayerByUsername asEntity() {
+            return this;
         }
 
         /**
@@ -101,6 +121,32 @@ public class BungeeEntity extends EnterpriseEntity {
          */
         public static ProxyPlayerByUsername connected(@NotNull ConnectedPlayer connectedPlayer) {
             return new ProxyPlayerByUsername(connectedPlayer);
+        }
+    }
+
+    /**
+     * Native implementation for backend servers.
+     *
+     * @implSpec Namespaces take the general form of
+     * <code>proxied_server_[identity_type]</code>.
+     * @since 2.0.0
+     * @author ms5984
+     */
+    public static class BackendServer extends BungeeEntity {
+
+        BackendServer(String namespace, String identity) {
+            super(namespace, identity);
+        }
+
+        /**
+         * Get an entity for a backend server that uses its configured name.
+         *
+         * @param serverInfo a backend server info object
+         * @return a new backend server entity
+         * @implNote Uses the namespace <code>proxied_server_name</code>.
+         */
+        public static BackendServer name(@NotNull ServerInfo serverInfo) {
+            return new BackendServer("proxied_server_name", serverInfo.getName());
         }
     }
 }
