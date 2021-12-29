@@ -15,24 +15,24 @@
  */
 package com.github.sanctum.economy.construct.system;
 
-import com.github.sanctum.economy.construct.Amount;
-import com.github.sanctum.economy.construct.assets.Asset;
+import com.github.sanctum.economy.construct.entity.EnterpriseEntity;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
 
 /**
- * A point that can be queried for its totals of assets.
+ * A point that may be resolvable to an {@link EnterpriseEntity}.
  *
  * @since 2.0.0
  * @author ms5984
  */
-public interface Total extends Resolvable {
+public interface Resolvable {
     /**
-     * Query for the amount of this asset held.
+     * Resolve this point to an EnterpriseEntity, if possible.
      *
-     * @param asset the asset to total
-     * @return an Optional describing the amount, if present
+     * @return an Optional describing the resolved entity, if present
      */
-    @NotNull Optional<Amount> total(@NotNull Asset asset);
+    default @NotNull Optional<? extends EnterpriseEntity> toEntity() {
+        return Optional.empty();
+    }
 }

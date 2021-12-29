@@ -22,7 +22,13 @@ import java.util.UUID;
 import java.util.regex.Pattern;
 
 /**
- * Identifies an economically-involved entity.
+ * Identifies an economically-involved actor.
+ * <p>
+ * In Enterprise, the identity of economy actors and their abilities are
+ * separated into API for defining identity and API that can define and
+ * redefine actors' abilities. This class (and all of its subclasses)
+ * are particularly focused on that first component--defining identity
+ * in format and functionality.
  *
  * @since 2.0.0
  * @author ms5984

@@ -24,7 +24,7 @@ import org.jetbrains.annotations.NotNull;
  * @since 2.0.0
  * @author ms5984
  */
-public interface Settable {
+public interface Settable extends Resolvable {
     /**
      * Set an amount.
      *

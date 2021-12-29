@@ -24,7 +24,7 @@ import org.jetbrains.annotations.NotNull;
  * @since 2.0.0
  * @author ms5984
  */
-public interface Receiver {
+public interface Receiver extends Resolvable {
     /**
      * Attempt to give an amount to this receiver.
      *

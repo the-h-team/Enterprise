@@ -15,6 +15,11 @@
  */
 package com.github.sanctum.economy.construct.system;
 
+import com.github.sanctum.economy.construct.entity.EnterpriseEntity;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Optional;
+
 /**
  * Marks an object able to manage limited amounts of assets
  * being held by a player on their person/in hammerspace.
@@ -22,5 +27,12 @@ package com.github.sanctum.economy.construct.system;
  * @since 2.0.0
  * @author ms5984
  */
-public interface Wallet extends Balance {
+public interface Wallet<T extends EnterpriseEntity & EnterpriseEntity.PlayerEntity<?>> extends Balance {
+    /**
+     * Resolve the player entity associated with this wallet, if possible.
+     *
+     * @return an Optional describing the resolved player entity, if present
+     */
+    @Override
+    @NotNull Optional<T> toEntity();
 }

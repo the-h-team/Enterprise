@@ -18,26 +18,31 @@ package com.github.sanctum.economy.construct.entity;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * A special type of entity that is responsible for the safekeeping
- * and/or management of others' assets.
+ * A base for all custom economy actors.
  * <p>
- * This is akin to banks, credit unions and brokerage firms.
+ * This class is entirely meant for use by other economy plugins; Enterprise
+ * is made with many entities pre-defined, including players (both by username
+ * or by UniqueId), the local server console/proxy, custom "server accounts"
+ * and fiduciaries (a new type of entity that maintain accounts for others).
+ * <p>
+ * If your use case does not fall within any of the above--for instance, you
+ * want to make an item shop plugin--this is likely the class to start with.
  *
  * @since 2.0.0
  * @author ms5984
  */
-public class Fiduciary extends EnterpriseEntity {
+public class CustomEntity extends EnterpriseEntity {
     /**
-     * Create a fiduciary from a namespace and identifier.
+     * Create an entity from a namespace and identifier.
      *
      * @param namespace the namespace for the entity
-     * @param identity the namespace-unique identifier for the entity
+     * @param identity  the namespace-unique identifier for the entity
      * @throws IllegalArgumentException if <code>namespace</code> does not
      * follow the pattern of {@link EnterpriseEntity#VALID_NAMESPACE} and/or
      * <code>identity</code> does not follow the pattern of
      * {@link EnterpriseEntity#VALID_IDENTIFIER}
      */
-    public Fiduciary(@NotNull String namespace, @NotNull String identity) throws IllegalArgumentException {
+    public CustomEntity(@NotNull String namespace, @NotNull String identity) throws IllegalArgumentException {
         super(validateNamespace(namespace), validateIdentity(identity));
     }
 }
