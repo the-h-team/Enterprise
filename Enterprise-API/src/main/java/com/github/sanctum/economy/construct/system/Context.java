@@ -102,7 +102,7 @@ public class Context {
          * {@code worldName} contains spaces
          */
         public static World byName(@NotNull String worldName) throws IllegalArgumentException {
-            return new World(NAME_TYPE, validate(worldName));
+            return new World(NAME_TYPE, validateValue(worldName));
         }
 
         /**
@@ -116,7 +116,119 @@ public class Context {
         }
     }
 
-    static String validate(@NotNull String value) {
+    /**
+     * Represent a permission as a context.
+     *
+     * @since 2.0.0
+     * @author ms5984
+     */
+    public static class Permission extends Context {
+        /**
+         * The type string for a permission.
+         */
+        public static final String PERMISSION_TYPE = "perm";
+
+        Permission(@NotNull String permission) {
+            super(PERMISSION_TYPE, permission);
+        }
+
+        /**
+         * Represents a permission as its string form.
+         *
+         * @param permission the permission
+         * @return a new permission context object
+         * @throws IllegalArgumentException if
+         * {@code permission} contains spaces
+         */
+        public static Permission of(@NotNull String permission) throws IllegalArgumentException {
+            return new Permission(validateValue(permission));
+        }
+    }
+
+    /**
+     * Represents custom contexts produced by
+     * a {@link CustomTypeBuilder} instance.
+     *
+     * @since 2.0.0
+     * @author ms5984
+     * @see CustomTypeBuilder
+     */
+    public static class Custom extends Context {
+        Custom(@NotNull String type, @NotNull String value) {
+            super(type, validateValue(value));
+        }
+    }
+
+    /**
+     * Represent custom contexts via a typed builder.
+     *
+     * @since 2.0.0
+     * @author ms5984
+     * @see Custom
+     */
+    public static final class CustomTypeBuilder {
+        final String type;
+
+        /**
+         * Define contexts with a type key.
+         *
+         * @param type the context type
+         * @throws IllegalArgumentException if {@code type} contains
+         * spaces or represents an internally defined type
+         * @see World#NAME_TYPE
+         * @see World#UID_TYPE
+         * @see Permission#PERMISSION_TYPE
+         */
+        public CustomTypeBuilder(@NotNull String type) throws IllegalArgumentException {
+            this.type = validateType(type);
+        }
+
+        /**
+         * Get the type key of this builder.
+         *
+         * @return the context type
+         */
+        public String getType() {
+            return type;
+        }
+
+        /**
+         * Define a context of this builder's type with a value string.
+         *
+         * @param value the value for the type
+         */
+        public Custom getContext(@NotNull String value) {
+            return new Custom(type, value);
+        }
+    }
+
+    /**
+     * Get a context builder with a defined type key.
+     *
+     * @param type the context type
+     * @throws IllegalArgumentException if {@code type} contains
+     * spaces or represents an internally defined type
+     * @see World#NAME_TYPE
+     * @see World#UID_TYPE
+     * @see Permission#PERMISSION_TYPE
+     */
+    public static CustomTypeBuilder factory(@NotNull String type) throws IllegalArgumentException {
+        return new CustomTypeBuilder(type);
+    }
+
+    static String validateType(@NotNull String type) throws IllegalArgumentException {
+        if (type.contains(" ")) throw new IllegalArgumentException("Type cannot contain spaces!");
+        switch (type) {
+            case World.NAME_TYPE:
+            case World.UID_TYPE:
+            case Permission.PERMISSION_TYPE:
+                throw new IllegalArgumentException("Cannot use protected internal type.");
+            default:
+                return type;
+        }
+    }
+
+    static String validateValue(@NotNull String value) throws IllegalArgumentException {
         if (value.contains(" ")) throw new IllegalArgumentException("Value cannot contain spaces!");
         return value;
     }
