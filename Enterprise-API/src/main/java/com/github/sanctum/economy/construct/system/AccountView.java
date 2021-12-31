@@ -20,13 +20,13 @@ import com.github.sanctum.economy.construct.system.Account.*;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * A specialization of {@link Balance}, exposing its functionality
- * from the context of an entity that is permitted access.
+ * A specialization of {@link Balance} exposing {@link Account}'s functionality
+ * from the perspective of an entity that is permitted access.
  *
  * @since 2.0.0
  * @author ms5984
  */
-public interface AccountView extends Balance {
+public interface AccountView extends Balance, Contextual {
     /**
      * Does this view belong to an account owner?
      *
@@ -55,11 +55,11 @@ public interface AccountView extends Balance {
     @NotNull AccessLevel accessLevel();
 
     /**
-     * Get the entity whose context forms this view.
+     * Get the entity whose perspective determines this view.
      *
-     * @return the entity whose context forms this view
+     * @return the entity whose perspective determines this view
      */
-    @NotNull EnterpriseEntity context();
+    @NotNull EnterpriseEntity viewer();
 
     /**
      * Get the account associated with this view.
@@ -78,7 +78,7 @@ public interface AccountView extends Balance {
      */
     default void addMember(@NotNull EnterpriseEntity entity, AccessLevel level) throws AccessDenied, DuplicateEntity {
         if (!isOwner()) {
-            throw new AccessDenied(context(), "This entity cannot add members.");
+            throw new AccessDenied(viewer(), "This entity cannot add members.");
         }
         account().addEntity(entity, level);
     }
@@ -94,7 +94,7 @@ public interface AccountView extends Balance {
      */
     default @NotNull AccessLevel setAccess(@NotNull EnterpriseEntity member, AccessLevel level) throws AccessDenied, NotAMember {
         if (!isOwner()) {
-            throw new AccessDenied(context(), "This entity cannot edit others' access!");
+            throw new AccessDenied(viewer(), "This entity cannot edit others' access!");
         }
         throw new NotAMember(member, "This entity is not a member of the account.");
     }
@@ -112,7 +112,7 @@ public interface AccountView extends Balance {
     @SuppressWarnings("RedundantThrows")
     default boolean removeMember(@NotNull EnterpriseEntity member) throws AccessDenied, NotAMember, LastOwner {
         if (!isOwner()) {
-            throw new AccessDenied(context(), "This entity cannot edit others' access!");
+            throw new AccessDenied(viewer(), "This entity cannot edit others' access!");
         }
         throw new NotAMember(member, "This entity is not a member of the account.");
     }
