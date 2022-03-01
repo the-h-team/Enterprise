@@ -1,5 +1,5 @@
 /*
- *   Copyright 2021 Sanctum <https://github.com/the-h-team>
+ *   Copyright 2022 Sanctum <https://github.com/the-h-team>
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ import com.github.sanctum.economy.construct.assets.Asset;
 import org.jetbrains.annotations.NotNull;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Objects;
 
 /**
@@ -103,6 +104,6 @@ public abstract class Amount {
             return initialScale == stripped.scale() ? value : stripped;
         }
         // Number is currently negatively scaled, set scale to zero
-        return value.setScale(0, BigDecimal.ROUND_UNNECESSARY);
+        return value.setScale(0, RoundingMode.UNNECESSARY);
     }
 }
