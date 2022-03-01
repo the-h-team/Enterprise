@@ -1,5 +1,5 @@
 /*
- *   Copyright 2021 Sanctum <https://github.com/the-h-team>
+ *   Copyright 2022 Sanctum <https://github.com/the-h-team>
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -25,8 +25,10 @@ import org.jetbrains.annotations.NotNull;
  *
  * @since 2.0.0
  * @author ms5984
+ * @param <N> the player-by-username class for this implementation
+ * @param <U> the player-by-uniqueId class for this implementation
  */
-public interface WalletService {
+public interface WalletService<N extends EnterpriseEntity & EnterpriseEntity.PlayerEntity.ByUsername, U extends EnterpriseEntity & EnterpriseEntity.PlayerEntity.ByUniqueId> {
     /**
      * Get the system implementation info associated with this service.
      *
@@ -38,37 +40,33 @@ public interface WalletService {
      * Get a wallet object for a player by username.
      *
      * @param player the player object
-     * @param <T> the inferred type bound (this is used by the wallet system)
      * @return the wallet object for the player, identified by username
      */
-    <T extends EnterpriseEntity & EnterpriseEntity.PlayerEntity.ByUsername> Wallet<T> username(@NotNull T player);
+    Wallet<N> username(@NotNull N player);
 
     /**
      * Get a contextual wallet object for a player by username.
      *
      * @param player the player object
      * @param contexts the contexts to apply
-     * @param <T> the inferred type bound (this is used by the wallet system)
      * @return the wallet object for the player, identified by username
      */
-    <T extends EnterpriseEntity & EnterpriseEntity.PlayerEntity.ByUsername> Wallet<T> username(@NotNull T player, @NotNull Context... contexts);
+    Wallet<N> username(@NotNull N player, @NotNull Context... contexts);
 
     /**
      * Get a wallet object for a player by UniqueId.
      *
      * @param player the player object
-     * @param <T> the inferred type bound (this is used by the wallet system)
      * @return the wallet object for the player, identified by UniqueId
      */
-    <T extends EnterpriseEntity & EnterpriseEntity.PlayerEntity.ByUniqueId> Wallet<T> uniqueId(T player);
+    Wallet<U> uniqueId(U player);
 
     /**
      * Get a contextual wallet object for a player by UniqueId.
      *
      * @param player the player object
      * @param contexts the contexts to apply
-     * @param <T> the inferred type bound (this is used by the wallet system)
      * @return the wallet object for the player, identified by UniqueId
      */
-    <T extends EnterpriseEntity & EnterpriseEntity.PlayerEntity.ByUniqueId> Wallet<T> uniqueId(@NotNull T player, @NotNull Context... contexts);
+    Wallet<U> uniqueId(@NotNull U player, @NotNull Context... contexts);
 }
