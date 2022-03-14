@@ -16,7 +16,6 @@
 package com.github.sanctum.economy.construct.system;
 
 import com.github.sanctum.economy.construct.entity.EnterpriseEntity;
-import com.github.sanctum.economy.construct.entity.Fiduciary;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
