@@ -39,10 +39,7 @@ public class AssetFactory<T extends Asset> {
      * cannot be normalized to match via {@link String#toLowerCase()}
      */
     protected AssetFactory(@NotNull String group, @NotNull BiFunction<String, String, T> constructor) throws IllegalArgumentException {
-        this.group = group.toLowerCase();
-        if (!Asset.VALID_GROUP.matcher(this.group).matches()) {
-            throw new IllegalArgumentException("Group does not follow pattern: " + Asset.VALID_GROUP.pattern());
-        }
+        this.group = Asset.validateGroup(group);
         this.constructor = constructor;
     }
 
@@ -65,10 +62,7 @@ public class AssetFactory<T extends Asset> {
      * does not follow the pattern of {@link Asset#VALID_IDENTIFIER}
      */
     public T fromIdentifier(@NotNull String identifier) throws IllegalArgumentException {
-        if (!Asset.VALID_IDENTIFIER.matcher(identifier).matches()) {
-            throw new IllegalArgumentException("Identifier does not follow pattern: " + Asset.VALID_IDENTIFIER.pattern());
-        }
-        return constructor.apply(group, identifier);
+        return constructor.apply(group, Asset.validateIdentifier(identifier));
     }
 
     /**
