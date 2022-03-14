@@ -113,4 +113,19 @@ public class Asset {
     public String toString() {
         return getFQN();
     }
+
+    static String validateGroup(String group) throws IllegalArgumentException {
+        final String normalized = group.toLowerCase();
+        if (!VALID_GROUP.matcher(normalized).matches()) {
+            throw new IllegalArgumentException("Group does not follow pattern: " + VALID_GROUP.pattern());
+        }
+        return normalized;
+    }
+
+    static String validateIdentifier(String identifier) throws IllegalArgumentException {
+        if (!VALID_IDENTIFIER.matcher(identifier).matches()) {
+            throw new IllegalArgumentException("Identifier does not follow pattern: " + VALID_IDENTIFIER.pattern());
+        }
+        return identifier;
+    }
 }
