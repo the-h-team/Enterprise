@@ -49,7 +49,7 @@ public final class TotalTransaction extends MemoryTransaction {
      * @implSpec Should be empty if {@link #isSuccess()} is false.
      */
     @Override
-    public Optional<Amount> getAmount() {
+    public @NotNull Optional<Amount> getAmount() {
         return Optional.ofNullable(amount);
     }
 

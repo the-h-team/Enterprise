@@ -20,6 +20,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.io.BukkitObjectInputStream;
 import org.bukkit.util.io.BukkitObjectOutputStream;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -57,6 +58,7 @@ public final class MetaItemAsset extends BukkitAsset implements IntegralAsset {
      * <b>This method is not cached.</b> Use sparingly.
      *
      * @return a copy of the original item
+     * @throws IllegalStateException if the item could not be reconstructed
      */
     public ItemStack getItem() {
         final ItemMeta meta;
@@ -79,7 +81,7 @@ public final class MetaItemAsset extends BukkitAsset implements IntegralAsset {
      * @throws IllegalArgumentException if <code>count</code> is negative
      */
     @Override
-    public ItemAmount getAmount(int count) throws IllegalArgumentException {
+    public @NotNull ItemAmount getAmount(int count) throws IllegalArgumentException {
         return new ItemAmount(count, this);
     }
 

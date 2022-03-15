@@ -16,6 +16,7 @@
 package com.github.sanctum.economy.construct.assets;
 
 import com.github.sanctum.economy.construct.IntegralAmount;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Marks an asset which can be divided by whole number.
@@ -31,5 +32,5 @@ public interface IntegralAsset {
      * @return a new amount object
      * @throws IllegalArgumentException if <code>count</code> is negative
      */
-    IntegralAmount getAmount(int count);
+    @NotNull IntegralAmount getAmount(int count);
 }

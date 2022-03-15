@@ -48,7 +48,7 @@ public final class ReceiveTransaction extends MemoryTransaction {
      * @return an Optional describing an AcceptError
      */
     @Override
-    public Optional<AcceptError> getException() {
+    public @NotNull Optional<AcceptError> getException() {
         return Optional.ofNullable((AcceptError) exception);
     }
 

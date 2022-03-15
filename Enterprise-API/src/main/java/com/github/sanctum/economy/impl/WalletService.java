@@ -34,7 +34,7 @@ public interface WalletService<N extends EnterpriseEntity & EnterpriseEntity.Pla
      *
      * @return associated implementation info
      */
-    SystemImplementation getImplementationInfo();
+    @NotNull SystemImplementation getImplementationInfo();
 
     /**
      * Get a wallet object for a player by username.

@@ -48,7 +48,7 @@ public final class SourceTransaction extends MemoryTransaction {
      * @return an Optional describing a SupplyError
      */
     @Override
-    public Optional<SupplyError> getException() {
+    public @NotNull Optional<SupplyError> getException() {
         return Optional.ofNullable((SupplyError) exception);
     }
 

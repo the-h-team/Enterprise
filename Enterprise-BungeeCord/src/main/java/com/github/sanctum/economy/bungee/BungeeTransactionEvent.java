@@ -60,7 +60,7 @@ public final class BungeeTransactionEvent<T extends MemoryTransaction> extends A
      *
      * @return the transaction in this event
      */
-    public final T getTransactionInfo() {
+    public T getTransactionInfo() {
         return transactionInfo;
     }
 

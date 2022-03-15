@@ -31,7 +31,7 @@ import java.util.Objects;
 public abstract class Amount {
     protected final Asset asset;
 
-    protected Amount(Asset asset) {
+    protected Amount(@NotNull Asset asset) {
         this.asset = asset;
     }
 
@@ -40,7 +40,7 @@ public abstract class Amount {
      *
      * @return the asset being counted
      */
-    public final @NotNull Asset getAsset() {
+    public final Asset getAsset() {
         return asset;
     }
 

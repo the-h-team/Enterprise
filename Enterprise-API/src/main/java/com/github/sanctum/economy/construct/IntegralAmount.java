@@ -27,7 +27,7 @@ import java.math.BigDecimal;
  * @author ms5984
  */
 public abstract class IntegralAmount extends Amount {
-    protected IntegralAmount(Asset asset) {
+    protected IntegralAmount(@NotNull Asset asset) {
         super(asset);
     }
 

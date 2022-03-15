@@ -73,7 +73,7 @@ public class MemoryTransaction {
      *
      * @return an Optional describing the original Amount
      */
-    public Optional<Amount> getAmount() {
+    public @NotNull Optional<Amount> getAmount() {
         return Optional.ofNullable(amount);
     }
 
@@ -82,7 +82,7 @@ public class MemoryTransaction {
      *
      * @return the asset
      */
-    public final @NotNull Asset getAsset() {
+    public final Asset getAsset() {
         return asset;
     }
 
@@ -100,7 +100,7 @@ public class MemoryTransaction {
      *
      * @return an Optional describing a system exception
      */
-    public Optional<? extends AbstractSystemException> getException() {
+    public @NotNull Optional<? extends AbstractSystemException> getException() {
         return Optional.ofNullable(exception);
     }
 
@@ -131,7 +131,7 @@ public class MemoryTransaction {
      *
      * @return a simple, non-empty description for this transaction
      */
-    public final @NotNull String getDescription() {
+    public final String getDescription() {
         return description;
     }
 
@@ -140,7 +140,7 @@ public class MemoryTransaction {
      *
      * @return the primary actor or actors
      */
-    public final @NotNull EnterpriseEntity[] getPrimaries() {
+    public final EnterpriseEntity[] getPrimaries() {
         return primaries;
     }
 

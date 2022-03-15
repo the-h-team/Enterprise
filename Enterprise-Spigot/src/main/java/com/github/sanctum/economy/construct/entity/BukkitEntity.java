@@ -54,7 +54,7 @@ public class BukkitEntity extends EnterpriseEntity {
         }
 
         @Override
-        public PlayerByUUID asEntity() {
+        public @NotNull PlayerByUUID asEntity() {
             return this;
         }
 
@@ -92,7 +92,7 @@ public class BukkitEntity extends EnterpriseEntity {
         }
 
         @Override
-        public PlayerByUsername asEntity() {
+        public @NotNull PlayerByUsername asEntity() {
             return this;
         }
 
