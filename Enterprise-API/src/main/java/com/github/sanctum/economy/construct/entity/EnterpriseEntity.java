@@ -154,7 +154,7 @@ public class EnterpriseEntity {
          *
          * @return this object as an EnterpriseEntity
          */
-        EnterpriseEntity asEntity();
+        @NotNull EnterpriseEntity asEntity();
 
         /**
          * Marks an entity that represents a player using their username.

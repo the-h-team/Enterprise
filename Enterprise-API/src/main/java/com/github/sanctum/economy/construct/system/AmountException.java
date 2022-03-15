@@ -26,7 +26,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public class AmountException extends AbstractSystemException {
     private static final long serialVersionUID = 6113315531348685535L;
-    protected final Amount amount;
+    final Amount amount;
 
     /**
      * Construct an exception with an Amount and a message.

@@ -61,7 +61,7 @@ public class BungeeEntity extends EnterpriseEntity {
         }
 
         @Override
-        public ProxyPlayerByUUID asEntity() {
+        public @NotNull ProxyPlayerByUUID asEntity() {
             return this;
         }
 
@@ -99,7 +99,7 @@ public class BungeeEntity extends EnterpriseEntity {
         }
 
         @Override
-        public ProxyPlayerByUsername asEntity() {
+        public @NotNull ProxyPlayerByUsername asEntity() {
             return this;
         }
 

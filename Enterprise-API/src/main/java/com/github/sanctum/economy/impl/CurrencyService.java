@@ -17,6 +17,7 @@ package com.github.sanctum.economy.impl;
 
 import com.github.sanctum.economy.construct.assets.AbstractCurrency;
 import com.github.sanctum.economy.construct.system.Context;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
 
@@ -32,7 +33,7 @@ public interface CurrencyService {
      *
      * @return associated implementation info
      */
-    SystemImplementation getImplementationInfo();
+    @NotNull SystemImplementation getImplementationInfo();
 
     /**
      * Get the main currency for this system.
@@ -41,7 +42,7 @@ public interface CurrencyService {
      *
      * @return an Optional describing the main system currency
      */
-    Optional<? extends AbstractCurrency> getMainCurrency();
+    @NotNull Optional<? extends AbstractCurrency> getMainCurrency();
 
     /**
      * Get the main currency for a particular world.
@@ -51,7 +52,7 @@ public interface CurrencyService {
      * @implSpec Defaults to empty; prefer to override only if
      * you really want to support multiple worlds separately.
      */
-    default Optional<? extends AbstractCurrency> getWorldCurrency(Context.World world) {
+    default @NotNull Optional<? extends AbstractCurrency> getWorldCurrency(@NotNull Context.World world) {
         return Optional.empty();
     }
 }

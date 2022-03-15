@@ -48,7 +48,7 @@ public final class SetTransaction extends MemoryTransaction {
      * @return an Optional describing a SetError
      */
     @Override
-    public Optional<SetError> getException() {
+    public @NotNull Optional<SetError> getException() {
         return Optional.ofNullable((SetError) exception);
     }
 

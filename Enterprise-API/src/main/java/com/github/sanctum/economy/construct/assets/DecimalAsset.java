@@ -34,5 +34,5 @@ public interface DecimalAsset {
      * @return a new amount object
      * @throws IllegalArgumentException if <code>decimal</code> is negative
      */
-    Amount getAmount(@NotNull BigDecimal decimal);
+    @NotNull Amount getAmount(@NotNull BigDecimal decimal);
 }

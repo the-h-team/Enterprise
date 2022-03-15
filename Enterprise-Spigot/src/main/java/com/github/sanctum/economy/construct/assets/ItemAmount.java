@@ -30,7 +30,7 @@ public class ItemAmount extends IntegralAmount {
     final int amount;
     final BigDecimal bigDecimal;
 
-    ItemAmount(int amount, Asset asset) {
+    ItemAmount(int amount, @NotNull Asset asset) {
         super(asset);
         if (amount < 0) throw new IllegalArgumentException("Amount cannot be negative!");
         this.amount = amount;

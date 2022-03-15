@@ -16,6 +16,7 @@
 package com.github.sanctum.economy.construct.assets;
 
 import org.bukkit.Material;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents a Material as an asset.
@@ -54,7 +55,7 @@ public final class MaterialAsset extends BukkitAsset implements IntegralAsset {
      * @throws IllegalArgumentException if <code>count</code> is negative
      */
     @Override
-    public ItemAmount getAmount(int count) throws IllegalArgumentException {
+    public @NotNull ItemAmount getAmount(int count) throws IllegalArgumentException {
         return new ItemAmount(count, this);
     }
 }
