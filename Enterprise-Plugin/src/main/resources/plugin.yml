@@ -1,6 +1,7 @@
 name: Enterprise
 version: ${project.version}
 main: com.github.sanctum.economy.spigot.EnterpriseSpigot
+softdepend: [Vault]
 author: Sanctum
 api-version: 1.13
 description: ${project.description}
