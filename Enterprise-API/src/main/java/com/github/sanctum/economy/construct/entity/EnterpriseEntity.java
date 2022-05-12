@@ -40,7 +40,7 @@ public class EnterpriseEntity {
      * the beginning and end; and must end with only a lowercase letter,
      * a digit or an underscore.
      */
-    public static final Pattern VALID_NAMESPACE = Pattern.compile("[a-z][a-zA-Z0-9_-]*[a-z0-9_]");
+    public static final Pattern VALID_NAMESPACE = Pattern.compile("[a-z]([a-zA-Z0-9_-]*[a-z0-9_])?");
     /**
      * Valid identifiers may contain both uppercase and lowercase letters;
      * digits, hash signs, forward-slashes, underscores, pluses; equals signs
