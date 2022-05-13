@@ -4,7 +4,7 @@
 ---
 
 ## What is Enterprise?
-### Enterprise is a new framework for Minecraft economies.
+### Enterprise is a framework for Minecraft economies.
 Enterprise makes it fast and easy to work with detailed Minecraft in-game economies.
 If you're here from Bukkit, you'll likely already know of
 [Vault's](https://www.spigotmc.org/resources/vault.34315/)
@@ -19,8 +19,11 @@ economy plugins and manage each of them directly through the plugin.
 - Platform-independent API
 
 ## I am a server owner, and I need Enterprise.
-**Grab the newest version from Central right here:**
-[![Maven Central](https://img.shields.io/maven-central/v/io.github.the-h-team/enterprise-parent?style=for-the-badge)](https://search.maven.org/artifact/io.github.the-h-team/enterprise-plugin)
+Grab the newest versions from Central right here:
+
+|Platform|Version+Downloads link|
+|---|---|
+|Spigot and Bungee|[![Spigot/Bungee Plugin on Maven Central](https://img.shields.io/maven-central/v/io.github.the-h-team/enterprise-parent?style=for-the-badge)](https://search.maven.org/artifact/io.github.the-h-team/enterprise-plugin)|
 
 ## Using Enterprise providers
 ###### For plugin developers requiring economy support
