@@ -1,5 +1,5 @@
 /*
- *   Copyright 2021 Sanctum <https://github.com/the-h-team>
+ *   Copyright 2022 Sanctum <https://github.com/the-h-team>
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -34,17 +34,17 @@ public class ItemStore implements Balance {
 
     @Override
     public boolean has(@NotNull Amount amount) {
-        if (amount instanceof ItemAmount) {
-            return counts.getOrDefault(amount.getAsset().getFQN(), 0) >= ((ItemAmount) amount).getIntegralAmount();
+        if (amount instanceof ItemAsset.Amount) {
+            return counts.getOrDefault(amount.getAsset().getFQN(), 0) >= ((ItemAsset.Amount) amount).getIntegralAmount();
         }
         return false;
     }
 
     @Override
     public void give(@NotNull Amount amount) throws AcceptError {
-        if (amount instanceof ItemAmount) {
+        if (amount instanceof ItemAsset.Amount) {
             synchronized (counts) {
-                counts.merge(amount.getAsset().getFQN(), ((ItemAmount) amount).getIntegralAmount(), Integer::sum);
+                counts.merge(amount.getAsset().getFQN(), ((ItemAsset.Amount) amount).getIntegralAmount(), Integer::sum);
             }
             return;
         }
@@ -53,9 +53,9 @@ public class ItemStore implements Balance {
 
     @Override
     public void set(@NotNull Amount amount) throws SetError {
-        if (amount instanceof ItemAmount) {
+        if (amount instanceof ItemAsset.Amount) {
             synchronized (counts) {
-                counts.put(amount.getAsset().getFQN(), ((ItemAmount) amount).getIntegralAmount());
+                counts.put(amount.getAsset().getFQN(), ((ItemAsset.Amount) amount).getIntegralAmount());
             }
             return;
         }
@@ -64,8 +64,8 @@ public class ItemStore implements Balance {
 
     @Override
     public void take(@NotNull Amount amount) throws SupplyError {
-        if (amount instanceof ItemAmount) {
-            final int newAmount = ((ItemAmount) amount).getIntegralAmount();
+        if (amount instanceof ItemAsset.Amount) {
+            final int newAmount = ((ItemAsset.Amount) amount).getIntegralAmount();
             final String fqn = amount.getAsset().getFQN();
             synchronized (counts) {
                 if (counts.getOrDefault(fqn, 0) < newAmount) {
@@ -80,7 +80,7 @@ public class ItemStore implements Balance {
 
     @Override
     public @NotNull Optional<Amount> total(@NotNull Asset asset) {
-        if (asset instanceof MaterialAsset || asset instanceof MetaItemAsset) {
+        if (asset instanceof ItemAsset) {
             final Integer integer = counts.get(asset.getFQN());
             if (integer != null) {
                 return Optional.of(((IntegralAsset) asset).getAmount(integer));
