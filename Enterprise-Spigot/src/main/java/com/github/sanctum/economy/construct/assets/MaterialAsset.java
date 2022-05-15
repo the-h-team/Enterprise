@@ -1,5 +1,5 @@
 /*
- *   Copyright 2021 Sanctum <https://github.com/the-h-team>
+ *   Copyright 2022 Sanctum <https://github.com/the-h-team>
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -25,17 +25,15 @@ import org.jetbrains.annotations.NotNull;
  * @author ms5984
  * @see Asset
  */
-public final class MaterialAsset extends BukkitAsset implements IntegralAsset {
-    final Material material;
+public final class MaterialAsset extends BukkitAsset.Item {
 
     /**
-     * Produce Asset as group="item", identifier="<code>material_name</code>".
+     * Produce item asset with identifier="<code>material_name</code>".
      *
      * @param material a Bukkit Material
      */
     MaterialAsset(Material material) {
-        super("item", material.name().toLowerCase());
-        this.material = material;
+        super(material, material.name().toLowerCase());
     }
 
     /**
@@ -55,7 +53,7 @@ public final class MaterialAsset extends BukkitAsset implements IntegralAsset {
      * @throws IllegalArgumentException if <code>count</code> is negative
      */
     @Override
-    public @NotNull ItemAmount getAmount(int count) throws IllegalArgumentException {
-        return new ItemAmount(count, this);
+    public @NotNull ItemAsset.Amount getAmount(int count) throws IllegalArgumentException {
+        return new Amount(count, this);
     }
 }

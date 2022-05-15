@@ -1,5 +1,5 @@
 /*
- *   Copyright 2021 Sanctum <https://github.com/the-h-team>
+ *   Copyright 2022 Sanctum <https://github.com/the-h-team>
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -38,6 +38,59 @@ public class BukkitAsset extends Asset {
      */
     BukkitAsset(@NotNull String group, @NotNull String identifier) {
         super(group, identifier);
+    }
+
+    /**
+     * Represents a Bukkit-native item as an ItemAsset.
+     *
+     * @since 2.0.0
+     * @author ms5984
+     */
+    public static abstract class Item extends BukkitAsset implements ItemAsset {
+        final Material material;
+        /**
+         * Create an item-based asset from a material and identifier.
+         *
+         * @param identifier the identifier for the item
+         */
+        Item(@NotNull Material material, @NotNull String identifier) {
+            super(GROUP, identifier);
+            this.material = material;
+        }
+
+        @Override
+        public @NotNull String itemId() {
+            return "minecraft:" + material.name().toLowerCase();
+        }
+
+        /**
+         * Get the asset corresponding to a valid ItemStack.
+         * <p>
+         * Like {@link Items#of(ItemStack)}, this method is free to return
+         * both cached and new objects. This is because MaterialAssets are
+         * cached while MetaItemAssets are not.
+         *
+         * @param identifier an item asset identifier
+         * @return a MaterialAsset or MetaItemAsset, as needed
+         * @throws IllegalArgumentException if the identifier cannot be
+         * interpreted as a MaterialAsset nor a MetaItemAsset.
+         */
+        public static Item decodeIdentifier(@NotNull String identifier) throws IllegalArgumentException {
+            final String[] split = identifier.split(MetaItemAsset.IDENTIFIER_SLUG);
+            // split[0] is the material name
+            final Material mat = Material.getMaterial(split[0]);
+            if (mat == null) throw new IllegalArgumentException("Invalid material name: " + split[0]);
+            if (split.length == 1) return Items.of(mat);
+            // split[1] is the Base64 encoded ItemMeta
+            final String meta = split[1];
+            // verify valid meta
+            try {
+                MetaItemAsset.decodeMeta(meta);
+            } catch (IllegalStateException e) {
+                throw new IllegalArgumentException("Invalid meta base64: " + meta, e);
+            }
+            return new MetaItemAsset(mat, meta);
+        }
     }
 
     /**
@@ -84,26 +137,26 @@ public class BukkitAsset extends Asset {
          *     <li>
          *         <b>Items with meta:</b>
          *         <ul>
-         *             <li>Group = "complex_item", then:</li>
+         *             <li>Group = "item", then:</li>
          *             <ol>
          *                 <li>Serialize ItemMeta</li>
          *                 <li>Encode as base64</li>
          *             </ol>
          *             <li>Identifier =
-         *             "<code>material_name</code>#<code>base64meta</code>"
+         *             "<code>material_name</code>#bukkitmeta:<code>base64meta</code>"
          *             </li>
          *         </ul>
          *         This is not cached.
          *     </li>
          * </ul>
          */
-        public static BukkitAsset of(@NotNull ItemStack itemStack) {
+        public static BukkitAsset.Item of(@NotNull ItemStack itemStack) {
             final Material mat = itemStack.getType();
             // return simple Material representation if possible
             if (!itemStack.hasItemMeta()) return of(mat);
             // Serialize and encode ItemMeta
             final String base64meta = MetaItemAsset.encodeMeta(itemStack);
-            // Produce Asset as {group="complex_item",identifier="material_name#base64meta"
+            // Produce Asset as {group="item",identifier="material_name#bukkitmeta:base64meta"
             return new MetaItemAsset(mat, base64meta);
         }
     }

@@ -1,5 +1,5 @@
 /*
- *   Copyright 2021 Sanctum <https://github.com/the-h-team>
+ *   Copyright 2022 Sanctum <https://github.com/the-h-team>
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -36,10 +36,10 @@ public class Asset {
     public static final Pattern VALID_GROUP = Pattern.compile("[a-z][a-z0-9._-]*[a-z0-9_]");
     /**
      * Valid identifiers may contain both uppercase and lowercase letters;
-     * digits, hash signs, forward-slashes, periods, underscores, pluses;
-     * equals signs and hyphens.
+     * digits, hash signs, colons, forward-slashes, periods, underscores,
+     * pluses; equals signs and hyphens.
      */
-    public static final Pattern VALID_IDENTIFIER = Pattern.compile("[a-zA-Z0-9#/._+=-]+");
+    public static final Pattern VALID_IDENTIFIER = Pattern.compile("[a-zA-Z0-9#:/._+=-]+");
 
     final String group;
     final String identifier;
@@ -64,8 +64,8 @@ public class Asset {
      * <p>
      * Built-in types include:
      * <ul>
-     *     <li><code>item</code> for basic items.</li>
-     *     <li><code>complex_item</code> for items with meta.</li>
+     *     <li><code>item</code> for items.</li>
+     *     <li><code>currency</code> for currencies.</li>
      * </ul>
      *
      * @return a basic description of this asset's type
