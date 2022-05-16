@@ -1,5 +1,5 @@
 /*
- *  Copyright 2021 Sanctum <https://github.com/the-h-team>
+ *  Copyright 2021-2022 Sanctum <https://github.com/the-h-team>
  *  Copyright 2020 Hempfest <https://github.com/Hempfest>
  *  Copyright 2020 ms5984 (Matt) <https://github.com/ms5984>
  *
@@ -81,7 +81,7 @@ public final class EnterpriseSpigot extends JavaPlugin {
 		}
 
 		@Override
-		public boolean execute(CommandSender sender, String commandLabel, String[] args) {
+		public boolean execute(@NotNull CommandSender sender, @NotNull String commandLabel, String[] args) {
 			if (!testPermission(sender)) {
 				return true;
 			}
@@ -95,7 +95,7 @@ public final class EnterpriseSpigot extends JavaPlugin {
 		}
 
 		@Override
-		public Plugin getPlugin() {
+		public @NotNull Plugin getPlugin() {
 			return EnterpriseSpigot.this;
 		}
 
