@@ -1,5 +1,5 @@
 /*
- *   Copyright 2021 Sanctum <https://github.com/the-h-team>
+ *   Copyright 2022 Sanctum <https://github.com/the-h-team>
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -87,8 +87,8 @@ public class BukkitEntity extends EnterpriseEntity {
      */
     public static class PlayerByUsername extends AbstractPlayerEntity<String> implements PlayerEntity.ByUsername {
 
-        PlayerByUsername(OfflinePlayer player) {
-            super(NAMESPACE, player.getName(), player);
+        PlayerByUsername(String username, OfflinePlayer player) {
+            super(NAMESPACE, username, player);
         }
 
         @Override
@@ -103,7 +103,7 @@ public class BukkitEntity extends EnterpriseEntity {
          * @return a new player entity
          */
         public static PlayerByUsername online(@NotNull Player player) {
-            return new PlayerByUsername(player);
+            return new PlayerByUsername(player.getName(), player);
         }
 
         /**
@@ -111,9 +111,19 @@ public class BukkitEntity extends EnterpriseEntity {
          *
          * @param offlinePlayer an offline player
          * @return a new player entity
+         * @throws IllegalArgumentException if we have
+         * not yet seen a name for the player
          */
-        public static PlayerByUsername offline(@NotNull OfflinePlayer offlinePlayer) {
-            return new PlayerByUsername(offlinePlayer);
+        public static PlayerByUsername offline(@NotNull OfflinePlayer offlinePlayer) throws IllegalArgumentException {
+            return new PlayerByUsername(checkUsername(offlinePlayer), offlinePlayer);
+        }
+
+        // validate that we have a username for the (potentially never yet online) player
+        static String checkUsername(OfflinePlayer offlinePlayer) {
+            if (offlinePlayer instanceof Player) return ((Player) offlinePlayer).getName();
+            final String name = offlinePlayer.getName();
+            if (name == null) throw new IllegalArgumentException("Offline player has no name");
+            return name;
         }
     }
 

@@ -1,5 +1,5 @@
 /*
- *   Copyright 2021 Sanctum <https://github.com/the-h-team>
+ *   Copyright 2022 Sanctum <https://github.com/the-h-team>
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -88,7 +88,7 @@ public enum Operation {
     }
 
     /**
-     * Setup a custom description template for this action.
+     * Set a custom description template for this action.
      *
      * @param template a new template
      * @see #defaultTemplate
