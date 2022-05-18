@@ -18,10 +18,10 @@ package com.github.sanctum.economy.impl;
 import com.github.sanctum.economy.construct.entity.BukkitEntity;
 
 /**
- * Provides wallets for Bukkit players.
+ * Provides Spigot platform player wallets.
  *
  * @since 2.0.0
  * @author ms5984
  */
-public interface BukkitWalletService extends WalletService<BukkitEntity.PlayerByUsername, BukkitEntity.PlayerByUUID> {
+public interface SpigotWalletService extends WalletService<BukkitEntity.PlayerByUsername, BukkitEntity.PlayerByUUID> {
 }
