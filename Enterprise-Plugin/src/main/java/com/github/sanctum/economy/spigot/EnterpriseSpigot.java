@@ -23,6 +23,7 @@ package com.github.sanctum.economy.spigot;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 
+import com.github.sanctum.economy.system.PluginPlatformLoader;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.event.EventHandler;
@@ -44,6 +45,7 @@ public final class EnterpriseSpigot extends JavaPlugin {
 		instance = this;
 		setupCommandMapField();
 		AsyncTransactionEvent.plugin = this;
+		PluginPlatformLoader.SPIGOT.initialize();
 		new StaffCommand("enterprise", "enterprise.staff")
 				.setDescription("Manage the Enterprise plugin")
 				.setPermissionMessage(CustomCommand.translateColorCodes("&c&oThis is a staff-only command."))

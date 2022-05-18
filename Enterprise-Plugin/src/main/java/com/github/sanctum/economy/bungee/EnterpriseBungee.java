@@ -1,5 +1,5 @@
 /*
- *  Copyright 2021 Sanctum <https://github.com/the-h-team>
+ *  Copyright 2022 Sanctum <https://github.com/the-h-team>
  *
  *  This file is part of Enterprise.
  *
@@ -18,6 +18,7 @@
  */
 package com.github.sanctum.economy.bungee;
 
+import com.github.sanctum.economy.system.PluginPlatformLoader;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.plugin.Plugin;
@@ -40,6 +41,7 @@ public final class EnterpriseBungee extends Plugin {
     @Override
     public void onLoad() {
         BungeeTransactionEvent.plugin = this;
+        PluginPlatformLoader.BUNGEE.initialize();
     }
 
     @Override
