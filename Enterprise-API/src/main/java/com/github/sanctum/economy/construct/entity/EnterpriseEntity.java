@@ -1,5 +1,5 @@
 /*
- *   Copyright 2021 Sanctum <https://github.com/the-h-team>
+ *   Copyright 2022 Sanctum <https://github.com/the-h-team>
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -69,8 +69,8 @@ public class EnterpriseEntity {
     /**
      * Get this entity's namespace.
      * <p>
-     * This typically describes briefly what type of entity
-     * this is and conforms to {@link #VALID_NAMESPACE}.
+     * Namespaces describe briefly what type of participant entities
+     * represent and conform to {@link #VALID_NAMESPACE}.
      *
      * @return the namespace of this entity
      */
@@ -81,8 +81,8 @@ public class EnterpriseEntity {
     /**
      * Get this entity's identity key.
      * <p>
-     * This is a namespace-unique identifier for this entity
-     * and conforms to {@link #VALID_IDENTIFIER}.
+     * Identity is a namespace-unique identifier for this
+     * entity and conforms to {@link #VALID_IDENTIFIER}.
      *
      * @return the namespace-unique identity key for this entity
      */
@@ -105,7 +105,7 @@ public class EnterpriseEntity {
     /**
      * A friendly name for this entity.
      * <p>
-     * <b>May be human-readable. Does not need be system-unique.</b>
+     * <b>May be human-readable. Need not be system-unique.</b>
      *
      * @return a friendly name for this entity
      * @implSpec Prefer human-readable; does not need to be unique.
@@ -141,7 +141,7 @@ public class EnterpriseEntity {
      * @author ms5984
      * @param <T> the type of the identifying property
      */
-    public interface PlayerEntity<T> {
+    public interface PlayerEntity<T> extends Identifiable {
         /**
          * Get the identifying property of the player.
          *
@@ -150,10 +150,11 @@ public class EnterpriseEntity {
         @NotNull T getIdentifyingProperty();
 
         /**
-         * Access this object as its EnterpriseEntity form.
+         * Access this player representation as its EnterpriseEntity form.
          *
-         * @return this object as an EnterpriseEntity
+         * @return this representation as an EnterpriseEntity
          */
+        @Override
         @NotNull EnterpriseEntity asEntity();
 
         /**
@@ -165,8 +166,7 @@ public class EnterpriseEntity {
          */
         interface ByUsername extends PlayerEntity<String> {
             /**
-             * All entity implementations should use
-             * this value as their namespace.
+             * The namespace of all entities identifying a player by username.
              */
             String NAMESPACE = "p_username";
         }
@@ -180,8 +180,7 @@ public class EnterpriseEntity {
          */
         interface ByUniqueId extends PlayerEntity<UUID> {
             /**
-             * All entity implementations should use
-             * this value as their namespace.
+             * The namespace of all entities identifying a player by UniqueId.
              */
             String NAMESPACE = "p_uid";
         }

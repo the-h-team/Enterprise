@@ -18,7 +18,7 @@ package com.github.sanctum.economy.impl;
 import com.github.sanctum.economy.construct.entity.BungeeEntity;
 
 /**
- * Provides wallets for Bungee players.
+ * Provides BungeeCord platform player wallets.
  *
  * @since 2.0.0
  * @author ms5984
