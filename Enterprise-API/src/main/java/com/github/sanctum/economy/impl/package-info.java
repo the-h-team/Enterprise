@@ -1,10 +1,10 @@
 /**
- * <h1>Implementations</h1>
- * Provider implementations.
+ * <h1>Service Implementations</h1>
+ * System service definitions.
  * <p>
- * Developers must extend the classes found here to implement a provider.
- * TODO how to get providers
+ * This package contains abstract API for system services.
  *
  * @since 2.0.0
+ * @see com.github.sanctum.economy.system
  */
 package com.github.sanctum.economy.impl;
