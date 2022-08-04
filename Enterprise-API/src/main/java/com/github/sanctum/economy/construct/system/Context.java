@@ -18,6 +18,7 @@ package com.github.sanctum.economy.construct.system;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
+import java.util.regex.Pattern;
 
 /**
  * Represents a particular context using a String
@@ -32,6 +33,18 @@ import java.util.UUID;
  * @author ms5984
  */
 public class Context {
+    /**
+     * Valid types must start with a lowercase letter; may contain upper and
+     * lowercase letters, numbers, periods and underscores between beginning
+     * and end; and must end with only an upper or lowercase letter or
+     * a number.
+     */
+    public static final Pattern VALID_TYPE = Pattern.compile("[a-z]([\\w.]*[a-zA-Z\\d])?");
+    /**
+     * Valid values may contain only letters, numbers, underscores, periods,
+     * spaces and hyphens; but must not start or end with whitespace.
+     */
+    public static final Pattern VALID_VALUE = Pattern.compile("[\\w.-][\\w. -]*[\\w.-]?");
     final String type;
     final String value;
     final String delimited;
@@ -217,19 +230,25 @@ public class Context {
     }
 
     static String validateType(@NotNull String type) throws IllegalArgumentException {
-        if (type.contains(" ")) throw new IllegalArgumentException("Type cannot contain spaces!");
         switch (type) {
             case World.NAME_TYPE:
             case World.UID_TYPE:
             case Permission.PERMISSION_TYPE:
                 throw new IllegalArgumentException("Cannot use protected internal type.");
             default:
+                if (type.contains(" ")) throw new IllegalArgumentException("Type cannot contain spaces!");
+                if (!VALID_TYPE.matcher(type).matches()) {
+                    throw new IllegalArgumentException("Type does not follow pattern: " + VALID_TYPE.pattern());
+                }
                 return type;
         }
     }
 
     static String validateValue(@NotNull String value) throws IllegalArgumentException {
         if (value.contains(" ")) throw new IllegalArgumentException("Value cannot contain spaces!");
+        if (!VALID_VALUE.matcher(value).matches()) {
+            throw new IllegalArgumentException("Value does not follow pattern: " + VALID_VALUE.pattern());
+        }
         return value;
     }
 }
