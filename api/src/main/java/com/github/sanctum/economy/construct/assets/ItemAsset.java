@@ -30,7 +30,7 @@ public abstract class ItemAsset extends AssetImpl implements IntegralAsset {
     /**
      * The common group for all item-based assets.
      */
-    public static final String GROUP = "item";
+    public static final @Group String GROUP = "item";
     private final String itemId;
 
     /**
@@ -39,7 +39,7 @@ public abstract class ItemAsset extends AssetImpl implements IntegralAsset {
      * @param identifier an identifier
      * @param itemId the item's id
      */
-    protected ItemAsset(@Identifier String identifier, @NotNull String itemId) {
+    protected ItemAsset(@Identifier @NotNull String identifier, @NotNull String itemId) {
         super(GROUP, identifier);
         this.itemId = itemId;
     }
