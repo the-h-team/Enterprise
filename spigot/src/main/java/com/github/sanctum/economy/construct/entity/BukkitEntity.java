@@ -29,7 +29,7 @@ import java.util.UUID;
  * @author ms5984
  */
 // FIXME pull impl
-public class BukkitEntity extends EnterpriseEntity {
+public class BukkitEntity extends EnterpriseEntityImpl {
     /**
      * Create an entity from a namespace and identifier.
      * <p>
@@ -52,11 +52,6 @@ public class BukkitEntity extends EnterpriseEntity {
 
         PlayerByUUID(OfflinePlayer player) {
             super(NAMESPACE, player.getUniqueId(), player);
-        }
-
-        @Override
-        public @NotNull PlayerByUUID asEntity() {
-            return this;
         }
 
         /**
@@ -90,11 +85,6 @@ public class BukkitEntity extends EnterpriseEntity {
 
         PlayerByUsername(String username, OfflinePlayer player) {
             super(NAMESPACE, username, player);
-        }
-
-        @Override
-        public @NotNull PlayerByUsername asEntity() {
-            return this;
         }
 
         /**
@@ -166,8 +156,11 @@ public class BukkitEntity extends EnterpriseEntity {
          * @throws IllegalArgumentException if <code>identity</code> does not
          * meet the format of {@link EnterpriseEntity#VALID_IDENTITY}.
          */
-        public static Server identity(@NotNull String identity) throws IllegalArgumentException {
-            return new Server(validateIdentity(identity));
+        public static Server identity(@NotNull @Identity String identity) throws IllegalArgumentException {
+            if (!identity.matches(VALID_IDENTITY)) {
+                throw new IllegalArgumentException("Invalid identity: " + identity);
+            }
+            return new Server(identity);
         }
     }
 }
