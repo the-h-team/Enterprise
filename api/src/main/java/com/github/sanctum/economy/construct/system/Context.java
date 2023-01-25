@@ -119,12 +119,12 @@ public interface Context {
     }
 
     /**
-     * Represents a custom context produced by a
-     * {@link CustomTypeBuilder} instance.
+     * Represents a custom context.
      *
      * @since 2.0.0
      * @author ms5984
-     * @see CustomTypeBuilder
+     * @see #of(String, String)
+     * @see #factory(String)
      */
     final class Custom extends ContextImpl {
         private Custom(@Type String type, @Value String value) {
@@ -175,6 +175,22 @@ public interface Context {
      */
     static CustomTypeBuilder factory(@Type @NotNull String type) {
         return new CustomTypeBuilder(type);
+    }
+
+    /**
+     * Gets an arbitrary context.
+     * <p>
+     * The given type must not match any of the internally defined types.
+     *
+     * @param type the context type
+     * @param value the context value
+     * @return a new context
+     * @throws IllegalArgumentException if {@code type} matches an
+     * internally defined type
+     * @see World#TYPE
+     */
+    static Custom of(@Type @NotNull String type, @Value @NotNull String value) throws IllegalArgumentException {
+        return new Custom(validateCustomType(type), value);
     }
 
     /**
