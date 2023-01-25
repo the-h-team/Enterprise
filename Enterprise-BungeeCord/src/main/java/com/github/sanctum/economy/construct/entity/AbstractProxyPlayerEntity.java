@@ -17,6 +17,7 @@ package com.github.sanctum.economy.construct.entity;
 
 import net.md_5.bungee.api.connection.ConnectedPlayer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -28,7 +29,8 @@ import org.jetbrains.annotations.Nullable;
  * @see EnterpriseEntity
  * @param <T> the type of the identifying property
  */
-public abstract class AbstractProxyPlayerEntity<T> extends BungeeEntity implements EnterpriseEntity.PlayerEntity<T> {
+@ApiStatus.NonExtendable
+public abstract class AbstractProxyPlayerEntity<T> extends BungeeEntityImpl implements EnterpriseEntity.PlayerEntity<T> {
     transient final ProxiedPlayer player;
     final T identifyingProperty;
 
@@ -58,7 +60,7 @@ public abstract class AbstractProxyPlayerEntity<T> extends BungeeEntity implemen
     }
 
     @Override
-    public @NotNull String friendlyName() {
+    public @NotNull String getFriendlyName() {
         final String playerName = player.getName();
         if (playerName != null) {
             return playerName;

@@ -15,10 +15,9 @@
  */
 package com.github.sanctum.economy.construct.assets;
 
+import org.intellij.lang.annotations.Language;
+import org.intellij.lang.annotations.Pattern;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Objects;
-import java.util.regex.Pattern;
 
 /**
  * Identifies a specific asset that may be holdable and/or tradable.
@@ -26,38 +25,26 @@ import java.util.regex.Pattern;
  * @since 2.0.0
  * @author ms5984
  */
-public class Asset {
+public interface Asset {
     /**
      * Valid groups must start with a lowercase letter; may contain lowercase
      * letters, digits, periods, underscores and hyphens between the beginning
      * and end; and must end with only a lowercase letter, a digit
      * or an underscore.
      */
-    public static final Pattern VALID_GROUP = Pattern.compile("[a-z][a-z0-9._-]*[a-z0-9_]");
+    @Language("RegExp")
+    String VALID_GROUP = "[a-z][a-z0-9._-]*[a-z0-9_]";
     /**
      * Valid identifiers may contain both uppercase and lowercase letters;
      * digits, hash signs, colons, forward-slashes, periods, underscores,
      * pluses; equals signs and hyphens.
      */
-    public static final Pattern VALID_IDENTIFIER = Pattern.compile("[a-zA-Z0-9#:/._+=-]+");
-
-    final String group;
-    final String identifier;
-    final String fqn;
-
-    /**
-     * Create an asset from a group and identifier.
-     * <p>
-     * <b>Does not perform validation. Internal use only!</b>
-     *
-     * @param group the group of the asset
-     * @param identifier the identifier for the asset
-     */
-    Asset(@NotNull String group, @NotNull String identifier) {
-        this.group = group;
-        this.identifier = identifier;
-        fqn = group + ":" + identifier;
-    }
+    @Language("RegExp")
+    String VALID_IDENTIFIER = "[a-zA-Z0-9#:/._+=-]+";
+    @Pattern(VALID_GROUP)
+    @interface Group {}
+    @Pattern(VALID_IDENTIFIER)
+    @interface Identifier {}
 
     /**
      * Get a brief description of this asset's type.
@@ -70,9 +57,7 @@ public class Asset {
      *
      * @return a basic description of this asset's type
      */
-    public final String getGroup() {
-        return group;
-    }
+    @NotNull @Group String getGroup();
 
     /**
      * Get the unique, identifying name of this specific asset
@@ -80,52 +65,5 @@ public class Asset {
      *
      * @return a group-unique name for this asset
      */
-    public final String getIdentifier() {
-        return identifier;
-    }
-
-    /**
-     * Get the full name of this asset as its identifier
-     * qualified by its group.
-     *
-     * @return the full name of this asset
-     * @implSpec Format is "<code>group</code>:<code>identifier</code>".
-     */
-    public final String getFQN() {
-        return fqn;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Asset asset = (Asset) o;
-        return identifier.equals(asset.identifier) &&
-                fqn.equals(asset.fqn);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(identifier, fqn);
-    }
-
-    @Override
-    public String toString() {
-        return getFQN();
-    }
-
-    static String validateGroup(String group) throws IllegalArgumentException {
-        final String normalized = group.toLowerCase();
-        if (!VALID_GROUP.matcher(normalized).matches()) {
-            throw new IllegalArgumentException("Group does not follow pattern: " + VALID_GROUP.pattern());
-        }
-        return normalized;
-    }
-
-    static String validateIdentifier(String identifier) throws IllegalArgumentException {
-        if (!VALID_IDENTIFIER.matcher(identifier).matches()) {
-            throw new IllegalArgumentException("Identifier does not follow pattern: " + VALID_IDENTIFIER.pattern());
-        }
-        return identifier;
-    }
+    @NotNull @Identifier String getIdentifier();
 }

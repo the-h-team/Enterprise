@@ -28,7 +28,7 @@ import org.jetbrains.annotations.NotNull;
  * @param <N> the player-by-username class for this implementation
  * @param <U> the player-by-uniqueId class for this implementation
  */
-public interface WalletService<N extends EnterpriseEntity & EnterpriseEntity.PlayerEntity.ByUsername, U extends EnterpriseEntity & EnterpriseEntity.PlayerEntity.ByUniqueId> extends AttributableService {
+public interface WalletService<N extends EnterpriseEntity.PlayerEntity.ByUsername, U extends EnterpriseEntity.PlayerEntity.ByUniqueId> extends AttributableService {
     /**
      * Get a wallet object for a player by username.
      *

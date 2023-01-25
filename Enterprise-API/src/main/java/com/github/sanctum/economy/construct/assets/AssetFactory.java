@@ -20,26 +20,23 @@ import org.jetbrains.annotations.NotNull;
 import java.util.function.BiFunction;
 
 /**
- * Generate new assets using a common, normalized group.
+ * Generate new assets with a common group.
  *
  * @since 2.0.0
  * @author ms5984
  */
 public class AssetFactory<T extends Asset> {
-    final String group;
-    final BiFunction<String, String, T> constructor;
+    private final @Asset.Group String group;
+    private final BiFunction<String, String, T> constructor;
 
     /**
      * Create a factory for the provided asset group and base class.
      *
      * @param group asset group name
      * @param constructor a base class constructor
-     * @throws IllegalArgumentException if <code>group</code>
-     * does not follow the pattern of {@link Asset#VALID_GROUP} and/or
-     * cannot be normalized to match via {@link String#toLowerCase()}
      */
-    protected AssetFactory(@NotNull String group, @NotNull BiFunction<String, String, T> constructor) throws IllegalArgumentException {
-        this.group = Asset.validateGroup(group);
+    protected AssetFactory(@NotNull @Asset.Group String group, @NotNull BiFunction<String, String, T> constructor) {
+        this.group = group;
         this.constructor = constructor;
     }
 
@@ -48,7 +45,7 @@ public class AssetFactory<T extends Asset> {
      *
      * @return this factory's group string
      */
-    public final String getGroup() {
+    public final @Asset.Group String getGroup() {
         return group;
     }
 
@@ -58,23 +55,18 @@ public class AssetFactory<T extends Asset> {
      *
      * @param identifier asset identifier
      * @return a new asset with the given identifier
-     * @throws IllegalArgumentException if <code>identifier</code>
-     * does not follow the pattern of {@link Asset#VALID_IDENTIFIER}
      */
-    public T fromIdentifier(@NotNull String identifier) throws IllegalArgumentException {
-        return constructor.apply(group, Asset.validateIdentifier(identifier));
+    public T fromIdentifier(@NotNull @Asset.Identifier String identifier) {
+        return constructor.apply(group, identifier);
     }
 
     /**
      * Create a factory for the provided asset group.
      *
      * @param group asset group name
-     * @throws IllegalArgumentException if <code>group</code>
-     * does not follow the pattern of {@link Asset#VALID_GROUP} and/or
-     * cannot be normalized to match via {@link String#toLowerCase()}
      */
-    public static AssetFactory<Asset> forGroup(@NotNull String group) throws IllegalArgumentException {
-        return new AssetFactory<>(group, Asset::new);
+    public static AssetFactory<Asset> forGroup(@NotNull @Asset.Group String group) {
+        return new AssetFactory<>(group, AssetImpl::new);
     }
 
     /**
@@ -83,11 +75,8 @@ public class AssetFactory<T extends Asset> {
      *
      * @param group asset group name
      * @param constructor the constructor function to use
-     * @throws IllegalArgumentException if <code>group</code>
-     * does not follow the pattern of {@link Asset#VALID_GROUP} and/or
-     * cannot be normalized to match via {@link String#toLowerCase()}
      */
-    public static <T extends AbstractAsset> AssetFactory<T> forGroup(@NotNull String group, @NotNull BiFunction<String, String, T> constructor) throws IllegalArgumentException {
+    public static <T extends Asset> AssetFactory<T> forGroup(@NotNull @Asset.Group String group, @NotNull BiFunction<String, String, T> constructor) {
         return new AssetFactory<>(group, constructor);
     }
 }

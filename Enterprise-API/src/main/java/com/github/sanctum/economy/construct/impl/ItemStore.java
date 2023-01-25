@@ -35,7 +35,7 @@ public class ItemStore implements Balance {
     @Override
     public boolean has(@NotNull Amount amount) {
         if (amount instanceof ItemAsset.Amount) {
-            return counts.getOrDefault(amount.getAsset().getFQN(), 0) >= ((ItemAsset.Amount) amount).getIntegralAmount();
+            return counts.getOrDefault(amount.getAsset().getIdentifier(), 0) >= ((ItemAsset.Amount) amount).getIntegralAmount();
         }
         return false;
     }
@@ -44,7 +44,7 @@ public class ItemStore implements Balance {
     public void give(@NotNull Amount amount) throws AcceptError {
         if (amount instanceof ItemAsset.Amount) {
             synchronized (counts) {
-                counts.merge(amount.getAsset().getFQN(), ((ItemAsset.Amount) amount).getIntegralAmount(), Integer::sum);
+                counts.merge(amount.getAsset().getIdentifier(), ((ItemAsset.Amount) amount).getIntegralAmount(), Integer::sum);
             }
             return;
         }
@@ -55,7 +55,7 @@ public class ItemStore implements Balance {
     public void set(@NotNull Amount amount) throws SetError {
         if (amount instanceof ItemAsset.Amount) {
             synchronized (counts) {
-                counts.put(amount.getAsset().getFQN(), ((ItemAsset.Amount) amount).getIntegralAmount());
+                counts.put(amount.getAsset().getIdentifier(), ((ItemAsset.Amount) amount).getIntegralAmount());
             }
             return;
         }
@@ -66,7 +66,7 @@ public class ItemStore implements Balance {
     public void take(@NotNull Amount amount) throws SupplyError {
         if (amount instanceof ItemAsset.Amount) {
             final int newAmount = ((ItemAsset.Amount) amount).getIntegralAmount();
-            final String fqn = amount.getAsset().getFQN();
+            final String fqn = amount.getAsset().getIdentifier();
             synchronized (counts) {
                 if (counts.getOrDefault(fqn, 0) < newAmount) {
                     throw new SupplyError(amount, "Insufficient amount!");
@@ -81,7 +81,7 @@ public class ItemStore implements Balance {
     @Override
     public @NotNull Optional<Amount> total(@NotNull Asset asset) {
         if (asset instanceof ItemAsset) {
-            final Integer integer = counts.get(asset.getFQN());
+            final Integer integer = counts.get(asset.getIdentifier());
             if (integer != null) {
                 return Optional.of(((IntegralAsset) asset).getAmount(integer));
             }

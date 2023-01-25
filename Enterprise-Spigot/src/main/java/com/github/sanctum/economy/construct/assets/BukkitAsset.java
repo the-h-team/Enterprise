@@ -17,44 +17,30 @@ package com.github.sanctum.economy.construct.assets;
 
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.EnumMap;
 
 /**
- * A type of asset derived from a Bukkit-native structure.
+ * Marks an asset derived from a Bukkit-native structure.
  *
  * @since 2.0.0
  * @author ms5984
  */
-public class BukkitAsset extends Asset {
-    /**
-     * Create an asset from a group and identifier.
-     * <p>
-     * <b>Does not perform validation. Internal use only!</b>
-     *
-     * @param group the group of the asset
-     * @param identifier the identifier for the asset
-     */
-    BukkitAsset(@NotNull String group, @NotNull String identifier) {
-        super(group, identifier);
-    }
-
+public interface BukkitAsset extends Asset {
     /**
      * Represents a Bukkit-native item as an ItemAsset.
      *
      * @since 2.0.0
      * @author ms5984
      */
-    public static abstract class Item extends BukkitAsset implements ItemAsset {
+    @ApiStatus.NonExtendable
+    abstract class Item extends AssetImpl implements BukkitAsset, ItemAsset {
         final Material material;
-        /**
-         * Create an item-based asset from a material and identifier.
-         *
-         * @param identifier the identifier for the item
-         */
-        Item(@NotNull Material material, @NotNull String identifier) {
-            super(GROUP, identifier);
+
+        Item(Material material, @Identifier String identifier) {
+            super(ItemAsset.GROUP, identifier);
             this.material = material;
         }
 
@@ -85,11 +71,10 @@ public class BukkitAsset extends Asset {
             final String meta = split[1];
             // verify valid meta
             try {
-                MetaItemAsset.decodeMeta(meta);
+                return new MetaItemAsset(mat, MetaItemAsset.decodeMeta(meta));
             } catch (IllegalStateException e) {
                 throw new IllegalArgumentException("Invalid meta base64: " + meta, e);
             }
-            return new MetaItemAsset(mat, meta);
         }
     }
 
@@ -99,7 +84,7 @@ public class BukkitAsset extends Asset {
      * @since 2.0.0
      * @author ms5984
      */
-    public static class Items {
+    class Items {
         static final Items INSTANCE = new Items();
         final EnumMap<Material, MaterialAsset> cache = new EnumMap<>(Material.class);
 
@@ -154,10 +139,7 @@ public class BukkitAsset extends Asset {
             final Material mat = itemStack.getType();
             // return simple Material representation if possible
             if (!itemStack.hasItemMeta()) return of(mat);
-            // Serialize and encode ItemMeta
-            final String base64meta = MetaItemAsset.encodeMeta(itemStack);
-            // Produce Asset as {group="item",identifier="material_name#bukkitmeta:base64meta"
-            return new MetaItemAsset(mat, base64meta);
+            return new MetaItemAsset(mat, itemStack.getItemMeta());
         }
     }
 }

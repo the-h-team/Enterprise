@@ -21,7 +21,7 @@ import org.jetbrains.annotations.NotNull;
 import java.math.BigDecimal;
 
 /**
- * Marks an asset which represents an item.
+ * An asset which represents an item.
  *
  * @since 2.0.0
  * @author ms5984
@@ -50,7 +50,7 @@ public interface ItemAsset extends IntegralAsset {
         final int amount;
         final BigDecimal bigDecimal;
 
-        <T extends Asset & ItemAsset> Amount(int amount, @NotNull T asset) {
+        Amount(int amount, @NotNull ItemAsset asset) {
             super(asset);
             if (amount < 0) throw new IllegalArgumentException("Amount cannot be negative!");
             this.amount = amount;

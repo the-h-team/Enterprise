@@ -19,12 +19,12 @@ import com.github.sanctum.economy.construct.IntegralAmount;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Marks an asset which can be divided by whole number.
+ * An asset that can be divided by whole number.
  *
  * @since 2.0.0
  * @author ms5984
  */
-public interface IntegralAsset {
+public interface IntegralAsset extends Asset {
     /**
      * Get an amount for this asset.
      *

@@ -18,6 +18,7 @@ package com.github.sanctum.economy.construct.entity;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ConnectedPlayer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
@@ -28,25 +29,14 @@ import java.util.UUID;
  * @since 2.0.0
  * @author ms5984
  */
-public class BungeeEntity extends EnterpriseEntity {
+@ApiStatus.NonExtendable
+public interface BungeeEntity extends EnterpriseEntity {
     /**
      * Represents any Bungeecord proxy instance.
      *
      * @since 2.0.0
      */
-    public static final BungeeEntity BUNGEECORD_PROXY = new BungeeEntity("proxy", "bungeecord");
-
-    /**
-     * Create an entity from a namespace and identifier.
-     * <p>
-     * <b>Does not perform validation. Internal use only!</b>
-     *
-     * @param namespace the namespace for the entity
-     * @param identity the namespace-unique identifier for the entity
-     */
-    BungeeEntity(@NotNull String namespace, @NotNull String identity) {
-        super(namespace, identity);
-    }
+    BungeeEntity BUNGEECORD_PROXY = new BungeeEntityImpl("proxy", "bungeecord");
 
     /**
      * Native implementation for proxy players by UniqueId.
@@ -54,15 +44,10 @@ public class BungeeEntity extends EnterpriseEntity {
      * @since 2.0.0
      * @author ms5984
      */
-    public static class ProxyPlayerByUUID extends AbstractProxyPlayerEntity<UUID> implements PlayerEntity.ByUniqueId {
+    class ProxyPlayerByUUID extends AbstractProxyPlayerEntity<UUID> implements PlayerEntity.ByUniqueId {
 
         ProxyPlayerByUUID(ProxiedPlayer player) {
             super(NAMESPACE, player.getUniqueId(), player);
-        }
-
-        @Override
-        public @NotNull ProxyPlayerByUUID asEntity() {
-            return this;
         }
 
         /**
@@ -92,15 +77,10 @@ public class BungeeEntity extends EnterpriseEntity {
      * @since 2.0.0
      * @author ms5984
      */
-    public static class ProxyPlayerByUsername extends AbstractProxyPlayerEntity<String> implements PlayerEntity.ByUsername {
+    class ProxyPlayerByUsername extends AbstractProxyPlayerEntity<String> implements PlayerEntity.ByUsername {
 
         ProxyPlayerByUsername(ProxiedPlayer player) {
             super(NAMESPACE, player.getName(), player);
-        }
-
-        @Override
-        public @NotNull ProxyPlayerByUsername asEntity() {
-            return this;
         }
 
         /**
@@ -132,7 +112,7 @@ public class BungeeEntity extends EnterpriseEntity {
      * @since 2.0.0
      * @author ms5984
      */
-    public static class BackendServer extends BungeeEntity {
+    class BackendServer extends BungeeEntityImpl {
 
         BackendServer(String namespace, String identity) {
             super(namespace, identity);

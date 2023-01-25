@@ -21,6 +21,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.io.BukkitObjectInputStream;
 import org.bukkit.util.io.BukkitObjectOutputStream;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Range;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -55,6 +56,10 @@ public final class MetaItemAsset extends BukkitAsset.Item {
         this.meta = meta;
     }
 
+    MetaItemAsset(Material material, ItemMeta meta) {
+        this(material, encodeMeta(meta));
+    }
+
     /**
      * Reconstruct a copy of the item that this asset represents.
      * <p>
@@ -78,15 +83,14 @@ public final class MetaItemAsset extends BukkitAsset.Item {
      * @throws IllegalArgumentException if <code>count</code> is negative
      */
     @Override
-    public @NotNull ItemAsset.Amount getAmount(int count) throws IllegalArgumentException {
+    public @NotNull ItemAsset.Amount getAmount(@Range(from = 0, to = Integer.MAX_VALUE) int count) throws IllegalArgumentException {
         return new Amount(count, this);
     }
 
-    static String encodeMeta(ItemStack item) {
+    static String encodeMeta(ItemMeta meta) {
         // Serialize and encode ItemMeta
         final ByteArrayOutputStream os = new ByteArrayOutputStream();
-        //noinspection ConstantConditions
-        final Map<String, Object> serialized = item.getItemMeta().serialize();
+        final Map<String, Object> serialized = meta.serialize();
         try (BukkitObjectOutputStream boos = new BukkitObjectOutputStream(os)) {
             boos.writeObject(serialized);
         } catch (IOException e) {

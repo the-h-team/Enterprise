@@ -15,11 +15,12 @@
  */
 package com.github.sanctum.economy.construct.entity;
 
+import org.intellij.lang.annotations.Pattern;
+import org.intellij.lang.annotations.RegExp;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Objects;
 import java.util.UUID;
-import java.util.regex.Pattern;
 
 /**
  * Identifies an economically-involved actor.
@@ -33,38 +34,26 @@ import java.util.regex.Pattern;
  * @since 2.0.0
  * @author ms5984
  */
-public class EnterpriseEntity {
+@ApiStatus.NonExtendable
+public interface EnterpriseEntity {
     /**
      * Valid namespaces must start with a lowercase letter; may contain both
      * uppercase and lowercase letters, digits, underscores and hyphens between
      * the beginning and end; and must end with only a lowercase letter,
      * a digit or an underscore.
      */
-    public static final Pattern VALID_NAMESPACE = Pattern.compile("[a-z]([a-zA-Z0-9_-]*[a-z0-9_])?");
+    @RegExp String VALID_NAMESPACE = "[a-z]([a-zA-Z0-9_-]*[a-z0-9_])?";
     /**
-     * Valid identifiers may contain both uppercase and lowercase letters;
+     * Valid identities may contain both uppercase and lowercase letters;
      * digits, hash signs, forward-slashes, underscores, pluses; equals signs
      * and hyphens.
      */
-    public static final Pattern VALID_IDENTIFIER = Pattern.compile("[a-zA-Z0-9#/_+=-]+");
+    @RegExp String VALID_IDENTITY = "[a-zA-Z0-9#/_+=-]+";
 
-    final String namespace;
-    final String identity;
-    final String fqn;
-
-    /**
-     * Create an entity from a namespace and identifier.
-     * <p>
-     * <b>Does not perform validation. Internal use only!</b>
-     *
-     * @param namespace the namespace for the entity
-     * @param identity the namespace-unique identifier for the entity
-     */
-    EnterpriseEntity(@NotNull String namespace, @NotNull String identity) {
-        this.namespace = namespace;
-        this.identity = identity;
-        fqn = namespace + ":" + identity;
-    }
+    @Pattern(VALID_NAMESPACE)
+    @interface Namespace {}
+    @Pattern(VALID_IDENTITY)
+    @interface Identity {}
 
     /**
      * Get this entity's namespace.
@@ -74,33 +63,17 @@ public class EnterpriseEntity {
      *
      * @return the namespace of this entity
      */
-    public final String getNamespace() {
-        return namespace;
-    }
+    @Namespace @NotNull String getNamespace();
 
     /**
      * Get this entity's identity key.
      * <p>
      * Identity is a namespace-unique identifier for this
-     * entity and conforms to {@link #VALID_IDENTIFIER}.
+     * entity and conforms to {@link #VALID_IDENTITY}.
      *
      * @return the namespace-unique identity key for this entity
      */
-    public final String getIdentity() {
-        return identity;
-    }
-
-    /**
-     * Get the full name of this entity as its identity qualified by its group.
-     * <p>
-     * <b>FQNs are designed to be system-unique.</b>
-     *
-     * @return the full name of this entity
-     * @implSpec Format is "<code>namespace</code>:<code>identity</code>".
-     */
-    public final String getFQN() {
-        return fqn;
-    }
+    @Identity @NotNull String getIdentity();
 
     /**
      * A friendly name for this entity.
@@ -109,29 +82,10 @@ public class EnterpriseEntity {
      *
      * @return a friendly name for this entity
      * @implSpec Prefer human-readable; does not need to be unique.
-     * @implNote Defaults to {@link #identity}.
+     * @implNote Defaults to {@link #getIdentity()}.
      */
-    public @NotNull String friendlyName() {
-        return identity;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        EnterpriseEntity that = (EnterpriseEntity) o;
-        return identity.equals(that.identity) &&
-                fqn.equals(that.fqn);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(identity, fqn);
-    }
-
-    @Override
-    public String toString() {
-        return getFQN();
+    default @NotNull String getFriendlyName() {
+        return getIdentity();
     }
 
     /**
@@ -141,21 +95,13 @@ public class EnterpriseEntity {
      * @author ms5984
      * @param <T> the type of the identifying property
      */
-    public interface PlayerEntity<T> extends Identifiable {
+    interface PlayerEntity<T> extends EnterpriseEntity {
         /**
          * Get the identifying property of the player.
          *
          * @return an identifying property of the player
          */
         @NotNull T getIdentifyingProperty();
-
-        /**
-         * Access this player representation as its EnterpriseEntity form.
-         *
-         * @return this representation as an EnterpriseEntity
-         */
-        @Override
-        @NotNull EnterpriseEntity asEntity();
 
         /**
          * Marks an entity that represents a player using their username.
@@ -186,17 +132,37 @@ public class EnterpriseEntity {
         }
     }
 
-    static String validateNamespace(String namespace) {
-        if (!VALID_NAMESPACE.matcher(namespace).matches()) {
-            throw new IllegalArgumentException("Namespace does not follow pattern: " + VALID_NAMESPACE.pattern());
-        }
-        return namespace;
-    }
+    /**
+     * A base for all custom economy actors.
+     * <p>
+     * This class is entirely meant for use by other economy plugins; Enterprise
+     * is made with many entities pre-defined, including players (both by username
+     * or by UniqueId), the local server console/proxy, custom "server accounts"
+     * and fiduciaries (a new type of entity that maintain accounts for others).
+     * <p>
+     * If your use case does not fall within any of the above--for instance, you
+     * want to make an item shop plugin--this is likely the class to start with.
+     *
+     * @since 2.0.0
+     * @author ms5984
+     */
+    abstract class Custom implements EnterpriseEntity {
+        protected final @Namespace String namespace;
+        protected final @Identity String identity;
 
-    static String validateIdentity(String identity) {
-        if (!VALID_IDENTIFIER.matcher(identity).matches()) {
-            throw new IllegalArgumentException("Identity does not follow pattern: " + VALID_IDENTIFIER.pattern());
+        protected Custom(@Namespace @NotNull String namespace, @Identity @NotNull String identity) {
+            this.namespace = namespace;
+            this.identity = identity;
         }
-        return identity;
+
+        @Override
+        public @Namespace @NotNull String getNamespace() {
+            return namespace;
+        }
+
+        @Override
+        public @Identity @NotNull String getIdentity() {
+            return identity;
+        }
     }
 }

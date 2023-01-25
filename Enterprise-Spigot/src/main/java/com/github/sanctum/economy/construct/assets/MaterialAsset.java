@@ -17,6 +17,7 @@ package com.github.sanctum.economy.construct.assets;
 
 import org.bukkit.Material;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Range;
 
 /**
  * Represents a Material as an asset.
@@ -53,7 +54,7 @@ public final class MaterialAsset extends BukkitAsset.Item {
      * @throws IllegalArgumentException if <code>count</code> is negative
      */
     @Override
-    public @NotNull ItemAsset.Amount getAmount(int count) throws IllegalArgumentException {
+    public @NotNull ItemAsset.Amount getAmount(@Range(from = 0, to = Integer.MAX_VALUE) int count) throws IllegalArgumentException {
         return new Amount(count, this);
     }
 }

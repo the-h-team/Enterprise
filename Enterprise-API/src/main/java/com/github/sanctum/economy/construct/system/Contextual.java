@@ -22,8 +22,8 @@ import org.jetbrains.annotations.NotNull;
  * <p>
  * Examples:
  * <ul>
- *     <li>world</li>
- *     <li>permission</li>
+ *     <li>current world (by name, uuid)</li>
+ *     <li>player permissions</li>
  *     <li>custom contexts</li>
  * </ul>
  *
