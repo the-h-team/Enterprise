@@ -21,6 +21,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.math.BigDecimal;
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * An abstract base for all currencies.
@@ -28,17 +29,7 @@ import java.util.Objects;
  * @since 2.0.0
  * @author ms5984
  */
-public abstract class AbstractCurrency extends AbstractAsset implements DecimalAsset {
-    /**
-     * Create a currency from an identifier.
-     *
-     * @param identifier the internal identifier for the currency
-     * @throws IllegalArgumentException if <code>identifier</code> does not
-     * follow the pattern of {@link Asset#VALID_IDENTIFIER}
-     */
-    protected AbstractCurrency(@NotNull String identifier) throws IllegalArgumentException {
-        super("currency", identifier);
-    }
+public interface AbstractCurrency extends DecimalAsset, Asset {
 
     /**
      * Get the short symbol for this currency.
@@ -52,7 +43,7 @@ public abstract class AbstractCurrency extends AbstractAsset implements DecimalA
      * <p>
      * As a reminder, the symbol for U.S. Dollars is <code>USD</code>.
      */
-    public abstract @NotNull String symbol();
+    @NotNull String symbol();
 
     /**
      * Get the formal display name of this currency.
@@ -61,7 +52,7 @@ public abstract class AbstractCurrency extends AbstractAsset implements DecimalA
      * @implSpec E.g., for USD, this could be <code>"U.S. Dollars"</code>.
      * @implNote Defaults to {@link #majorNamePlural()}.
      */
-    public @NotNull String displayName() {
+    default @NotNull String displayName() {
         return majorNamePlural();
     }
 
@@ -69,71 +60,62 @@ public abstract class AbstractCurrency extends AbstractAsset implements DecimalA
      * Get the plural form of this currency's major units.
      *
      * @return the plural form of this currency's major units
-     * @implSpec E.g., for USD, this could be <code>"Dollars"</code>.
+     * @implSpec For USD, this could be <code>"Dollars"</code>.
      */
-    public abstract @NotNull String majorNamePlural();
+    @NotNull String majorNamePlural();
 
     /**
      * Get the singular form of this currency's major units.
      *
      * @return the singular form of this currency's major units
-     * @implSpec E.g., for USD, this could be <code>"Dollar"</code>.
+     * @implSpec For USD, this could be <code>"Dollar"</code>.
      */
-    public abstract @NotNull String majorNameSingular();
+    @NotNull String majorNameSingular();
 
     /**
-     * Get the plural form of this currency's minor units.
+     * Get the plural form of this currency's minor units, if applicable.
      *
-     * @return the plural form of this currency's minor units
-     * @implSpec E.g., for USD, this could be <code>"Cents"</code>.
+     * @return the plural form of this currency's minor units if present
+     * @implSpec For USD, this could be <code>"Cents"</code>.
      */
-    public abstract @Nullable String minorNamePlural();
-
-    /**
-     * Get the singular form of this currency's minor units.
-     *
-     * @return the singular form of this currency's minor units
-     * @implSpec E.g., for USD, this could be <code>"Cent"</code>.
-     */
-    public abstract @Nullable String minorNameSingular();
-
-    @Override
-    public @NotNull Amount getAmount(@NotNull BigDecimal decimal) {
-        return new CurrencyAmount(decimal);
+    @NotNull
+    default Optional<String> minorNamePlural() {
+        return Optional.empty();
     }
 
     /**
-     * An immutable implementation of Amount for currencies.
+     * Get the singular form of this currency's minor units, if applicable.
      *
-     * @since 2.0.0
-     * @author ms5984
+     * @return the singular form of this currency's minor units if present
+     * @implSpec For USD, this could be <code>"Cent"</code>.
      */
-    class CurrencyAmount extends Amount {
-        final BigDecimal bigDecimal;
+    @NotNull
+    default Optional<String> minorNameSingular() {
+        return Optional.empty();
+    }
 
-        CurrencyAmount(BigDecimal bigDecimal) {
-            super(AbstractCurrency.this);
-            this.bigDecimal = bigDecimal;
-        }
-
-        @Override
-        public @NotNull BigDecimal getAmount() {
-            return bigDecimal;
-        }
+    @Override
+    default @NotNull Amount getAmount(@NotNull BigDecimal decimal) {
+        return new Amount(this) {
+            @Override
+            public @NotNull BigDecimal getAmount() {
+                return decimal;
+            }
+        };
     }
 
     /**
      * Currency tokens (notes, bills or specie).
      * <p>
-     * This class is designed such that you would first make your desired
-     * base Asset and then pass it as the first constructor parameter;
-     * this object will then mimic the Asset insofar as its group,
-     * identifier and fqn.
+     * This class is designed such that you would first make your desired base
+     * asset and then pass it as the first constructor parameter; this object
+     * will then mimic the Asset insofar as group and identifier.
      *
      * @since 2.0.0
      * @author ms5984
      */
-    public final class Token extends Asset {
+    abstract class Token implements Asset {
+        final Asset match;
         final BigDecimal worth;
         final String name;
 
@@ -155,10 +137,27 @@ public abstract class AbstractCurrency extends AbstractAsset implements DecimalA
          * = "10 Dollars" (concatenated, space-separated)
          */
         public Token(@NotNull Asset match, @NotNull BigDecimal worth, @Nullable String name) {
-            super(match.group, match.identifier);
+            this.match = match;
             this.worth = worth;
-            this.name = name != null ? name : Amount.normalize(this.worth) + " " + displayName();
+            this.name = name != null ? name : Amount.normalize(this.worth) + " " + currency().displayName();
         }
+
+        @Override
+        public @NotNull @Group String getGroup() {
+            return match.getGroup();
+        }
+
+        @Override
+        public @NotNull @Identifier String getIdentifier() {
+            return match.getIdentifier();
+        }
+
+        /**
+         * Get the currency associated with this token.
+         *
+         * @return the currency this token represents
+         */
+        public abstract @NotNull AbstractCurrency currency();
 
         /**
          * Get the worth of this token.
@@ -184,7 +183,7 @@ public abstract class AbstractCurrency extends AbstractAsset implements DecimalA
          * @return an equivalent Amount of the base currency
          */
         public Amount equivalentAmount() {
-            return getAmount(worth);
+            return currency().getAmount(worth);
         }
 
         @Override

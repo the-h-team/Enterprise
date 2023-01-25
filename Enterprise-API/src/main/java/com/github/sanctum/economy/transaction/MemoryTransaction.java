@@ -175,11 +175,11 @@ public class MemoryTransaction {
         if (primaries.length == 0) {
             return "[none]"; // I guess
         }
-        final String firstName = primaries[0].friendlyName();
+        final String firstName = primaries[0].getFriendlyName();
         if (primaries.length == 1) return firstName;
         final StringBuilder sb = new StringBuilder(firstName);
         for (int i = 1; i < primaries.length; ++i) {
-            final String friendlyName = primaries[i].friendlyName();
+            final String friendlyName = primaries[i].getFriendlyName();
             if (i + 1 < primaries.length) {
                 if (friendlyName.contains(",")) {
                     // complex list

@@ -62,7 +62,7 @@ public abstract class AbstractPlayerEntity<T> extends BukkitEntity implements En
     }
 
     @Override
-    public @NotNull String friendlyName() {
+    public @NotNull String getFriendlyName() {
         final String playerName = player.getName();
         if (playerName != null) {
             return playerName;

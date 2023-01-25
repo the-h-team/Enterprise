@@ -28,6 +28,7 @@ import java.util.UUID;
  * @since 2.0.0
  * @author ms5984
  */
+// FIXME pull impl
 public class BukkitEntity extends EnterpriseEntity {
     /**
      * Create an entity from a namespace and identifier.
@@ -163,7 +164,7 @@ public class BukkitEntity extends EnterpriseEntity {
          * @param identity a custom identifier
          * @return a new, custom server entity
          * @throws IllegalArgumentException if <code>identity</code> does not
-         * meet the format of {@link EnterpriseEntity#VALID_IDENTIFIER}.
+         * meet the format of {@link EnterpriseEntity#VALID_IDENTITY}.
          */
         public static Server identity(@NotNull String identity) throws IllegalArgumentException {
             return new Server(validateIdentity(identity));

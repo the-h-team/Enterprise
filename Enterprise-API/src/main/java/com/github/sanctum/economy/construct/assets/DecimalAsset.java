@@ -21,12 +21,12 @@ import org.jetbrains.annotations.NotNull;
 import java.math.BigDecimal;
 
 /**
- * Marks an asset that can be divided by BigDecimal.
+ * An asset that can be divided by BigDecimal.
  *
  * @since 2.0.0
  * @author ms5984
  */
-public interface DecimalAsset {
+public interface DecimalAsset extends Asset {
     /**
      * Get an amount for this asset.
      *
