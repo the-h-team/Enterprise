@@ -26,27 +26,53 @@ import java.math.BigDecimal;
  * @since 2.0.0
  * @author ms5984
  */
-public interface ItemAsset extends IntegralAsset {
+public abstract class ItemAsset extends AssetImpl implements IntegralAsset {
     /**
      * The common group for all item-based assets.
      */
-    String GROUP = "item";
+    public static final String GROUP = "item";
+    private final String itemId;
 
     /**
-     * Get the namespaced ID of the item.
+     * Creates a new item asset.
+     *
+     * @param identifier an identifier
+     * @param itemId the item's id
+     */
+    protected ItemAsset(@Identifier String identifier, @NotNull String itemId) {
+        super(GROUP, identifier);
+        this.itemId = itemId;
+    }
+
+    /**
+     * Gets the namespaced ID of the item.
      * <p>
      * For example, {@code minecraft:diamond}.
      *
      * @return the item's namespaced ID
      */
-    @NotNull String itemId();
+    public final @NotNull String getItemId() {
+        return itemId;
+    }
+
+    /**
+     * Gets an amount of this item asset.
+     *
+     * @param count the whole number count of the asset
+     * @return a new amount object
+     * @throws IllegalArgumentException if {@code count} is negative
+     */
+    @Override
+    public final @NotNull IntegralAmount getAmount(int count) {
+        return new Amount(count, this);
+    }
 
     /**
      * Provides a fast, immutable implementation of IntegralAmount for item assets.
      *
      * @since 2.0.0
      */
-    final class Amount extends IntegralAmount {
+    public static final class Amount extends IntegralAmount {
         final int amount;
         final BigDecimal bigDecimal;
 

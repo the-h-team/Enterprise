@@ -20,8 +20,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.io.BukkitObjectInputStream;
 import org.bukkit.util.io.BukkitObjectOutputStream;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Range;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -44,13 +42,6 @@ public final class MetaItemAsset extends BukkitAsset.Item {
     public static final String IDENTIFIER_SLUG = "#bukkitmeta:";
     final String meta;
 
-    /**
-     * Produce item asset as
-     * identifier="<code>material_name</code>#bukkitmeta:<code>base64meta</code>".
-     *
-     * @param material a Bukkit Material
-     * @param meta a Base64 Bukkit ItemMeta representation
-     */
     MetaItemAsset(Material material, String meta) {
         super(material, material.name().toLowerCase() + IDENTIFIER_SLUG + meta);
         this.meta = meta;
@@ -61,7 +52,7 @@ public final class MetaItemAsset extends BukkitAsset.Item {
     }
 
     /**
-     * Reconstruct a copy of the item that this asset represents.
+     * Reconstructs a copy of the item that this asset represents.
      * <p>
      * <b>This method is not cached.</b> Use sparingly.
      *
@@ -73,18 +64,6 @@ public final class MetaItemAsset extends BukkitAsset.Item {
         final ItemStack item = new ItemStack(material);
         item.setItemMeta(meta);
         return item;
-    }
-
-    /**
-     * Get an Amount object for this asset's item.
-     *
-     * @param count the number of items
-     * @return a new amount object
-     * @throws IllegalArgumentException if <code>count</code> is negative
-     */
-    @Override
-    public @NotNull ItemAsset.Amount getAmount(@Range(from = 0, to = Integer.MAX_VALUE) int count) throws IllegalArgumentException {
-        return new Amount(count, this);
     }
 
     static String encodeMeta(ItemMeta meta) {

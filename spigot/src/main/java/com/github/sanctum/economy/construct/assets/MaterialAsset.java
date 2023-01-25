@@ -16,8 +16,6 @@
 package com.github.sanctum.economy.construct.assets;
 
 import org.bukkit.Material;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Range;
 
 /**
  * Represents a Material as an asset.
@@ -28,33 +26,16 @@ import org.jetbrains.annotations.Range;
  */
 public final class MaterialAsset extends BukkitAsset.Item {
 
-    /**
-     * Produce item asset with identifier="<code>material_name</code>".
-     *
-     * @param material a Bukkit Material
-     */
     MaterialAsset(Material material) {
         super(material, material.name().toLowerCase());
     }
 
     /**
-     * Get the Material this asset represents.
+     * Gets the Material this asset represents.
      *
      * @return the Material of this asset
      */
     public Material getMaterial() {
         return material;
-    }
-
-    /**
-     * Get an Amount object for this material.
-     *
-     * @param count the number of items
-     * @return a new amount object
-     * @throws IllegalArgumentException if <code>count</code> is negative
-     */
-    @Override
-    public @NotNull ItemAsset.Amount getAmount(@Range(from = 0, to = Integer.MAX_VALUE) int count) throws IllegalArgumentException {
-        return new Amount(count, this);
     }
 }

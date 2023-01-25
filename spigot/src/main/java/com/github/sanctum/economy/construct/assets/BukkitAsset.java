@@ -17,7 +17,6 @@ package com.github.sanctum.economy.construct.assets;
 
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.EnumMap;
@@ -35,33 +34,27 @@ public interface BukkitAsset extends Asset {
      * @since 2.0.0
      * @author ms5984
      */
-    @ApiStatus.NonExtendable
-    abstract class Item extends AssetImpl implements BukkitAsset, ItemAsset {
+    abstract class Item extends ItemAsset implements BukkitAsset {
         final Material material;
 
         Item(Material material, @Identifier String identifier) {
-            super(ItemAsset.GROUP, identifier);
+            super(identifier, "minecraft:" + material.name().toLowerCase());
             this.material = material;
         }
 
-        @Override
-        public @NotNull String itemId() {
-            return "minecraft:" + material.name().toLowerCase();
-        }
-
         /**
-         * Get the asset corresponding to a valid ItemStack.
+         * Gets the asset corresponding to a valid ItemStack.
          * <p>
          * Like {@link Items#of(ItemStack)}, this method is free to return
          * both cached and new objects. This is because MaterialAssets are
          * cached while MetaItemAssets are not.
          *
          * @param identifier an item asset identifier
-         * @return a MaterialAsset or MetaItemAsset, as needed
+         * @return a MaterialAsset or MetaItemAsset as appropriate
          * @throws IllegalArgumentException if the identifier cannot be
-         * interpreted as a MaterialAsset nor a MetaItemAsset.
+         * interpreted as a MaterialAsset nor as a MetaItemAsset.
          */
-        public static Item decodeIdentifier(@NotNull String identifier) throws IllegalArgumentException {
+        public static Item decodeIdentifier(@NotNull @Identifier String identifier) throws IllegalArgumentException {
             final String[] split = identifier.split(MetaItemAsset.IDENTIFIER_SLUG);
             // split[0] is the material name
             final Material mat = Material.getMaterial(split[0]);
@@ -89,14 +82,14 @@ public interface BukkitAsset extends Asset {
         final EnumMap<Material, MaterialAsset> cache = new EnumMap<>(Material.class);
 
         /**
-         * Get the asset representation of a simple Material.
+         * Gets the asset representation of a simple Material.
          *
          * @param material a given item type
          * @return the asset representation of the provided material
          * @implNote This implementation uses an internal EnumMap cache and
          * the following formula for generation:
          * <ul>
-         *     <li>Group = "item"</li>
+         *     <li>Group = {@link ItemAsset#GROUP}</li>
          *     <li>Identifier = "<code>material_name</code>"</li>
          * </ul>
          */
@@ -107,7 +100,7 @@ public interface BukkitAsset extends Asset {
         }
 
         /**
-         * Get an asset representation of the provided ItemStack.
+         * Gets an asset representation of the provided ItemStack.
          *
          * @param itemStack an item
          * @return an asset representation of the provided item
@@ -122,7 +115,7 @@ public interface BukkitAsset extends Asset {
          *     <li>
          *         <b>Items with meta:</b>
          *         <ul>
-         *             <li>Group = "item", then:</li>
+         *             <li>Group = {@link ItemAsset#GROUP}, then:</li>
          *             <ol>
          *                 <li>Serialize ItemMeta</li>
          *                 <li>Encode as base64</li>
