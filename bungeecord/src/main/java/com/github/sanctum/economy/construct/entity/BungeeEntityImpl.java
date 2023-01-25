@@ -19,7 +19,7 @@ import org.jetbrains.annotations.ApiStatus;
 
 @ApiStatus.Internal
 class BungeeEntityImpl extends EnterpriseEntityImpl implements BungeeEntity {
-    BungeeEntityImpl(@Namespace String namespace, @Identity String identity) {
-        super(namespace, identity);
+    BungeeEntityImpl(@Namespace String namespace, @IdentityKey String identityKey) {
+        super(namespace, identityKey);
     }
 }

@@ -20,6 +20,7 @@ import org.intellij.lang.annotations.RegExp;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
+import java.lang.annotation.Documented;
 import java.util.UUID;
 
 /**
@@ -48,15 +49,28 @@ public interface EnterpriseEntity {
      * digits, hash signs, forward-slashes, underscores, pluses; equals signs
      * and hyphens.
      */
-    @RegExp String VALID_IDENTITY = "[a-zA-Z0-9#/_+=-]+";
-
-    @Pattern(VALID_NAMESPACE)
-    @interface Namespace {}
-    @Pattern(VALID_IDENTITY)
-    @interface Identity {}
+    @RegExp String VALID_IDENTITY_KEY = "[a-zA-Z0-9#/_+=-]+";
 
     /**
-     * Get this entity's namespace.
+     * A String defining an entity namespace.
+     *
+     * @see #VALID_NAMESPACE
+     */
+    @Documented
+    @Pattern(VALID_NAMESPACE)
+    @interface Namespace {}
+
+    /**
+     * A String defining entity identity.
+     *
+     * @see #VALID_IDENTITY_KEY
+     */
+    @Documented
+    @Pattern(VALID_IDENTITY_KEY)
+    @interface IdentityKey {}
+
+    /**
+     * Gets the namespace of this entity.
      * <p>
      * Namespaces describe briefly what type of participant entities
      * represent and conform to {@link #VALID_NAMESPACE}.
@@ -66,26 +80,26 @@ public interface EnterpriseEntity {
     @Namespace @NotNull String getNamespace();
 
     /**
-     * Get this entity's identity key.
+     * Gets the identity key of this entity.
      * <p>
-     * Identity is a namespace-unique identifier for this
-     * entity and conforms to {@link #VALID_IDENTITY}.
+     * An identity key is a namespace-unique identifier for this
+     * entity and conforms to {@link #VALID_IDENTITY_KEY}.
      *
      * @return the namespace-unique identity key for this entity
      */
-    @Identity @NotNull String getIdentity();
+    @IdentityKey @NotNull String getIdentityKey();
 
     /**
-     * A friendly name for this entity.
+     * Gets the friendly name for this entity.
      * <p>
      * <b>May be human-readable. Need not be system-unique.</b>
      *
-     * @return a friendly name for this entity
-     * @implSpec Prefer human-readable; does not need to be unique.
-     * @implNote Defaults to {@link #getIdentity()}.
+     * @return the friendly name for this entity
+     * @implSpec Prefer human-readable; does not need to be (globally) unique.
+     * @implNote Defaults to {@link #getIdentityKey()}.
      */
     default @NotNull String getFriendlyName() {
-        return getIdentity();
+        return getIdentityKey();
     }
 
     /**
@@ -148,11 +162,11 @@ public interface EnterpriseEntity {
      */
     abstract class Custom implements EnterpriseEntity {
         protected final @Namespace String namespace;
-        protected final @Identity String identity;
+        protected final @IdentityKey String identityKey;
 
-        protected Custom(@Namespace @NotNull String namespace, @Identity @NotNull String identity) {
+        protected Custom(@Namespace @NotNull String namespace, @IdentityKey @NotNull String identityKey) {
             this.namespace = namespace;
-            this.identity = identity;
+            this.identityKey = identityKey;
         }
 
         @Override
@@ -161,8 +175,8 @@ public interface EnterpriseEntity {
         }
 
         @Override
-        public @Identity @NotNull String getIdentity() {
-            return identity;
+        public @IdentityKey @NotNull String getIdentityKey() {
+            return identityKey;
         }
     }
 }

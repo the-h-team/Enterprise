@@ -15,9 +15,11 @@
  */
 package com.github.sanctum.economy.construct.assets;
 
-import org.intellij.lang.annotations.Language;
 import org.intellij.lang.annotations.Pattern;
+import org.intellij.lang.annotations.RegExp;
 import org.jetbrains.annotations.NotNull;
+
+import java.lang.annotation.Documented;
 
 /**
  * Identifies a specific asset that may be holdable and/or tradable.
@@ -32,38 +34,48 @@ public interface Asset {
      * and end; and must end with only a lowercase letter, a digit
      * or an underscore.
      */
-    @Language("RegExp")
-    String VALID_GROUP = "[a-z][a-z0-9._-]*[a-z0-9_]";
+    @RegExp String VALID_GROUP = "[a-z][a-z0-9._-]*[a-z0-9_]";
     /**
      * Valid identifiers may contain both uppercase and lowercase letters;
      * digits, hash signs, colons, forward-slashes, periods, underscores,
      * pluses; equals signs and hyphens.
      */
-    @Language("RegExp")
-    String VALID_IDENTIFIER = "[a-zA-Z0-9#:/._+=-]+";
+    @RegExp String VALID_IDENTIFIER = "[a-zA-Z0-9#:/._+=-]+";
+
+    /**
+     * A String defining an asset group.
+     *
+     * @see #VALID_GROUP
+     */
+    @Documented
     @Pattern(VALID_GROUP)
     @interface Group {}
+
+    /**
+     * A String defining an asset identifier.
+     *
+     * @see #VALID_IDENTIFIER
+     */
+    @Documented
     @Pattern(VALID_IDENTIFIER)
     @interface Identifier {}
 
     /**
-     * Get a brief description of this asset's type.
+     * Gets a brief description of the asset's type.
      * <p>
      * Built-in types include:
      * <ul>
-     *     <li><code>item</code> for items.</li>
-     *     <li><code>currency</code> for currencies.</li>
+     *     <li>{@code item} for items</li>
      * </ul>
      *
      * @return a basic description of this asset's type
      */
-    @NotNull @Group String getGroup();
+    @Group @NotNull String getGroup();
 
     /**
-     * Get the unique, identifying name of this specific asset
-     * among its broader type.
+     * Gets the unique, identifying name of the asset within its group.
      *
      * @return a group-unique name for this asset
      */
-    @NotNull @Identifier String getIdentifier();
+    @Identifier @NotNull String getIdentifier();
 }
