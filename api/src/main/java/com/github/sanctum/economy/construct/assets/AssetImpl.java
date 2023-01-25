@@ -14,12 +14,12 @@ class AssetImpl implements Asset {
     }
 
     @Override
-    public final @Group @NotNull String getGroup() {
+    public final @NotNull @Group String getGroup() {
         return group;
     }
 
     @Override
-    public final @Identifier @NotNull String getIdentifier() {
+    public final @NotNull @Identifier String getIdentifier() {
         return identifier;
     }
 }

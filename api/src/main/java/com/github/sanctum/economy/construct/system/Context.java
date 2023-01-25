@@ -20,6 +20,7 @@ import org.intellij.lang.annotations.RegExp;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
+import java.lang.annotation.Documented;
 import java.util.UUID;
 
 /**
@@ -48,24 +49,38 @@ public interface Context {
      * spaces and hyphens; but must not start or end with whitespace.
      */
     @RegExp String VALID_VALUE = "[\\w.-][\\w. -]*[\\w.-]?";
+
+    /**
+     * A String defining a context type.
+     *
+     * @see #VALID_TYPE
+     */
+    @Documented
     @Pattern(VALID_TYPE)
     @interface Type {}
+
+    /**
+     * A String defining a context value.
+     *
+     * @see #VALID_VALUE
+     */
+    @Documented
     @Pattern(VALID_VALUE)
     @interface Value {}
 
     /**
-     * Get the type component of this context.
+     * Gets the type component of this context.
      *
      * @return the type of this context
      */
-    @Type String getType();
+    @Type @NotNull String getType(); // FIXME
 
     /**
-     * Get the value component of this context.
+     * Gets the value component of this context.
      *
-     * @return the value component
+     * @return the value of this context
      */
-    @Value String getValue();
+    @Value @NotNull String getValue(); // FIXME
 
     /**
      * Represent a world as a context.

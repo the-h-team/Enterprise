@@ -114,8 +114,8 @@ public interface BungeeEntity extends EnterpriseEntity {
      */
     class BackendServer extends BungeeEntityImpl {
 
-        BackendServer(String namespace, String identity) {
-            super(namespace, identity);
+        BackendServer(String namespace, String identityKey) {
+            super(namespace, identityKey);
         }
 
         /**

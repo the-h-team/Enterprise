@@ -16,11 +16,12 @@
 package com.github.sanctum.economy.construct.assets;
 
 import com.github.sanctum.economy.construct.Amount;
-import org.intellij.lang.annotations.Language;
 import org.intellij.lang.annotations.Pattern;
+import org.intellij.lang.annotations.RegExp;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.lang.annotation.Documented;
 import java.math.BigDecimal;
 import java.util.Objects;
 
@@ -37,9 +38,15 @@ public interface AbstractCurrency extends DecimalAsset, Asset {
      * <p>
      * See <a href="https://en.wikipedia.org/wiki/ISO_4217">ISO 4217</a>.
      */
-    @Language("RegExp")
-    String VALID_ALPHA_CODE = "[A-Z]{3}";
+    @RegExp String VALID_ALPHA_CODE = "[A-Z]{3}";
 
+    /**
+     * A String defining a currency alpha code.
+     *
+     * @see #VALID_ALPHA_CODE
+     * @see #getAlphaCode()
+     */
+    @Documented
     @Pattern(VALID_ALPHA_CODE)
     @interface AlphaCode {}
 

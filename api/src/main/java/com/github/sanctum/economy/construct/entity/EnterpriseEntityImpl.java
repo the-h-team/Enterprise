@@ -21,11 +21,11 @@ import org.jetbrains.annotations.NotNull;
 @ApiStatus.Internal
 class EnterpriseEntityImpl implements EnterpriseEntity {
     final @Namespace String namespace;
-    final @Identity String identity;
+    final @IdentityKey String identityKey;
 
-    EnterpriseEntityImpl(@Namespace String namespace, @Identity String identity) {
+    EnterpriseEntityImpl(@Namespace String namespace, @IdentityKey String identityKey) {
         this.namespace = namespace;
-        this.identity = identity;
+        this.identityKey = identityKey;
     }
 
     @Override
@@ -34,7 +34,7 @@ class EnterpriseEntityImpl implements EnterpriseEntity {
     }
 
     @Override
-    public final @Identity @NotNull String getIdentity() {
-        return identity;
+    public final @IdentityKey @NotNull String getIdentityKey() {
+        return identityKey;
     }
 }
