@@ -21,7 +21,6 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.annotation.Documented;
-import java.util.UUID;
 
 /**
  * Represents a particular context using a String
@@ -43,12 +42,13 @@ public interface Context {
      * and end; and must end with only an upper or lowercase letter or
      * a number.
      */
-    @RegExp String VALID_TYPE = "[a-z]([\\w.]*[a-zA-Z\\d])?";
+    @RegExp String VALID_TYPE = "^[a-z]([\\w.]*[a-zA-Z\\d])?$";
     /**
      * Valid values may contain only letters, numbers, underscores, periods,
-     * spaces and hyphens; but must not start or end with whitespace.
+     * colons, curly braces, spaces and hyphens; but must not start or end with
+     * whitespace.
      */
-    @RegExp String VALID_VALUE = "[\\w.-][\\w. -]*[\\w.-]?";
+    @RegExp String VALID_VALUE = "^[\\w.:{}-](?:[\\w.:{} -]*[\\w.:{}-])?$";
 
     /**
      * A String defining a context type.
@@ -73,101 +73,48 @@ public interface Context {
      *
      * @return the type of this context
      */
-    @Type @NotNull String getType(); // FIXME
+    @Type @NotNull String getType();
 
     /**
      * Gets the value component of this context.
      *
      * @return the value of this context
      */
-    @Value @NotNull String getValue(); // FIXME
+    @Value @NotNull String getValue();
 
     /**
-     * Represent a world as a context.
+     * Represents a world as a context.
      *
      * @since 2.0.0
-     * @author ms5984
      */
-    @ApiStatus.NonExtendable
-    interface World extends Context {
+    class World extends ContextImpl {
         /**
-         * The type string for worlds by name.
+         * The type string for every world context.
          */
-        @Type String NAME_TYPE = "world";
-        /**
-         * The type string for world by UID.
-         */
-        @Type String UID_TYPE = "world_uid";
+        public static final String TYPE = "world";
 
         /**
-         * Represents a world by its name.
+         * Creates a new world context.
+         *
+         * @param worldRepresentation a suitable identifier for the world
          */
-        @ApiStatus.NonExtendable
-        interface Name extends World {
-            @Override
-            default @Type String getType() {
-                return NAME_TYPE;
-            }
+        protected World(@Value @NotNull String worldRepresentation) {
+            super(TYPE, worldRepresentation);
         }
 
         /**
-         * Represents a world by its UID.
-         */
-        @ApiStatus.NonExtendable
-        interface UID extends World {
-            @Override
-            default @Type String getType() {
-                return UID_TYPE;
-            }
-        }
-
-        /**
-         * Represents a world by its name.
+         * Creates a new world context from a world name.
+         * <p>
+         * The world name is used as the value component.
          *
          * @param worldName the name of the world
-         * @return a new world context object
+         * @return a new world context
          */
-        static Name byName(@Value @NotNull String worldName) {
-            return () -> worldName;
-        }
-
-        /**
-         * Represents a world by its UID.
-         *
-         * @param worldUID the UID of the world
-         * @return a new world context object
-         */
-        static UID byUID(@NotNull UUID worldUID) {
-            return worldUID::toString;
-        }
-    }
-
-    /**
-     * Represent a permission as a context.
-     *
-     * @since 2.0.0
-     * @author ms5984
-     */
-    @ApiStatus.NonExtendable
-    interface Permission extends Context {
-        /**
-         * The type string for a permission.
-         */
-        @Type String PERMISSION_TYPE = "perm";
-
-        @Override
-        default @Type String getType() {
-            return PERMISSION_TYPE;
-        }
-
-        /**
-         * Represents a permission as its string form.
-         *
-         * @param permission the permission
-         * @return a new permission context object
-         */
-        static Permission of(@Value @NotNull String permission) {
-            return () -> permission;
+        public static World name(@NotNull String worldName) {
+            if (!worldName.matches(VALID_VALUE)) {
+                throw new IllegalArgumentException("Invalid world name: " + worldName);
+            }
+            return new World(worldName);
         }
     }
 
@@ -179,28 +126,14 @@ public interface Context {
      * @author ms5984
      * @see CustomTypeBuilder
      */
-    class Custom implements Context {
-        final @Type String type;
-        final @Value String value;
-
+    final class Custom extends ContextImpl {
         private Custom(@Type String type, @Value String value) {
-            this.type = type;
-            this.value = value;
-        }
-
-        @Override
-        public @Type String getType() {
-            return type;
-        }
-
-        @Override
-        public @Value String getValue() {
-            return null;
+            super(type, value);
         }
     }
 
     /**
-     * Represent custom contexts via a typed builder.
+     * Creates custom contexts via a typed builder.
      *
      * @since 2.0.0
      * @author ms5984
@@ -209,22 +142,12 @@ public interface Context {
     final class CustomTypeBuilder {
         final @Type String type;
 
-        /**
-         * Define contexts with a type key.
-         *
-         * @param type the context type
-         * @throws IllegalArgumentException if {@code type}
-         * represents an internally defined type
-         * @see World#NAME_TYPE
-         * @see World#UID_TYPE
-         * @see Permission#PERMISSION_TYPE
-         */
-        public CustomTypeBuilder(@Type @NotNull String type) throws IllegalArgumentException {
-            this.type = validateType(type);
+        CustomTypeBuilder(@Type @NotNull String type) {
+            this.type = validateCustomType(type);
         }
 
         /**
-         * Get the type key of this builder.
+         * Gets the type key of this builder.
          *
          * @return the context type
          */
@@ -233,9 +156,9 @@ public interface Context {
         }
 
         /**
-         * Define a context of this builder's type with a value string.
+         * Defines a context of this builder's type.
          *
-         * @param value the value for the type
+         * @param value the value for the context
          */
         public Custom getContext(@Value @NotNull String value) {
             return new Custom(type, value);
@@ -243,24 +166,31 @@ public interface Context {
     }
 
     /**
-     * Get a context builder with a defined type key.
+     * Gets a builder for contexts with a predefined, shared type.
      *
      * @param type the context type
      * @throws IllegalArgumentException if {@code type} contains
      * spaces or represents an internally defined type
-     * @see World#NAME_TYPE
-     * @see World#UID_TYPE
-     * @see Permission#PERMISSION_TYPE
+     * @see World#TYPE
      */
-    static CustomTypeBuilder factory(@Type @NotNull String type) throws IllegalArgumentException {
+    static CustomTypeBuilder factory(@Type @NotNull String type) {
         return new CustomTypeBuilder(type);
     }
 
-    static String validateType(@NotNull String type) throws IllegalArgumentException {
+    /**
+     * Checks to see if a custom type is valid.
+     * <p>
+     * Custom types must not match any of the internally defined types.
+     *
+     * @param type a context type
+     * @return the type if valid
+     * @throws IllegalArgumentException if {@code type} matches an
+     * internally defined type
+     */
+    static String validateCustomType(@NotNull String type) throws IllegalArgumentException {
+        //noinspection SwitchStatementWithTooFewBranches
         switch (type) {
-            case World.NAME_TYPE:
-            case World.UID_TYPE:
-            case Permission.PERMISSION_TYPE:
+            case World.TYPE:
                 throw new IllegalArgumentException("Cannot use protected internal type.");
             default:
                 return type;
