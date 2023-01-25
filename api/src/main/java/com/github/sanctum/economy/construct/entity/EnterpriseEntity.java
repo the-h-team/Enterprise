@@ -43,13 +43,13 @@ public interface EnterpriseEntity {
      * the beginning and end; and must end with only a lowercase letter,
      * a digit or an underscore.
      */
-    @RegExp String VALID_NAMESPACE = "[a-z]([a-zA-Z0-9_-]*[a-z0-9_])?";
+    @RegExp String VALID_NAMESPACE = "^[a-z]([a-zA-Z0-9_-]*[a-z0-9_])?$";
     /**
      * Valid identities may contain both uppercase and lowercase letters;
      * digits, hash signs, forward-slashes, underscores, pluses; equals signs
      * and hyphens.
      */
-    @RegExp String VALID_IDENTITY_KEY = "[a-zA-Z0-9#/_+=-]+";
+    @RegExp String VALID_IDENTITY_KEY = "^[a-zA-Z0-9#/_+=-]+$";
 
     /**
      * A String defining an entity namespace.

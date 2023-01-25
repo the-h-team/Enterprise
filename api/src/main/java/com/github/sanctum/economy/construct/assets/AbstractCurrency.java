@@ -38,7 +38,7 @@ public interface AbstractCurrency extends DecimalAsset, Asset {
      * <p>
      * See <a href="https://en.wikipedia.org/wiki/ISO_4217">ISO 4217</a>.
      */
-    @RegExp String VALID_ALPHA_CODE = "[A-Z]{3}";
+    @RegExp String VALID_ALPHA_CODE = "^[A-Z]{3}$";
 
     /**
      * A String defining a currency alpha code.

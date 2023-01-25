@@ -34,13 +34,13 @@ public interface Asset {
      * and end; and must end with only a lowercase letter, a digit
      * or an underscore.
      */
-    @RegExp String VALID_GROUP = "[a-z][a-z0-9._-]*[a-z0-9_]";
+    @RegExp String VALID_GROUP = "^[a-z][a-z0-9._-]*[a-z0-9_]$";
     /**
      * Valid identifiers may contain both uppercase and lowercase letters;
      * digits, hash signs, colons, forward-slashes, periods, underscores,
      * pluses; equals signs and hyphens.
      */
-    @RegExp String VALID_IDENTIFIER = "[a-zA-Z0-9#:/._+=-]+";
+    @RegExp String VALID_IDENTIFIER = "^[a-zA-Z0-9#:/._+=-]+$";
 
     /**
      * A String defining an asset group.
