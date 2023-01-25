@@ -16,12 +16,13 @@
 package com.github.sanctum.economy.construct.assets;
 
 import com.github.sanctum.economy.construct.Amount;
+import org.intellij.lang.annotations.Language;
+import org.intellij.lang.annotations.Pattern;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.math.BigDecimal;
 import java.util.Objects;
-import java.util.Optional;
 
 /**
  * An abstract base for all currencies.
@@ -32,67 +33,66 @@ import java.util.Optional;
 public interface AbstractCurrency extends DecimalAsset, Asset {
 
     /**
-     * Get the short symbol for this currency.
+     * Valid alpha codes mimic ISO 4217.
+     * <p>
+     * See <a href="https://en.wikipedia.org/wiki/ISO_4217">ISO 4217</a>.
+     */
+    @Language("RegExp")
+    String VALID_ALPHA_CODE = "[A-Z]{3}";
+
+    @Pattern(VALID_ALPHA_CODE)
+    @interface AlphaCode {}
+
+    /**
+     * Gets the alpha code for this currency.
      * <p>
      * This would be used at exchanges or in foreign trade.
      *
-     * @return the short symbol for this currency
-     * @implSpec Like the real world, prefer three-letter, uppercase strings,
-     * possibly even of the usual real-world format: <code>(two-letter country
-     * code)+(initial letter of currency name)</code>.
+     * @return the short alpha code for this currency
+     * @implSpec Like the real world, use three-letter, uppercase strings,
+     * possibly even following existing ISO 4217 strategies:
+     * {@code (two-letter country code)+...}
+     * <ul>
+     * <li>{@code (initial letter of currency name)}</li>
+     * <li>a mnemonic continuation of the name itself ({@code R} for EURo)
+     * </li>
+     * <li>{@code "N"} as in "new" following a devaluation</li>
+     * </ul>
      * <p>
-     * As a reminder, the symbol for U.S. Dollars is <code>USD</code>.
+     * The alpha code for U.S. Dollars is {@code USD}.
      */
-    @NotNull String symbol();
+    @NotNull @AlphaCode String getAlphaCode();
 
     /**
-     * Get the formal display name of this currency.
+     * Gets the formal name of this currency.
+     * <p>
+     * This often includes the name of the country or region.
+     * <p>
+     * For USD this would be {@code "U.S. Dollars"}.
      *
-     * @return the formal display name of this currency
-     * @implSpec E.g., for USD, this could be <code>"U.S. Dollars"</code>.
-     * @implNote Defaults to {@link #majorNamePlural()}.
+     * @return the formal name of this currency
      */
-    default @NotNull String displayName() {
-        return majorNamePlural();
+    default @NotNull String getFormalName() {
+        return getUnitNamePlural();
     }
 
     /**
-     * Get the plural form of this currency's major units.
+     * Gets the plural form of this currency's major unit.
+     * <p>
+     * For USD this would be {@code "Dollars"}.
      *
-     * @return the plural form of this currency's major units
-     * @implSpec For USD, this could be <code>"Dollars"</code>.
+     * @return the plural form of this currency's major unit
      */
-    @NotNull String majorNamePlural();
+    @NotNull String getUnitNamePlural();
 
     /**
-     * Get the singular form of this currency's major units.
+     * Gets the singular form of this currency's major units.
+     * <p>
+     * For USD this would be {@code "Dollar"}.
      *
-     * @return the singular form of this currency's major units
-     * @implSpec For USD, this could be <code>"Dollar"</code>.
+     * @return the singular form of this currency's major unit
      */
-    @NotNull String majorNameSingular();
-
-    /**
-     * Get the plural form of this currency's minor units, if applicable.
-     *
-     * @return the plural form of this currency's minor units if present
-     * @implSpec For USD, this could be <code>"Cents"</code>.
-     */
-    @NotNull
-    default Optional<String> minorNamePlural() {
-        return Optional.empty();
-    }
-
-    /**
-     * Get the singular form of this currency's minor units, if applicable.
-     *
-     * @return the singular form of this currency's minor units if present
-     * @implSpec For USD, this could be <code>"Cent"</code>.
-     */
-    @NotNull
-    default Optional<String> minorNameSingular() {
-        return Optional.empty();
-    }
+    @NotNull String getUnitNameSingular();
 
     @Override
     default @NotNull Amount getAmount(@NotNull BigDecimal decimal) {
@@ -139,7 +139,7 @@ public interface AbstractCurrency extends DecimalAsset, Asset {
         public Token(@NotNull Asset match, @NotNull BigDecimal worth, @Nullable String name) {
             this.match = match;
             this.worth = worth;
-            this.name = name != null ? name : Amount.normalize(this.worth) + " " + currency().displayName();
+            this.name = name != null ? name : Amount.normalize(this.worth) + " " + currency().getFormalName();
         }
 
         @Override
