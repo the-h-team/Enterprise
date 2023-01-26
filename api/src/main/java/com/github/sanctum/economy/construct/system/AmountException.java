@@ -15,11 +15,11 @@
  */
 package com.github.sanctum.economy.construct.system;
 
-import com.github.sanctum.economy.construct.Amount;
+import com.github.sanctum.economy.construct.assets.Amount;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * A system exception involving a specific Amount.
+ * A system exception involving a specific amount.
  *
  * @since 2.0.0
  * @author ms5984
@@ -29,7 +29,7 @@ public class AmountException extends AbstractSystemException {
     final Amount amount;
 
     /**
-     * Construct an exception with an Amount and a message.
+     * Constructs an exception with an amount and a message.
      *
      * @param amount an amount of an asset
      * @param message a message
@@ -40,7 +40,7 @@ public class AmountException extends AbstractSystemException {
     }
 
     /**
-     * Construct an exception with an Amount, a message and cause.
+     * Constructs an exception with an amount, a message and cause.
      *
      * @param amount an amount of an asset
      * @param message a message
@@ -52,7 +52,7 @@ public class AmountException extends AbstractSystemException {
     }
 
     /**
-     * Construct an exception with an Amount and a cause.
+     * Constructs an exception with an amount and a cause.
      *
      * @param amount an amount of an asset
      * @param cause a cause throwable
@@ -63,7 +63,7 @@ public class AmountException extends AbstractSystemException {
     }
 
     /**
-     * Get the Amount associated with this exception.
+     * Gets the amount associated with this exception.
      *
      * @return an amount of an asset
      */

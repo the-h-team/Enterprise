@@ -1,5 +1,5 @@
 /*
- *   Copyright 2021 Sanctum <https://github.com/the-h-team>
+ *   Copyright 2023 Sanctum <https://github.com/the-h-team>
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -15,20 +15,34 @@
  */
 package com.github.sanctum.economy.construct.assets;
 
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * An asset that can be divided by whole number.
- *
- * @since 2.0.0
- * @author ms5984
- */
-public interface IntegralAsset extends Asset {
-    /**
-     * Gets an integer amount of this asset.
-     *
-     * @param count an integer amount
-     * @return a new amount object
-     */
-    @NotNull IntegralAmount getAmount(int count);
+@ApiStatus.Internal
+class AmountImpl implements Amount {
+    final Asset asset;
+
+    AmountImpl(@NotNull Asset asset) {
+        this.asset = asset;
+    }
+
+    @Override
+    public @NotNull Asset getAsset() {
+        return asset;
+    }
+
+    // TODO toString
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof AmountImpl)) return false;
+        AmountImpl that = (AmountImpl) o;
+        return asset.equals(that.asset);
+    }
+
+    @Override
+    public int hashCode() {
+        return asset.hashCode();
+    }
 }

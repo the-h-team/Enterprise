@@ -78,17 +78,20 @@ public enum Operation {
     }
 
     /**
-     * Get the user-configured description template for this action.
+     * Gets the description template for this action.
+     * <p>
+     * Templates may be configured by the server.
      *
-     * @return an Optional describing an alternate description template
+     * @return an Optional describing a description template
      * @see #defaultTemplate
+     * @see #setTemplate(String)
      */
     public Optional<String> getTemplate() {
         return Optional.ofNullable(template.get());
     }
 
     /**
-     * Set a custom description template for this action.
+     * Sets a custom description template for this action.
      *
      * @param template a new template
      * @see #defaultTemplate

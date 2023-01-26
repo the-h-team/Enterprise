@@ -1,5 +1,5 @@
 /*
- *   Copyright 2021 Sanctum <https://github.com/the-h-team>
+ *   Copyright 2023 Sanctum <https://github.com/the-h-team>
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -13,23 +13,22 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package com.github.sanctum.economy.construct.system;
+package com.github.sanctum.economy.construct.assets;
 
-import com.github.sanctum.economy.construct.assets.Amount;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * A point that can be tested for the holding of assets.
+ * An object that can be expressed as a decimal amount.
  *
  * @since 2.0.0
  * @author ms5984
  */
-public interface Queryable extends Resolvable {
+@FunctionalInterface
+public interface DecimalAmountLike {
     /**
-     * Check for an amount.
+     * Gets this object represented as a decimal amount.
      *
-     * @param amount an amount of an asset
-     * @return true if this point has the amount
+     * @return a decimal amount representation
      */
-    boolean has(@NotNull Amount amount);
+    @NotNull DecimalAmount asDecimalAmount();
 }

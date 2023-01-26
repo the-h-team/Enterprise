@@ -15,22 +15,22 @@
  */
 package com.github.sanctum.economy.transaction;
 
-import com.github.sanctum.economy.construct.Amount;
+import com.github.sanctum.economy.construct.assets.Amount;
 import com.github.sanctum.economy.construct.entity.EnterpriseEntity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * A {@link Operation#QUERY}-based transaction.
+ * An {@link Operation#QUERY}-based transaction.
  *
  * @since 2.0.0
  * @author ms5984
  */
 public final class QueryTransaction extends MemoryTransaction {
     /**
-     * Create a new query-based transaction.
+     * Creates a new query-based transaction object.
      *
-     * @param amount an Amount
+     * @param amount an amount
      * @param has whether the point had the amount
      * @param info optionally, more/custom text detail
      * @param primaries the involved entity or entities

@@ -15,10 +15,7 @@
  */
 package com.github.sanctum.economy.construct.assets;
 
-import com.github.sanctum.economy.construct.IntegralAmount;
 import org.jetbrains.annotations.NotNull;
-
-import java.math.BigDecimal;
 
 /**
  * An asset which represents an item.
@@ -60,11 +57,10 @@ public abstract class ItemAsset extends AssetImpl implements IntegralAsset {
      *
      * @param count the whole number count of the asset
      * @return a new amount object
-     * @throws IllegalArgumentException if {@code count} is negative
      */
     @Override
-    public final @NotNull IntegralAmount getAmount(int count) {
-        return new Amount(count, this);
+    public final @NotNull ItemAsset.ItemAmount getAmount(int count) {
+        return new ItemAmount(count, this);
     }
 
     /**
@@ -72,15 +68,17 @@ public abstract class ItemAsset extends AssetImpl implements IntegralAsset {
      *
      * @since 2.0.0
      */
-    public static final class Amount extends IntegralAmount {
+    public static final class ItemAmount extends AmountImpl implements IntegralAmount {
         final int amount;
-        final BigDecimal bigDecimal;
 
-        Amount(int amount, @NotNull ItemAsset asset) {
+        ItemAmount(int amount, @NotNull ItemAsset asset) {
             super(asset);
-            if (amount < 0) throw new IllegalArgumentException("Amount cannot be negative!");
             this.amount = amount;
-            bigDecimal = BigDecimal.valueOf(amount);
+        }
+
+        @Override
+        public @NotNull ItemAsset getAsset() {
+            return (ItemAsset) asset;
         }
 
         @Override
@@ -88,18 +86,15 @@ public abstract class ItemAsset extends AssetImpl implements IntegralAsset {
             return amount;
         }
 
-        @Override
-        public @NotNull BigDecimal getAmount() {
-            return bigDecimal;
-        }
+        // TODO toString?
 
         @Override
         public boolean equals(Object o) {
             if (this == o) return true;
-            if (o instanceof Amount) {
-                Amount amount = (Amount) o;
-                if (this.amount == amount.amount) {
-                    return asset.equals(amount.asset);
+            if (o instanceof ItemAmount) {
+                ItemAmount that = (ItemAmount) o;
+                if (this.amount == that.amount) {
+                    return asset.equals(that.asset);
                 }
             }
             return false;

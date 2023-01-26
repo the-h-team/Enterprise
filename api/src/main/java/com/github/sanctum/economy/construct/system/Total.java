@@ -15,7 +15,7 @@
  */
 package com.github.sanctum.economy.construct.system;
 
-import com.github.sanctum.economy.construct.Amount;
+import com.github.sanctum.economy.construct.assets.Amount;
 import com.github.sanctum.economy.construct.assets.Asset;
 import org.jetbrains.annotations.NotNull;
 
@@ -34,5 +34,5 @@ public interface Total extends Resolvable {
      * @param asset the asset to total
      * @return an Optional describing the amount, if present
      */
-    @NotNull Optional<Amount> total(@NotNull Asset asset);
+    @NotNull Optional<? extends Amount> total(@NotNull Asset asset);
 }

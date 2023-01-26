@@ -15,7 +15,6 @@
  */
 package com.github.sanctum.economy.construct.assets;
 
-import com.github.sanctum.economy.construct.Amount;
 import org.intellij.lang.annotations.Pattern;
 import org.intellij.lang.annotations.RegExp;
 import org.jetbrains.annotations.NotNull;
@@ -101,16 +100,7 @@ public interface AbstractCurrency extends DecimalAsset, Asset {
      */
     @NotNull String getUnitNameSingular();
 
-    @Override
-    default @NotNull Amount getAmount(@NotNull BigDecimal decimal) {
-        return new Amount(this) {
-            @Override
-            public @NotNull BigDecimal getAmount() {
-                return decimal;
-            }
-        };
-    }
-
+    // FIXME overhaul token system
     /**
      * Currency tokens (notes, bills or specie).
      * <p>
@@ -127,7 +117,7 @@ public interface AbstractCurrency extends DecimalAsset, Asset {
         final String name;
 
         /**
-         * Initialize the match, worth and name of this token.
+         * Initializes the match asset, worth and name of this token.
          *
          * @param match the asset that will match this token
          * @param worth a face amount of base currency
@@ -146,7 +136,7 @@ public interface AbstractCurrency extends DecimalAsset, Asset {
         public Token(@NotNull Asset match, @NotNull BigDecimal worth, @Nullable String name) {
             this.match = match;
             this.worth = worth;
-            this.name = name != null ? name : Amount.normalize(this.worth) + " " + currency().getFormalName();
+            this.name = name != null ? name : DecimalAmount.normalize(this.worth) + " " + getBaseCurrency().getFormalName();
         }
 
         @Override
@@ -160,14 +150,14 @@ public interface AbstractCurrency extends DecimalAsset, Asset {
         }
 
         /**
-         * Get the currency associated with this token.
+         * Gets the currency represented by this token.
          *
          * @return the currency this token represents
          */
-        public abstract @NotNull AbstractCurrency currency();
+        public abstract @NotNull AbstractCurrency getBaseCurrency();
 
         /**
-         * Get the worth of this token.
+         * Gets the worth of this token.
          *
          * @return the worth of this token
          */
@@ -185,12 +175,12 @@ public interface AbstractCurrency extends DecimalAsset, Asset {
         }
 
         /**
-         * Get the token-equivalent Amount in the represented currency.
+         * Gets the token-equivalent Amount in the represented currency.
          *
          * @return an equivalent Amount of the base currency
          */
-        public Amount equivalentAmount() {
-            return currency().getAmount(worth);
+        public Amount toEquivalentAmount() {
+            return getBaseCurrency().getAmount(worth);
         }
 
         @Override

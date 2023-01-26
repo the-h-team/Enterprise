@@ -15,7 +15,6 @@
  */
 package com.github.sanctum.economy.construct.assets;
 
-import com.github.sanctum.economy.construct.Amount;
 import org.jetbrains.annotations.NotNull;
 
 import java.math.BigDecimal;
@@ -28,11 +27,10 @@ import java.math.BigDecimal;
  */
 public interface DecimalAsset extends Asset {
     /**
-     * Get an amount for this asset.
+     * Gets an amount of this asset.
      *
      * @param decimal the decimal amount of the asset
      * @return a new amount object
-     * @throws IllegalArgumentException if <code>decimal</code> is negative
      */
-    @NotNull Amount getAmount(@NotNull BigDecimal decimal);
+    @NotNull DecimalAmount getAmount(@NotNull BigDecimal decimal);
 }

@@ -15,7 +15,7 @@
  */
 package com.github.sanctum.economy.transaction;
 
-import com.github.sanctum.economy.construct.Amount;
+import com.github.sanctum.economy.construct.assets.Amount;
 import com.github.sanctum.economy.construct.entity.EnterpriseEntity;
 import com.github.sanctum.economy.construct.system.Settable.SetError;
 import org.jetbrains.annotations.NotNull;
@@ -24,16 +24,16 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Optional;
 
 /**
- * A {@link Operation#SET}-based transaction.
+ * An {@link Operation#SET}-based transaction.
  *
  * @since 2.0.0
  * @author ms5984
  */
 public final class SetTransaction extends MemoryTransaction {
     /**
-     * Create a new set-based transaction.
+     * Creates a new set-based transaction.
      *
-     * @param amount an Amount
+     * @param amount an amount
      * @param exception a SetError if one has occurred
      * @param info optionally, more/custom text detail
      * @param primaries the involved entity or entities
@@ -43,7 +43,7 @@ public final class SetTransaction extends MemoryTransaction {
     }
 
     /**
-     * Get the SetError for this transaction if it is unsuccessful.
+     * Gets the {@link SetError} for this transaction if it is unsuccessful.
      *
      * @return an Optional describing a SetError
      */
