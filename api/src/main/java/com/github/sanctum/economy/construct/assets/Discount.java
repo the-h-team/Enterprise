@@ -13,9 +13,8 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package com.github.sanctum.economy.construct;
+package com.github.sanctum.economy.construct.assets;
 
-import com.github.sanctum.economy.construct.assets.DecimalAsset;
 import org.jetbrains.annotations.NotNull;
 
 import java.math.BigDecimal;
@@ -152,35 +151,27 @@ public enum Discount {
         }
 
         /**
-         * Produce a new amount having the discount applied.
+         * Produces a new decimal amount having the discount applied.
          *
-         * @param amount an existing amount
+         * @param amount an existing decimal amount
          * @return a new amount with the discount applied
          */
-        public Amount calculate(@NotNull Amount amount) {
+        public DecimalAmount calculate(@NotNull DecimalAmount amount) {
             final BigDecimal finalPrice;
             switch (Discount.this) {
                 case PERCENTAGE:
-                    finalPrice = discount.multiply(amount.getAmount()).divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
+                    finalPrice = discount.multiply(amount.getDecimal()).divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
                     break;
                 case DECIMAL:
-                    finalPrice = BigDecimal.ONE.subtract(discount).multiply(amount.getAmount());
+                    finalPrice = BigDecimal.ONE.subtract(discount).multiply(amount.getDecimal());
                     break;
                 case FLAT:
-                    finalPrice = amount.getAmount().subtract(discount);
+                    finalPrice = amount.getDecimal().subtract(discount);
                     break;
                 default:
                     throw new IllegalArgumentException();
             }
-            if (amount.asset instanceof DecimalAsset) {
-                return ((DecimalAsset) amount.asset).getAmount(finalPrice);
-            }
-            return new Amount(amount.asset) {
-                @Override
-                public @NotNull BigDecimal getAmount() {
-                    return finalPrice;
-                }
-            };
+            return new DecimalAmountImpl(amount.getAsset(), finalPrice);
         }
 
         @Override

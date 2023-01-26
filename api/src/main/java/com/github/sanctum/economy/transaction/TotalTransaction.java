@@ -15,7 +15,7 @@
  */
 package com.github.sanctum.economy.transaction;
 
-import com.github.sanctum.economy.construct.Amount;
+import com.github.sanctum.economy.construct.assets.Amount;
 import com.github.sanctum.economy.construct.assets.Asset;
 import com.github.sanctum.economy.construct.entity.EnterpriseEntity;
 import org.jetbrains.annotations.NotNull;
@@ -24,16 +24,16 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Optional;
 
 /**
- * A {@link Operation#TOTAL}-based transaction.
+ * An {@link Operation#TOTAL}-based transaction.
  *
  * @since 2.0.0
  * @author ms5984
  */
 public final class TotalTransaction extends MemoryTransaction {
     /**
-     * Create a new total-based transaction.
+     * Creates a new total-based transaction.
      *
-     * @param amount the Amount possessed by the point, if any
+     * @param amount the amount possessed by the point, if any
      * @param asset the asset being totalled
      * @param info optionally, more/custom text detail
      * @param primaries the involved entity or entities
@@ -43,7 +43,7 @@ public final class TotalTransaction extends MemoryTransaction {
     }
 
     /**
-     * The total Amount of {@link #getAsset()} possessed by this point.
+     * Gets the total amount of {@link #getAsset()} possessed by this point.
      *
      * @return an Optional describing an Amount
      * @implSpec Should be empty if {@link #isSuccess()} is false.

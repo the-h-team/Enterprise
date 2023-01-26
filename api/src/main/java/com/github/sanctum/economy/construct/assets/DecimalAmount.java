@@ -13,14 +13,13 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package com.github.sanctum.economy.construct;
+package com.github.sanctum.economy.construct.assets;
 
-import com.github.sanctum.economy.construct.assets.Asset;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.Objects;
 
 /**
  * Represents an amount of an asset as a BigDecimal.
@@ -28,56 +27,34 @@ import java.util.Objects;
  * @since 2.0.0
  * @author ms5984
  */
-public abstract class Amount {
-    protected final Asset asset;
-
-    protected Amount(@NotNull Asset asset) {
-        this.asset = asset;
-    }
-
+@ApiStatus.NonExtendable
+public interface DecimalAmount extends Amount, DecimalAmountLike {
     /**
-     * Get the asset being counted.
+     * Gets the decimal of this amount.
      *
-     * @return the asset being counted
+     * @return the decimal amount
      */
-    public final Asset getAsset() {
-        return asset;
-    }
-
-    /**
-     * Get this amount as a BigDecimal.
-     *
-     * @return this amount as a BigDecimal
-     * @implSpec Must not be negative.
-     */
-    public abstract @NotNull BigDecimal getAmount();
+    @NotNull BigDecimal getDecimal();
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o instanceof Amount) {
-            Amount amount = (Amount) o;
-            return asset.equals(amount.asset) && getAmount().compareTo(amount.getAmount()) == 0;
-        }
-        return false;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(asset, normalize(getAmount()));
+    default @NotNull DecimalAmount asDecimalAmount() {
+        return this;
     }
 
     /**
-     * Convert BigDecimal values to the most compact and human-readable form.
+     * Converts BigDecimal values to a compact and human-readable form.
+     * <p>
+     * Returns {@code value} if it is already in a normalized form.
      *
      * @param value a BigDecimal value to normalize
      * @return a normalized value
-     * @implNote The normalization process seeks to represent BigDecimal values
-     * as full, unscaled integers OR compact decimals. It looks like this:
+     * @implNote The normalization process seeks to represent BigDecimal
+     * values as full, unscaled integers OR compact decimals. It looks like
+     * this:
      * <h3>For "0.50":</h3>
      * <ul>
-     *     <li><code>0.50 -> 0.5</code></li>
-     *     <li>{@link BigDecimal#scale()} is <code>&lt;0 (2)</code></li>
+     *     <li><code>0.50 -&gt; 0.5</code></li>
+     *     <li>{@link BigDecimal#scale()} is <code>&gt;=0 (2)</code></li>
      *     <li>This indicates a decimal portion. We will try to strip
      *     trailing zeros from the value: <code>0.5</code>
      *     </li>
@@ -85,15 +62,16 @@ public abstract class Amount {
      * </ul>
      * <h3>For "2E+2":</h3>
      * <ul>
-     *     <li><code>2E+2 -> 200</code></li>
-     *     <li>Scale is negative: <code>-2</code></li>
+     *     <li><code>2E+2 -&gt; 200</code></li>
+     *     <li>Scale is negative: <code>(-2)</code></li>
      *     <li>This indicates a scaled whole number; we will simplify its
-     *     representation by setting scale to 0: <code>200</code>
+     *     representation by setting scale to {@code 0}. Result:
+     *     <code>200</code>
      *     </li>
      *     <li>We will use this new value as it is easier to read.</li>
      * </ul>
      */
-    public static BigDecimal normalize(@NotNull BigDecimal value) {
+    static @NotNull BigDecimal normalize(@NotNull BigDecimal value) {
         final int initialScale = value.scale();
         // simple whole number = fast return
         if (initialScale == 0) return value;

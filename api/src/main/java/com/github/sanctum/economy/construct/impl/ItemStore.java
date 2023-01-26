@@ -15,7 +15,6 @@
  */
 package com.github.sanctum.economy.construct.impl;
 
-import com.github.sanctum.economy.construct.Amount;
 import com.github.sanctum.economy.construct.assets.*;
 import com.github.sanctum.economy.construct.system.Balance;
 import org.jetbrains.annotations.NotNull;
@@ -34,17 +33,17 @@ public class ItemStore implements Balance {
 
     @Override
     public boolean has(@NotNull Amount amount) {
-        if (amount instanceof ItemAsset.Amount) {
-            return counts.getOrDefault(amount.getAsset().getIdentifier(), 0) >= ((ItemAsset.Amount) amount).getIntegralAmount();
+        if (amount instanceof ItemAsset.ItemAmount) {
+            return counts.getOrDefault(amount.getAsset().getIdentifier(), 0) >= ((ItemAsset.ItemAmount) amount).getIntegralAmount();
         }
         return false;
     }
 
     @Override
     public void give(@NotNull Amount amount) throws AcceptError {
-        if (amount instanceof ItemAsset.Amount) {
+        if (amount instanceof ItemAsset.ItemAmount) {
             synchronized (counts) {
-                counts.merge(amount.getAsset().getIdentifier(), ((ItemAsset.Amount) amount).getIntegralAmount(), Integer::sum);
+                counts.merge(amount.getAsset().getIdentifier(), ((ItemAsset.ItemAmount) amount).getIntegralAmount(), Integer::sum);
             }
             return;
         }
@@ -53,9 +52,9 @@ public class ItemStore implements Balance {
 
     @Override
     public void set(@NotNull Amount amount) throws SetError {
-        if (amount instanceof ItemAsset.Amount) {
+        if (amount instanceof ItemAsset.ItemAmount) {
             synchronized (counts) {
-                counts.put(amount.getAsset().getIdentifier(), ((ItemAsset.Amount) amount).getIntegralAmount());
+                counts.put(amount.getAsset().getIdentifier(), ((ItemAsset.ItemAmount) amount).getIntegralAmount());
             }
             return;
         }
@@ -64,8 +63,8 @@ public class ItemStore implements Balance {
 
     @Override
     public void take(@NotNull Amount amount) throws SupplyError {
-        if (amount instanceof ItemAsset.Amount) {
-            final int newAmount = ((ItemAsset.Amount) amount).getIntegralAmount();
+        if (amount instanceof ItemAsset.ItemAmount) {
+            final int newAmount = ((ItemAsset.ItemAmount) amount).getIntegralAmount();
             final String fqn = amount.getAsset().getIdentifier();
             synchronized (counts) {
                 if (counts.getOrDefault(fqn, 0) < newAmount) {
@@ -79,11 +78,11 @@ public class ItemStore implements Balance {
     }
 
     @Override
-    public @NotNull Optional<Amount> total(@NotNull Asset asset) {
+    public @NotNull Optional<ItemAsset.ItemAmount> total(@NotNull Asset asset) {
         if (asset instanceof ItemAsset) {
             final Integer integer = counts.get(asset.getIdentifier());
             if (integer != null) {
-                return Optional.of(((IntegralAsset) asset).getAmount(integer));
+                return Optional.of(((ItemAsset) asset).getAmount(integer));
             }
         }
         return Optional.empty();

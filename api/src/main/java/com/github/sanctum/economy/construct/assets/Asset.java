@@ -22,7 +22,7 @@ import org.jetbrains.annotations.NotNull;
 import java.lang.annotation.Documented;
 
 /**
- * Identifies a specific asset that may be holdable and/or tradable.
+ * Things that are holdable and/or tradable.
  *
  * @since 2.0.0
  * @author ms5984

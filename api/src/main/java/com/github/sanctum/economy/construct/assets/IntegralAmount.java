@@ -13,23 +13,29 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package com.github.sanctum.economy.construct.system;
+package com.github.sanctum.economy.construct.assets;
 
-import com.github.sanctum.economy.construct.assets.Amount;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
+import java.math.BigDecimal;
+
 /**
- * A point that can be tested for the holding of assets.
+ * Represents a simple, whole-number amount of an asset.
  *
  * @since 2.0.0
- * @author ms5984
  */
-public interface Queryable extends Resolvable {
+@ApiStatus.NonExtendable
+public interface IntegralAmount extends Amount, DecimalAmountLike {
     /**
-     * Check for an amount.
+     * Gets the integer value of this amount.
      *
-     * @param amount an amount of an asset
-     * @return true if this point has the amount
+     * @return the integer amount
      */
-    boolean has(@NotNull Amount amount);
+    int getIntegralAmount();
+
+    @Override
+    default @NotNull DecimalAmount asDecimalAmount() {
+        return new DecimalAmountImpl(getAsset(), BigDecimal.valueOf(getIntegralAmount()));
+    }
 }

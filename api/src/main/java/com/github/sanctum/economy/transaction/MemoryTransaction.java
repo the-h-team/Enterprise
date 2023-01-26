@@ -15,7 +15,7 @@
  */
 package com.github.sanctum.economy.transaction;
 
-import com.github.sanctum.economy.construct.Amount;
+import com.github.sanctum.economy.construct.assets.Amount;
 import com.github.sanctum.economy.construct.assets.Asset;
 import com.github.sanctum.economy.construct.entity.EnterpriseEntity;
 import com.github.sanctum.economy.construct.system.AbstractSystemException;
@@ -41,10 +41,10 @@ public class MemoryTransaction {
     final String description;
 
     /**
-     * Create a new transaction from provided information.
+     * Creates a new transaction object from provided information.
      *
-     * @param amount an Amount (of the asset provided below)
-     * @param asset an asset (must match <code>amount</code>)
+     * @param amount an amount (if present, must be an amount of {@code asset})
+     * @param asset an asset
      * @param operation a transaction type
      * @param exception a system exception if one has occurred
      * @param success a general success/failure status
@@ -69,25 +69,25 @@ public class MemoryTransaction {
     }
 
     /**
-     * Get the original Amount object for this transaction, if applicable.
+     * Gets the amount object for this transaction if it was present.
      *
-     * @return an Optional describing the original Amount
+     * @return an Optional describing the amount object
      */
-    public @NotNull Optional<Amount> getAmount() {
+    public @NotNull Optional<? extends Amount> getAmount() {
         return Optional.ofNullable(amount);
     }
 
     /**
-     * Get asset of the transaction.
+     * Gets the asset associated with the transaction.
      *
-     * @return the asset
+     * @return the associated asset
      */
     public final Asset getAsset() {
         return asset;
     }
 
     /**
-     * Get the operation (transaction type).
+     * Gets the operation (transaction type).
      *
      * @return the transaction type
      */
@@ -96,7 +96,7 @@ public class MemoryTransaction {
     }
 
     /**
-     * Get the exception associated with this transaction, if applicable.
+     * Gets the exception associated with this transaction, if applicable.
      *
      * @return an Optional describing a system exception
      */
@@ -114,7 +114,7 @@ public class MemoryTransaction {
     }
 
     /**
-     * Get additional detail about the transaction (if provided).
+     * Gets additional detail about the transaction (if provided).
      *
      * @return an Optional describing transaction detail
      */
@@ -123,7 +123,7 @@ public class MemoryTransaction {
     }
 
     /**
-     * Get a written description of this transaction.
+     * Gets a written description of this transaction.
      * <p>
      * If {@link #getInfo()} is present, it is returned preferentially.
      * The next fallback is {@link Operation#getTemplate()}, followed
@@ -132,11 +132,12 @@ public class MemoryTransaction {
      * @return a simple, non-empty description for this transaction
      */
     public final String getDescription() {
+        // FIXME make less eager?
         return description;
     }
 
     /**
-     * Get the primary actor or actors in this transaction.
+     * Gets the primary actor or actors in this transaction.
      *
      * @return the primary actor or actors
      */

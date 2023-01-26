@@ -15,7 +15,7 @@
  */
 package com.github.sanctum.economy.construct.system;
 
-import com.github.sanctum.economy.construct.Amount;
+import com.github.sanctum.economy.construct.assets.Amount;
 import org.jetbrains.annotations.NotNull;
 
 /**
