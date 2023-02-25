@@ -39,7 +39,7 @@ public abstract class AbstractPlayerEntity<T> extends BukkitEntity implements En
     }
 
     /**
-     * Get the offline player represented by this entity.
+     * Gets the offline player represented by this entity.
      * <p>
      * Savvy users may know--{@link Player} subclasses OfflinePlayer,
      * so it's perfectly reasonable to run an <code>instanceof</code>
@@ -53,7 +53,7 @@ public abstract class AbstractPlayerEntity<T> extends BukkitEntity implements En
     }
 
     /**
-     * Attempt to resolve this entity to an online player.
+     * Attempts to resolve this entity to an online player.
      *
      * @return an online player (if possible) or null
      */

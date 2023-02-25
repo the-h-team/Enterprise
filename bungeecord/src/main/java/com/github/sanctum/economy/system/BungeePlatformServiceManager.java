@@ -32,7 +32,7 @@ public class BungeePlatformServiceManager extends PlatformServiceManager {
     }
 
     /**
-     * Get the active BungeeCord wallet service.
+     * Gets the active BungeeCord wallet service.
      *
      * @return the active BungeeCord wallet service
      */
@@ -42,7 +42,7 @@ public class BungeePlatformServiceManager extends PlatformServiceManager {
     }
 
     /**
-     * Set the active BungeeCord wallet service.
+     * Sets the active BungeeCord wallet service.
      *
      * @param walletService the active BungeeCord wallet service
      */
@@ -51,7 +51,7 @@ public class BungeePlatformServiceManager extends PlatformServiceManager {
     }
 
     /**
-     * Get the service manager instance for the BungeeCord platform.
+     * Gets the service manager instance for the BungeeCord platform.
      *
      * @return the service manager instance for BungeeCord
      * @throws IllegalStateException if the PlatformServiceManager singleton

@@ -38,7 +38,7 @@ public final class AsyncTransactionEvent<T extends MemoryTransaction> extends Ev
     final AtomicBoolean logged = new AtomicBoolean(false);
 
     /**
-     * Directly create a new transaction event.
+     * Directly creates a new transaction event.
      * <p>
      * Note: this constructor does not automatically call the event;
      * if that is desired you must do so separately.
@@ -56,7 +56,7 @@ public final class AsyncTransactionEvent<T extends MemoryTransaction> extends Ev
     }
 
     /**
-     * Get the transaction in this event.
+     * Gets the transaction in this event.
      *
      * @return the transaction in this event
      */
@@ -74,7 +74,7 @@ public final class AsyncTransactionEvent<T extends MemoryTransaction> extends Ev
     }
 
     /**
-     * Set whether this event should be logged to console.
+     * Sets whether this event should be logged to console.
      *
      * @param log whether to log
      */
@@ -103,7 +103,7 @@ public final class AsyncTransactionEvent<T extends MemoryTransaction> extends Ev
     }
 
     /**
-     * Create and call an event for a query operation.
+     * Creates and calls an event for a query operation.
      *
      * @param query a query transaction
      * @return the scheduled-to-be-called event
@@ -113,7 +113,7 @@ public final class AsyncTransactionEvent<T extends MemoryTransaction> extends Ev
     }
 
     /**
-     * Create and call an event for a receive operation.
+     * Creates and calls an event for a receive operation.
      *
      * @param give a give transaction
      * @return the scheduled-to-be-called event
@@ -123,7 +123,7 @@ public final class AsyncTransactionEvent<T extends MemoryTransaction> extends Ev
     }
 
     /**
-     * Create and call an event for a set operation.
+     * Creates and calls an event for a set operation.
      *
      * @param set a set transaction
      * @return the scheduled-to-be-called event
@@ -133,7 +133,7 @@ public final class AsyncTransactionEvent<T extends MemoryTransaction> extends Ev
     }
 
     /**
-     * Create and call an event for a source operation.
+     * Creates and calls an event for a source operation.
      *
      * @param take a take transaction
      * @return the scheduled-to-be-called event
@@ -143,7 +143,7 @@ public final class AsyncTransactionEvent<T extends MemoryTransaction> extends Ev
     }
 
     /**
-     * Create and call an event for a total operation.
+     * Creates and calls an event for a total operation.
      *
      * @param total a total transaction
      * @return the scheduled-to-be-called event

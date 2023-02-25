@@ -41,7 +41,7 @@ public abstract class AbstractProxyPlayerEntity<T> extends BungeeEntityImpl impl
     }
 
     /**
-     * Get the proxied player represented by this entity.
+     * Gets the proxied player represented by this entity.
      *
      * @return a ProxiedPlayer object
      */
@@ -50,7 +50,7 @@ public abstract class AbstractProxyPlayerEntity<T> extends BungeeEntityImpl impl
     }
 
     /**
-     * Attempt to resolve this entity to a connected player.
+     * Attempts to resolve this entity to a connected player.
      *
      * @return a connected player (if possible) or null
      */

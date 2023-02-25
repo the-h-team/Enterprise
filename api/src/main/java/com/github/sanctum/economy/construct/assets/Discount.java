@@ -117,7 +117,7 @@ public enum Discount {
     ;
 
     /**
-     * Produce a compiled discount.
+     * Produces a compiled discount.
      *
      * @param discount the discount amount
      * @return a new compiled discount
@@ -127,7 +127,7 @@ public enum Discount {
     }
 
     /**
-     * Produce a compiled discount.
+     * Produces a compiled discount.
      *
      * @param discount the discount as a valid BigDecimal string representation
      * @return a new compiled discount

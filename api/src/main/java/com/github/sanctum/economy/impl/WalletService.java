@@ -30,7 +30,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public interface WalletService<N extends EnterpriseEntity.PlayerEntity.ByUsername, U extends EnterpriseEntity.PlayerEntity.ByUniqueId> extends AttributableService {
     /**
-     * Get a wallet object for a player by username.
+     * Gets a wallet object for a player by username.
      *
      * @param player the player object
      * @return the wallet object for the player, identified by username
@@ -38,7 +38,7 @@ public interface WalletService<N extends EnterpriseEntity.PlayerEntity.ByUsernam
     Wallet<N> username(@NotNull N player);
 
     /**
-     * Get a contextual wallet object for a player by username.
+     * Gets a contextual wallet object for a player by username.
      *
      * @param player the player object
      * @param contexts the contexts to apply
@@ -47,7 +47,7 @@ public interface WalletService<N extends EnterpriseEntity.PlayerEntity.ByUsernam
     Wallet<N> username(@NotNull N player, @NotNull Context... contexts);
 
     /**
-     * Get a wallet object for a player by UniqueId.
+     * Gets a wallet object for a player by UniqueId.
      *
      * @param player the player object
      * @return the wallet object for the player, identified by UniqueId
@@ -55,7 +55,7 @@ public interface WalletService<N extends EnterpriseEntity.PlayerEntity.ByUsernam
     Wallet<U> uniqueId(U player);
 
     /**
-     * Get a contextual wallet object for a player by UniqueId.
+     * Gets a contextual wallet object for a player by UniqueId.
      *
      * @param player the player object
      * @param contexts the contexts to apply

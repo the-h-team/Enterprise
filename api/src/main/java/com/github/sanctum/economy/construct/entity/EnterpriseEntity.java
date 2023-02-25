@@ -111,7 +111,7 @@ public interface EnterpriseEntity {
      */
     interface PlayerEntity<T> extends EnterpriseEntity {
         /**
-         * Get the identifying property of the player.
+         * Gets the identifying property of the player.
          *
          * @return an identifying property of the player
          */

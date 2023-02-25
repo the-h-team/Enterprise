@@ -28,7 +28,7 @@ import java.util.Optional;
  */
 public interface Resolvable {
     /**
-     * Resolve this point to an EnterpriseEntity, if possible.
+     * Resolves this point to an EnterpriseEntity, if possible.
      *
      * @return an Optional describing the resolved entity, if present
      */

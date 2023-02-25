@@ -20,7 +20,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.function.BiFunction;
 
 /**
- * Generate new assets with a common group.
+ * Generates new assets with a common group.
  *
  * @since 2.0.0
  * @author ms5984
@@ -30,7 +30,7 @@ public class AssetFactory<T extends Asset> {
     private final BiFunction<String, String, T> constructor;
 
     /**
-     * Create a factory for the provided asset group and base class.
+     * Creates a factory for the provided asset group and base class.
      *
      * @param group asset group name
      * @param constructor a base class constructor
@@ -41,7 +41,7 @@ public class AssetFactory<T extends Asset> {
     }
 
     /**
-     * Get the group string of this factory.
+     * Gets the group string of this factory.
      *
      * @return this factory's group string
      */
@@ -50,7 +50,7 @@ public class AssetFactory<T extends Asset> {
     }
 
     /**
-     * Create an asset with this factory's group,
+     * Creates an asset with this factory's group,
      * constructor and the provided identifier.
      *
      * @param identifier asset identifier
@@ -61,7 +61,7 @@ public class AssetFactory<T extends Asset> {
     }
 
     /**
-     * Create a factory for the provided asset group.
+     * Creates a factory for the provided asset group.
      *
      * @param group asset group name
      */
@@ -70,7 +70,7 @@ public class AssetFactory<T extends Asset> {
     }
 
     /**
-     * Create a factory for the provided asset group using the
+     * Creates a factory for the provided asset group using the
      * selected base class constructor function.
      *
      * @param group asset group name

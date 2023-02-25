@@ -32,7 +32,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public interface Contextual {
     /**
-     * Get all contexts applied to this point.
+     * Gets all contexts applied to this point.
      *
      * @return all contexts applied to this point
      */

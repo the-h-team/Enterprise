@@ -166,7 +166,7 @@ public interface AbstractCurrency extends DecimalAsset, Asset {
         }
 
         /**
-         * Get the name of this token.
+         * Gets the name of this token.
          *
          * @return the name of this token
          */

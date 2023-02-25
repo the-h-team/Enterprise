@@ -26,7 +26,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public interface AttributableService {
     /**
-     * Get the system implementation info associated with this service.
+     * Gets the system implementation info associated with this service.
      *
      * @return associated implementation info
      */

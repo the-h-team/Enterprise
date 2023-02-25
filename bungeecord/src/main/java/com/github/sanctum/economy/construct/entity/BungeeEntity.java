@@ -51,7 +51,7 @@ public interface BungeeEntity extends EnterpriseEntity {
         }
 
         /**
-         * Get an entity for a proxied player that uses their UniqueId.
+         * Gets an entity for a proxied player that uses their UniqueId.
          *
          * @param player a proxied player
          * @return a new player entity
@@ -61,7 +61,7 @@ public interface BungeeEntity extends EnterpriseEntity {
         }
 
         /**
-         * Get an entity for a connected player that uses their UniqueId.
+         * Gets an entity for a connected player that uses their UniqueId.
          *
          * @param connectedPlayer a connected player
          * @return a new player entity
@@ -84,7 +84,7 @@ public interface BungeeEntity extends EnterpriseEntity {
         }
 
         /**
-         * Get an entity for a proxied player that uses their username.
+         * Gets an entity for a proxied player that uses their username.
          *
          * @param player a proxied player
          * @return a new player entity
@@ -94,7 +94,7 @@ public interface BungeeEntity extends EnterpriseEntity {
         }
 
         /**
-         * Get an entity for a connected player that uses their username.
+         * Gets an entity for a connected player that uses their username.
          *
          * @param connectedPlayer a connected player
          * @return a new player entity
@@ -119,7 +119,7 @@ public interface BungeeEntity extends EnterpriseEntity {
         }
 
         /**
-         * Get an entity for a backend server that uses its configured name.
+         * Gets an entity for a backend server that uses its configured name.
          *
          * @param serverInfo a backend server info object
          * @return a new backend server entity
