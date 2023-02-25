@@ -26,7 +26,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public interface Queryable extends Resolvable {
     /**
-     * Check for an amount.
+     * Checks for an amount on this point.
      *
      * @param amount an amount of an asset
      * @return true if this point has the amount

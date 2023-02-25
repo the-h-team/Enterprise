@@ -29,7 +29,7 @@ import java.util.Optional;
  */
 public interface Total extends Resolvable {
     /**
-     * Query for the amount of this asset held.
+     * Queries this point for an amount.
      *
      * @param asset the asset to total
      * @return an Optional describing the amount, if present

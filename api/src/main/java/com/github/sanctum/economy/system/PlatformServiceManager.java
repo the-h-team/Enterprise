@@ -41,7 +41,7 @@ public abstract class PlatformServiceManager {
     final String name;
 
     /**
-     * Create a new service manager instance for a particular platform.
+     * Creates a new service manager instance for a particular platform.
      *
      * @param name the name of the platform
      */
@@ -50,7 +50,7 @@ public abstract class PlatformServiceManager {
     }
 
     /**
-     * Get the name of the platform.
+     * Gets the name of the platform.
      *
      * @return the name of the platform
      */
@@ -59,7 +59,7 @@ public abstract class PlatformServiceManager {
     }
 
     /**
-     * Get the active currency service.
+     * Gets the active currency service.
      *
      * @return the active currency service, if any
      */
@@ -68,7 +68,7 @@ public abstract class PlatformServiceManager {
     }
 
     /**
-     * Set the active currency service.
+     * Sets the active currency service.
      *
      * @param currencyService a currency service
      */
@@ -77,14 +77,14 @@ public abstract class PlatformServiceManager {
     }
 
     /**
-     * Get the active wallet service.
+     * Gets the active wallet service.
      *
      * @return the active wallet service, if any
      */
     public abstract @Nullable WalletService<?, ?> getWalletService();
 
     /**
-     * Get the service manager instance.
+     * Gets the service manager instance.
      *
      * @return the service manager instance
      * @throws IllegalStateException if the platform service manager is not set

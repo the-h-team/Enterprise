@@ -31,7 +31,7 @@ import java.util.UUID;
 // FIXME pull impl
 public class BukkitEntity extends EnterpriseEntityImpl {
     /**
-     * Create an entity from a namespace and identifier.
+     * Creates an entity from a namespace and identifier.
      * <p>
      * <b>Does not perform validation. Internal use only!</b>
      *
@@ -55,7 +55,7 @@ public class BukkitEntity extends EnterpriseEntityImpl {
         }
 
         /**
-         * Get an entity for an online player which uses their UniqueId.
+         * Gets an entity for an online player which uses their UniqueId.
          *
          * @param player an online player
          * @return a new player entity
@@ -65,7 +65,7 @@ public class BukkitEntity extends EnterpriseEntityImpl {
         }
 
         /**
-         * Get an entity for an offline player which uses their UniqueId.
+         * Gets an entity for an offline player which uses their UniqueId.
          *
          * @param offlinePlayer an offline player
          * @return a new player entity
@@ -88,7 +88,7 @@ public class BukkitEntity extends EnterpriseEntityImpl {
         }
 
         /**
-         * Get an entity for an online player which uses their username.
+         * Gets an entity for an online player which uses their username.
          *
          * @param player an online player
          * @return a new player entity
@@ -98,7 +98,7 @@ public class BukkitEntity extends EnterpriseEntityImpl {
         }
 
         /**
-         * Get an entity for an offline player which uses their username.
+         * Gets an entity for an offline player which uses their username.
          *
          * @param offlinePlayer an offline player
          * @return a new player entity
@@ -135,7 +135,7 @@ public class BukkitEntity extends EnterpriseEntityImpl {
         }
 
         /**
-         * Get an entity for the server that specifically
+         * Gets an entity for the server that specifically
          * identifies the console command sender.
          *
          * @param console the console command sender instance
@@ -148,7 +148,7 @@ public class BukkitEntity extends EnterpriseEntityImpl {
         }
 
         /**
-         * Get an entity associated with the server with
+         * Gets an entity associated with the server with
          * an arbitrary identifier component.
          *
          * @param identity a custom identifier

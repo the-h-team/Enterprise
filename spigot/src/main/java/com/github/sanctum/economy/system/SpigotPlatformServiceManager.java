@@ -32,7 +32,7 @@ public class SpigotPlatformServiceManager extends PlatformServiceManager {
     }
 
     /**
-     * Get the active Spigot wallet service.
+     * Gets the active Spigot wallet service.
      *
      * @return the active Spigot wallet service
      */
@@ -42,7 +42,7 @@ public class SpigotPlatformServiceManager extends PlatformServiceManager {
     }
 
     /**
-     * Set the active Spigot wallet service.
+     * Sets the active Spigot wallet service.
      *
      * @param walletService the active Spigot wallet service
      */
@@ -51,7 +51,7 @@ public class SpigotPlatformServiceManager extends PlatformServiceManager {
     }
 
     /**
-     * Get the service manager instance for the Spigot platform.
+     * Gets the service manager instance for the Spigot platform.
      *
      * @return the service manager instance for Spigot
      * @throws IllegalStateException if the PlatformServiceManager singleton

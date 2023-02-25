@@ -25,7 +25,7 @@ public abstract class AbstractSystemException extends Exception {
     private static final long serialVersionUID = -359957975837575116L;
 
     /**
-     * Construct an exception with a message.
+     * Constructs an exception with a message.
      *
      * @param message a message
      */
@@ -34,7 +34,7 @@ public abstract class AbstractSystemException extends Exception {
     }
 
     /**
-     * Construct an exception with a message and cause.
+     * Constructs an exception with a message and cause.
      *
      * @param message a message
      * @param cause a cause throwable
@@ -44,7 +44,7 @@ public abstract class AbstractSystemException extends Exception {
     }
 
     /**
-     * Construct an exception with a cause.
+     * Constructs an exception with a cause.
      *
      * @param cause a cause throwable
      */

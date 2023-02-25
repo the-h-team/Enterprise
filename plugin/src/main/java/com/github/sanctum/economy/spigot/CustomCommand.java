@@ -49,7 +49,7 @@ public abstract class CustomCommand extends Command implements PluginIdentifiabl
     }
 
     /**
-     * Send a prefixed message.
+     * Sends a prefixed message.
      *
      * @param sender a command sender
      * @param message a message

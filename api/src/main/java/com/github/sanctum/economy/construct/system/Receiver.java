@@ -26,7 +26,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public interface Receiver extends Resolvable {
     /**
-     * Attempt to give an amount to this receiver.
+     * Gives an amount to this point.
      *
      * @param amount an amount of an asset
      * @throws AcceptError if this point cannot accept the amount
@@ -43,7 +43,7 @@ public interface Receiver extends Resolvable {
         private static final long serialVersionUID = -5318173096317818284L;
 
         /**
-         * Construct an exception with an Amount and a message.
+         * Constructs an exception with an Amount and a message.
          *
          * @param amount an amount of an asset
          * @param message a message
@@ -53,7 +53,7 @@ public interface Receiver extends Resolvable {
         }
 
         /**
-         * Construct an exception with an Amount, a message and cause.
+         * Constructs an exception with an Amount, a message and cause.
          *
          * @param amount an amount of an asset
          * @param message a message
@@ -64,7 +64,7 @@ public interface Receiver extends Resolvable {
         }
 
         /**
-         * Construct an exception with an Amount and a cause.
+         * Constructs an exception with an Amount and a cause.
          *
          * @param amount an amount of an asset
          * @param cause a cause throwable

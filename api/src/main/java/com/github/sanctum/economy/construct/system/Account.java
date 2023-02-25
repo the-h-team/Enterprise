@@ -28,7 +28,7 @@ import java.util.Optional;
  */
 public interface Account {
     /**
-     * Get the custodian for this account.
+     * Gets the custodian for this account.
      *
      * @return the fiduciary responsible for this account
      */
@@ -44,7 +44,7 @@ public interface Account {
     @NotNull AccountView accessAs(@NotNull EnterpriseEntity entity) throws AccessDenied;
 
     /**
-     * Allow an entity to access this account.
+     * Allows an entity to access this account.
      *
      * @param entity an entity
      * @param level an initial level of access
@@ -53,16 +53,16 @@ public interface Account {
     void addEntity(@NotNull EnterpriseEntity entity, AccessLevel level) throws DuplicateEntity;
 
     /**
-     * Set the access level of an entity.
+     * Sets the access level of another entity.
      *
-     * @param entity an entity
+     * @param entity another entity
      * @param level a level of access
      * @return an Optional describing the previous level of access, if present
      */
     @NotNull Optional<AccessLevel> setEntityAccess(@NotNull EnterpriseEntity entity, AccessLevel level);
 
     /**
-     * Remove an entity from this account.
+     * Removes an entity from this account.
      *
      * @param entity an entity
      * @return true if access was present and removed
@@ -109,7 +109,7 @@ public interface Account {
         private static final long serialVersionUID = 1113963021969850967L;
 
         /**
-         * Construct an exception with an Entity and a message.
+         * Constructs an exception with an Entity and a message.
          *
          * @param entity the denied entity
          * @param message a message
@@ -119,7 +119,7 @@ public interface Account {
         }
 
         /**
-         * Construct an exception with an Entity, a message and cause.
+         * Constructs an exception with an Entity, a message and cause.
          *
          * @param entity the denied entity
          * @param message a message
@@ -130,7 +130,7 @@ public interface Account {
         }
 
         /**
-         * Construct an exception with an Entity and a cause.
+         * Constructs an exception with an Entity and a cause.
          *
          * @param entity the denied entity
          * @param cause a cause throwable
@@ -150,7 +150,7 @@ public interface Account {
         private static final long serialVersionUID = -6017977336788103629L;
 
         /**
-         * Construct an exception with an Entity and a message.
+         * Constructs an exception with an Entity and a message.
          *
          * @param entity the duplicated entity
          * @param message a message
@@ -160,7 +160,7 @@ public interface Account {
         }
 
         /**
-         * Construct an exception with an Entity, a message and cause.
+         * Constructs an exception with an Entity, a message and cause.
          *
          * @param entity the duplicated entity
          * @param message a message
@@ -171,7 +171,7 @@ public interface Account {
         }
 
         /**
-         * Construct an exception with an Entity and a cause.
+         * Constructs an exception with an Entity and a cause.
          *
          * @param entity the duplicated entity
          * @param cause a cause throwable
@@ -192,7 +192,7 @@ public interface Account {
         protected final Account account;
 
         /**
-         * Construct an exception with an Entity, an Account and a message.
+         * Constructs an exception with an Entity, an Account and a message.
          *
          * @param owner the entity
          * @param account the account
@@ -204,7 +204,7 @@ public interface Account {
         }
 
         /**
-         * Construct an exception with an Entity,
+         * Constructs an exception with an Entity,
          * an Account, a message and cause.
          *
          * @param owner the entity
@@ -218,7 +218,7 @@ public interface Account {
         }
 
         /**
-         * Construct an exception with an Entity, an Account and a cause.
+         * Constructs an exception with an Entity, an Account and a cause.
          *
          * @param owner the entity
          * @param account the account
@@ -230,7 +230,7 @@ public interface Account {
         }
 
         /**
-         * Get the account associated with this exception.
+         * Gets the account associated with this exception.
          *
          * @return the account associated with this exception
          */
@@ -249,7 +249,7 @@ public interface Account {
         private static final long serialVersionUID = 2094168851736743929L;
 
         /**
-         * Construct an exception with an Entity and a message.
+         * Constructs an exception with an Entity and a message.
          *
          * @param entity the denied entity
          * @param message a message
@@ -259,7 +259,7 @@ public interface Account {
         }
 
         /**
-         * Construct an exception with an Entity, a message and cause.
+         * Constructs an exception with an Entity, a message and cause.
          *
          * @param entity the denied entity
          * @param message a message
@@ -270,7 +270,7 @@ public interface Account {
         }
 
         /**
-         * Construct an exception with an Entity and a cause.
+         * Constructs an exception with an Entity and a cause.
          *
          * @param entity the denied entity
          * @param cause a cause throwable

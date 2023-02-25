@@ -37,7 +37,7 @@ public final class BungeeTransactionEvent<T extends MemoryTransaction> extends A
     final AtomicBoolean logged = new AtomicBoolean(false);
 
     /**
-     * Create a new event from a transaction and a final callback.
+     * Creates a new event from a transaction and a final callback.
      * <p>
      * Note: this constructor does not automatically call the event;
      * if that is desired you must do so separately.
@@ -56,7 +56,7 @@ public final class BungeeTransactionEvent<T extends MemoryTransaction> extends A
     }
 
     /**
-     * Get the transaction in this event.
+     * Gets the transaction in this event.
      *
      * @return the transaction in this event
      */
@@ -74,7 +74,7 @@ public final class BungeeTransactionEvent<T extends MemoryTransaction> extends A
     }
 
     /**
-     * Set whether this event should be logged to console.
+     * Sets whether this event should be logged to console.
      *
      * @param log whether to log
      */
@@ -102,7 +102,7 @@ public final class BungeeTransactionEvent<T extends MemoryTransaction> extends A
     }
 
     /**
-     * Create and call an event for a query operation.
+     * Creates and calls an event for a query operation.
      * <p>
      * Uses callback to log to console.
      *
@@ -115,7 +115,7 @@ public final class BungeeTransactionEvent<T extends MemoryTransaction> extends A
     }
 
     /**
-     * Create and call an event for a receive operation.
+     * Creates and calls an event for a receive operation.
      *
      * @param give the give transaction
      * @return the new event registered to runAsync
@@ -126,7 +126,7 @@ public final class BungeeTransactionEvent<T extends MemoryTransaction> extends A
     }
 
     /**
-     * Create and call an event for a set operation.
+     * Creates and calls an event for a set operation.
      *
      * @param set the set transaction
      * @return the new event registered to runAsync
@@ -137,7 +137,7 @@ public final class BungeeTransactionEvent<T extends MemoryTransaction> extends A
     }
 
     /**
-     * Create and call an event for a source operation.
+     * Creates and calls an event for a source operation.
      *
      * @param take the take transaction
      * @return the new event registered to runAsync
@@ -148,7 +148,7 @@ public final class BungeeTransactionEvent<T extends MemoryTransaction> extends A
     }
 
     /**
-     * Create and call an event for a total operation.
+     * Creates and calls an event for a total operation.
      *
      * @param total the total transaction
      * @return the new event registered to runAsync

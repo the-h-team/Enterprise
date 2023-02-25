@@ -26,7 +26,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public interface Source extends Resolvable {
     /**
-     * Attempt to take an amount from this source.
+     * Takes an amount from this point.
      *
      * @param amount an amount of an asset
      * @throws SupplyError if this point cannot produce the amount
@@ -43,7 +43,7 @@ public interface Source extends Resolvable {
         private static final long serialVersionUID = 1018956534551717937L;
 
         /**
-         * Construct an exception with an Amount and a message.
+         * Constructs an exception with an Amount and a message.
          *
          * @param amount an amount of an asset
          * @param message a message
@@ -53,7 +53,7 @@ public interface Source extends Resolvable {
         }
 
         /**
-         * Construct an exception with an Amount, a message and cause.
+         * Constructs an exception with an Amount, a message and cause.
          *
          * @param amount an amount of an asset
          * @param message a message
@@ -64,7 +64,7 @@ public interface Source extends Resolvable {
         }
 
         /**
-         * Construct an exception with an Amount and a cause.
+         * Constructs an exception with an Amount and a cause.
          *
          * @param amount an amount of an asset
          * @param cause a cause throwable

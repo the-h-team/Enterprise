@@ -18,21 +18,21 @@ package com.github.sanctum.economy.impl;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Get information about a system implementation, such as by a plugin.
+ * Exposes information about a system implementation, such as by a plugin.
  *
  * @since 2.0.0
  * @author ms5984
  */
 public interface SystemImplementation {
     /**
-     * Get the name of the assembly.
+     * Gets the name of the assembly.
      *
      * @return the name of the implementing assembly
      */
     @NotNull String getName();
 
     /**
-     * Get the version of the implementation.
+     * Gets the version of the implementation.
      * <p>
      * Defaults to empty string.
      *

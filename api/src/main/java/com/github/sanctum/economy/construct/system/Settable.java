@@ -26,7 +26,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public interface Settable extends Resolvable {
     /**
-     * Set an amount.
+     * Sets an amount.
      *
      * @param amount an amount of an asset
      * @throws SetError if <code>amount</code> cannot be set for this point
@@ -43,7 +43,7 @@ public interface Settable extends Resolvable {
         private static final long serialVersionUID = 5857783323258413601L;
 
         /**
-         * Construct an exception with an Amount and a message.
+         * Constructs an exception with an Amount and a message.
          *
          * @param amount an amount of an asset
          * @param message a message
@@ -53,7 +53,7 @@ public interface Settable extends Resolvable {
         }
 
         /**
-         * Construct an exception with an Amount, a message and cause.
+         * Constructs an exception with an Amount, a message and cause.
          *
          * @param amount an amount of an asset
          * @param message a message
@@ -64,7 +64,7 @@ public interface Settable extends Resolvable {
         }
 
         /**
-         * Construct an exception with an Amount and a cause.
+         * Constructs an exception with an Amount and a cause.
          *
          * @param amount an amount of an asset
          * @param cause a cause throwable

@@ -48,21 +48,21 @@ public interface AccountView extends Balance, Contextual {
     }
 
     /**
-     * Get the access level of this view.
+     * Gets the access level of this view.
      *
      * @return the access level of this view
      */
     @NotNull AccessLevel accessLevel();
 
     /**
-     * Get the entity whose perspective determines this view.
+     * Gets the entity whose perspective determines this view.
      *
      * @return the entity whose perspective determines this view
      */
     @NotNull EnterpriseEntity viewer();
 
     /**
-     * Get the account associated with this view.
+     * Gets the account associated with this view.
      *
      * @return the account associated with this view
      */

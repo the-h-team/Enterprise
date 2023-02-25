@@ -36,7 +36,7 @@ public abstract class BungeeCommand extends Command implements TabExecutor {
     }
 
     /**
-     * Send a prefixed message.
+     * Sends a prefixed message.
      *
      * @param sender a command sender
      * @param message a message

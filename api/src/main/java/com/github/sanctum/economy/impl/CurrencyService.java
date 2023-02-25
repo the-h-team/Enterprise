@@ -29,7 +29,7 @@ import java.util.Optional;
  */
 public interface CurrencyService extends AttributableService {
     /**
-     * Get the main currency for this system.
+     * Gets the main currency for this system.
      * <p>
      * If you only have one global currency, reference it here.
      *
@@ -38,7 +38,7 @@ public interface CurrencyService extends AttributableService {
     @NotNull Optional<? extends AbstractCurrency> getMainCurrency();
 
     /**
-     * Get the main currency for a particular world.
+     * Gets the main currency for a particular world.
      *
      * @param world a world context
      * @return an Optional describing <code>world</code>'s main currency

@@ -29,7 +29,7 @@ import java.util.Optional;
  */
 public interface Wallet<T extends EnterpriseEntity & EnterpriseEntity.PlayerEntity<?>> extends Balance, Contextual {
     /**
-     * Resolve the player entity associated with this wallet, if possible.
+     * Resolves the player entity associated with this wallet, if possible.
      *
      * @return an Optional describing the resolved player entity, if present
      */

@@ -29,7 +29,7 @@ public class EntityException extends AbstractSystemException {
     protected final EnterpriseEntity enterpriseEntity;
 
     /**
-     * Construct an exception with an Entity and a message.
+     * Constructs an exception with an Entity and a message.
      *
      * @param entity an entity
      * @param message a message
@@ -40,7 +40,7 @@ public class EntityException extends AbstractSystemException {
     }
 
     /**
-     * Construct an exception with an Entity, a message and cause.
+     * Constructs an exception with an Entity, a message and cause.
      *
      * @param entity an entity
      * @param message a message
@@ -52,7 +52,7 @@ public class EntityException extends AbstractSystemException {
     }
 
     /**
-     * Construct an exception with an Entity and a cause.
+     * Constructs an exception with an Entity and a cause.
      *
      * @param entity an entity
      * @param cause a cause throwable
@@ -63,7 +63,7 @@ public class EntityException extends AbstractSystemException {
     }
 
     /**
-     * Get the entity associated with this exception.
+     * Gets the entity associated with this exception.
      *
      * @return an entity
      */
