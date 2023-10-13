@@ -1,6 +1,6 @@
 name: Enterprise
 version: ${project.version}
-main: com.github.sanctum.economy.bukkit.EnterpriseBukkit
+main: io.github.sanctum.economy.bukkit.EnterpriseBukkit
 softdepend: [Vault]
 author: Sanctum
 api-version: 1.13
