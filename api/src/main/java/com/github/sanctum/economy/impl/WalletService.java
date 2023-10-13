@@ -1,5 +1,5 @@
 /*
- *   Copyright 2022 Sanctum <https://github.com/the-h-team>
+ *   Copyright 2023 Sanctum <https://github.com/the-h-team>
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 package com.github.sanctum.economy.impl;
 
-import com.github.sanctum.economy.construct.entity.EnterpriseEntity;
+import com.github.sanctum.economy.construct.entity.PlayerHandle;
 import com.github.sanctum.economy.construct.system.Context;
 import com.github.sanctum.economy.construct.system.Wallet;
 import org.jetbrains.annotations.NotNull;
@@ -25,10 +25,10 @@ import org.jetbrains.annotations.NotNull;
  *
  * @since 2.0.0
  * @author ms5984
- * @param <N> the player-by-username class for this implementation
- * @param <U> the player-by-uniqueId class for this implementation
+ * @param <N> the player-by-username handle for this implementation
+ * @param <U> the player-by-uniqueId handle for this implementation
  */
-public interface WalletService<N extends EnterpriseEntity.PlayerEntity.ByUsername, U extends EnterpriseEntity.PlayerEntity.ByUniqueId> extends AttributableService {
+public interface WalletService<N extends PlayerHandle.ByUsername, U extends PlayerHandle.ByUniqueId> extends AttributableService {
     /**
      * Gets a wallet object for a player by username.
      *

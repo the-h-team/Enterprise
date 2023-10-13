@@ -1,5 +1,5 @@
 /*
- *   Copyright 2021 Sanctum <https://github.com/the-h-team>
+ *   Copyright 2023 Sanctum <https://github.com/the-h-team>
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -17,28 +17,23 @@ package com.github.sanctum.economy.transaction;
 
 import com.github.sanctum.economy.construct.assets.Amount;
 import com.github.sanctum.economy.construct.assets.Asset;
-import com.github.sanctum.economy.construct.entity.EnterpriseEntity;
-import com.github.sanctum.economy.construct.system.AbstractSystemException;
+import com.github.sanctum.economy.construct.system.Resolvable;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Optional;
-
 /**
- * Holds transaction information in memory for reference.
+ * Holds transaction information in memory.
  *
  * @since 2.0.0
  * @author ms5984
  */
+@ApiStatus.NonExtendable
 public class MemoryTransaction {
-    transient final Amount amount;
-    transient final Asset asset;
-    transient final AbstractSystemException exception;
-    transient final EnterpriseEntity[] primaries;
-    final boolean success;
-    final String info;
+    final Amount amount;
+    final Asset asset;
+    final Resolvable[] primaries;
     final Operation operation;
-    final String description;
 
     /**
      * Creates a new transaction object from provided information.
@@ -46,43 +41,36 @@ public class MemoryTransaction {
      * @param amount an amount (if present, must be an amount of {@code asset})
      * @param asset an asset
      * @param operation a transaction type
-     * @param exception a system exception if one has occurred
-     * @param success a general success/failure status
-     * @param info custom detail for the transaction
-     * @param primaries the involved entity or entities
+     * @param primaries the involved participant or participants
      */
     protected MemoryTransaction(@Nullable Amount amount,
                                 @NotNull Asset asset,
                                 @NotNull Operation operation,
-                                @Nullable AbstractSystemException exception,
-                                boolean success,
-                                @Nullable String info,
-                                @NotNull EnterpriseEntity... primaries) {
+                                @NotNull Resolvable... primaries) {
+        if (amount != null && !amount.getAsset().equals(asset)) {
+            throw new IllegalArgumentException("Amount asset must match transaction asset");
+        }
         this.amount = amount;
         this.asset = asset;
         this.operation = operation;
-        this.exception = exception;
-        this.success = success;
-        this.info = info;
         this.primaries = primaries;
-        this.description = info != null ? info : operation.getTemplate().map(this::doReplacements).orElseGet(this::defaultReplacements);
     }
 
     /**
-     * Gets the amount object for this transaction if it was present.
+     * Gets the amount for this transaction, if present.
      *
-     * @return an Optional describing the amount object
+     * @return an amount or null
      */
-    public @NotNull Optional<? extends Amount> getAmount() {
-        return Optional.ofNullable(amount);
+    public @Nullable Amount getAmount() {
+        return amount;
     }
 
     /**
-     * Gets the asset associated with the transaction.
+     * Gets the asset associated with this transaction.
      *
      * @return the associated asset
      */
-    public final Asset getAsset() {
+    public final @NotNull Asset getAsset() {
         return asset;
     }
 
@@ -91,49 +79,8 @@ public class MemoryTransaction {
      *
      * @return the transaction type
      */
-    public final Operation getOperation() {
+    public final @NotNull Operation getOperation() {
         return operation;
-    }
-
-    /**
-     * Gets the exception associated with this transaction, if applicable.
-     *
-     * @return an Optional describing a system exception
-     */
-    public @NotNull Optional<? extends AbstractSystemException> getException() {
-        return Optional.ofNullable(exception);
-    }
-
-    /**
-     * Whether the transaction in general was a success.
-     *
-     * @return true on successful transactions
-     */
-    public boolean isSuccess() {
-        return success;
-    }
-
-    /**
-     * Gets additional detail about the transaction (if provided).
-     *
-     * @return an Optional describing transaction detail
-     */
-    public final Optional<String> getInfo() {
-        return Optional.ofNullable(info);
-    }
-
-    /**
-     * Gets a written description of this transaction.
-     * <p>
-     * If {@link #getInfo()} is present, it is returned preferentially.
-     * The next fallback is {@link Operation#getTemplate()}, followed
-     * by {@link Operation#defaultTemplate}.
-     *
-     * @return a simple, non-empty description for this transaction
-     */
-    public final String getDescription() {
-        // FIXME make less eager?
-        return description;
     }
 
     /**
@@ -141,58 +88,7 @@ public class MemoryTransaction {
      *
      * @return the primary actor or actors
      */
-    public final EnterpriseEntity[] getPrimaries() {
+    public final @NotNull Resolvable @NotNull [] getPrimaries() {
         return primaries;
-    }
-
-    @NotNull String doReplacements(@NotNull String template) {
-        if (!template.contains("{") || !template.contains("}")) return template;
-        if (template.contains("{0}")) {
-            template = template.replace("{0}", String.valueOf(amount));
-        }
-        if (template.contains("{1}")) {
-            template = template.replace("{1}", listPrimaries());
-        }
-        if (template.contains("{2}")) {
-            template = template.replace("{2}", String.valueOf(asset));
-        }
-        if (template.contains("{3}")) {
-            template = template.replace("{3}", String.valueOf(success));
-        }
-        if (template.contains("{4}")) {
-            template = template.replace("{4}", String.valueOf(operation));
-        }
-        if (template.contains("{5}")) {
-            template = template.replace("{5}", String.valueOf(exception));
-        }
-        return template;
-    }
-
-    String defaultReplacements() {
-        return doReplacements(operation.defaultTemplate);
-    }
-
-    String listPrimaries() {
-        if (primaries.length == 0) {
-            return "[none]"; // I guess
-        }
-        final String firstName = primaries[0].getFriendlyName();
-        if (primaries.length == 1) return firstName;
-        final StringBuilder sb = new StringBuilder(firstName);
-        for (int i = 1; i < primaries.length; ++i) {
-            final String friendlyName = primaries[i].getFriendlyName();
-            if (i + 1 < primaries.length) {
-                if (friendlyName.contains(",")) {
-                    // complex list
-                    sb.append("; ");
-                } else {
-                    sb.append(", ");
-                }
-            } else {
-                sb.append(" and ");
-            }
-            sb.append(friendlyName);
-        }
-        return sb.toString();
     }
 }

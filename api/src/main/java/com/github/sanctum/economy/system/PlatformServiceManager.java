@@ -1,5 +1,5 @@
 /*
- *   Copyright 2022 Sanctum <https://github.com/the-h-team>
+ *   Copyright 2023 Sanctum <https://github.com/the-h-team>
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -15,10 +15,8 @@
  */
 package com.github.sanctum.economy.system;
 
-import com.github.sanctum.economy.impl.CurrencyService;
 import com.github.sanctum.economy.impl.WalletService;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * Exposes available economy services with agnostic base API.
@@ -34,10 +32,6 @@ public abstract class PlatformServiceManager {
      * The manager singleton.
      */
     protected static PlatformServiceManager instance;
-    /**
-     * The active currency service.
-     */
-    protected CurrencyService currencyService;
     final String name;
 
     /**
@@ -59,29 +53,12 @@ public abstract class PlatformServiceManager {
     }
 
     /**
-     * Gets the active currency service.
-     *
-     * @return the active currency service, if any
-     */
-    public final @Nullable CurrencyService getCurrencyService() {
-        return currencyService;
-    }
-
-    /**
-     * Sets the active currency service.
-     *
-     * @param currencyService a currency service
-     */
-    public final void setCurrencyService(@Nullable CurrencyService currencyService) {
-        this.currencyService = currencyService;
-    }
-
-    /**
      * Gets the active wallet service.
      *
-     * @return the active wallet service, if any
+     * @return the active wallet service
+     * @throws IllegalStateException if the wallet service is not initialized
      */
-    public abstract @Nullable WalletService<?, ?> getWalletService();
+    public abstract @NotNull WalletService<?, ?> getWalletService();
 
     /**
      * Gets the service manager instance.
@@ -89,7 +66,7 @@ public abstract class PlatformServiceManager {
      * @return the service manager instance
      * @throws IllegalStateException if the platform service manager is not set
      */
-    public static PlatformServiceManager getInstance() {
+    public static @NotNull PlatformServiceManager getInstance() {
         if (instance == null) throw new IllegalStateException("No platform service manager instance found.");
         return instance;
     }

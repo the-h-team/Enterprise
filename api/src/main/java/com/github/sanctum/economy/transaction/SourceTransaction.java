@@ -1,5 +1,5 @@
 /*
- *   Copyright 2021 Sanctum <https://github.com/the-h-team>
+ *   Copyright 2023 Sanctum <https://github.com/the-h-team>
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -17,11 +17,11 @@ package com.github.sanctum.economy.transaction;
 
 import com.github.sanctum.economy.construct.assets.Amount;
 import com.github.sanctum.economy.construct.entity.EnterpriseEntity;
-import com.github.sanctum.economy.construct.system.Source.SupplyError;
+import com.github.sanctum.economy.construct.system.Source;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Optional;
+import java.util.UUID;
 
 /**
  * An {@link Operation#TAKE}-based transaction.
@@ -34,31 +34,39 @@ public final class SourceTransaction extends MemoryTransaction {
      * Creates a new take-based transaction.
      *
      * @param amount an amount
-     * @param exception a SupplyError if one has occurred
-     * @param info optionally, more/custom text detail
      * @param primaries the involved entity or entities
      */
-    public SourceTransaction(@NotNull Amount amount, @Nullable SupplyError exception, @Nullable String info, @NotNull EnterpriseEntity... primaries) {
-        super(amount, amount.getAsset(), Operation.TAKE, exception, exception == null, info, primaries);
+    public SourceTransaction(@NotNull Amount amount, @NotNull EnterpriseEntity... primaries) {
+        super(amount, amount.getAsset(), Operation.TAKE, primaries);
     }
 
     /**
-     * Gets the {@link SupplyError} for this transaction if it is unsuccessful.
+     * Gets the amount being taken by this transaction.
      *
-     * @return an Optional describing a SupplyError
+     * @return the amount
      */
     @Override
-    public @NotNull Optional<SupplyError> getException() {
-        return Optional.ofNullable((SupplyError) exception);
+    public @Nullable Amount getAmount() {
+        return amount;
     }
 
     /**
-     * Whether the point successfully supplied the amount.
+     * Represents the result of a take transaction.
      *
-     * @return true if the amount was taken successfully
+     * @since 2.0.0
      */
-    @Override
-    public boolean isSuccess() {
-        return success;
+    static final class Result extends com.github.sanctum.economy.transaction.Result<SourceTransaction, Source.SupplyError> {
+        /**
+         * Creates a result from a UUID, transaction spec, error and success.
+         *
+         * @param uuid the unique identifier of this transaction execution
+         * @param transaction the original transaction specification
+         * @param error the error, if any
+         * @param success whether the transaction was "successful"
+         * @implSpec Success is an implementation-specific concept.
+         */
+        public Result(@NotNull UUID uuid, @NotNull SourceTransaction transaction, @Nullable Source.SupplyError error, boolean success) {
+            super(uuid, transaction, error, success);
+        }
     }
 }

@@ -1,5 +1,5 @@
 /*
- *   Copyright 2021 Sanctum <https://github.com/the-h-team>
+ *   Copyright 2023 Sanctum <https://github.com/the-h-team>
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -16,12 +16,12 @@
 package com.github.sanctum.economy.transaction;
 
 import com.github.sanctum.economy.construct.assets.Amount;
-import com.github.sanctum.economy.construct.entity.EnterpriseEntity;
-import com.github.sanctum.economy.construct.system.Receiver.AcceptError;
+import com.github.sanctum.economy.construct.system.Receiver;
+import com.github.sanctum.economy.construct.system.Resolvable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Optional;
+import java.util.UUID;
 
 /**
  * An {@link Operation#GIVE}-based transaction.
@@ -34,31 +34,39 @@ public final class ReceiveTransaction extends MemoryTransaction {
      * Creates a new give-based transaction.
      *
      * @param amount an amount
-     * @param exception an AcceptError if one has occurred
-     * @param info optionally, more/custom text detail
-     * @param primaries the involved entity or entities
+     * @param primaries the involved actor or actors
      */
-    public ReceiveTransaction(@NotNull Amount amount, @Nullable AcceptError exception, @Nullable String info, @NotNull EnterpriseEntity... primaries) {
-        super(amount, amount.getAsset(), Operation.GIVE, exception, exception == null, info, primaries);
+    public ReceiveTransaction(@NotNull Amount amount, @NotNull Resolvable... primaries) {
+        super(amount, amount.getAsset(), Operation.GIVE, primaries);
     }
 
     /**
-     * Gets the {@link AcceptError} for this transaction if it is unsuccessful.
+     * Gets the amount being given by this transaction.
      *
-     * @return an Optional describing an AcceptError
+     * @return the amount
      */
     @Override
-    public @NotNull Optional<AcceptError> getException() {
-        return Optional.ofNullable((AcceptError) exception);
+    public @NotNull Amount getAmount() {
+        return amount;
     }
 
     /**
-     * Whether the point successfully received the amount.
+     * Represents the result of a receive transaction.
      *
-     * @return true if the amount was given successfully
+     * @since 2.0.0
      */
-    @Override
-    public boolean isSuccess() {
-        return success;
+    static final class Result extends com.github.sanctum.economy.transaction.Result<ReceiveTransaction, Receiver.AcceptError> {
+        /**
+         * Creates a result from a UUID, transaction spec, error and success.
+         *
+         * @param uuid the unique identifier of this transaction execution
+         * @param transaction the original transaction specification
+         * @param error the error, if any
+         * @param success whether the transaction was "successful"
+         * @implSpec Success is an implementation-specific concept.
+         */
+        public Result(@NotNull UUID uuid, @NotNull ReceiveTransaction transaction, @Nullable Receiver.AcceptError error, boolean success) {
+            super(uuid, transaction, error, success);
+        }
     }
 }

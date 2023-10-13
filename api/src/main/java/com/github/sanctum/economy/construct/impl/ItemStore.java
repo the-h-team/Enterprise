@@ -1,5 +1,5 @@
 /*
- *   Copyright 2022 Sanctum <https://github.com/the-h-team>
+ *   Copyright 2023 Sanctum <https://github.com/the-h-team>
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -15,12 +15,14 @@
  */
 package com.github.sanctum.economy.construct.impl;
 
-import com.github.sanctum.economy.construct.assets.*;
+import com.github.sanctum.economy.construct.assets.Amount;
+import com.github.sanctum.economy.construct.assets.Asset;
+import com.github.sanctum.economy.construct.assets.ItemAsset;
 import com.github.sanctum.economy.construct.system.Balance;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
-import java.util.Optional;
 
 /**
  * An object suitable for managing amounts of item assets.
@@ -28,7 +30,7 @@ import java.util.Optional;
  * @since 2.0.0
  * @author ms5984
  */
-public class ItemStore implements Balance {
+public abstract class ItemStore implements Balance {
     protected final HashMap<String, Integer> counts = new HashMap<>();
 
     @Override
@@ -78,13 +80,13 @@ public class ItemStore implements Balance {
     }
 
     @Override
-    public @NotNull Optional<ItemAsset.ItemAmount> total(@NotNull Asset asset) {
+    public @Nullable ItemAsset.ItemAmount total(@NotNull Asset asset) {
         if (asset instanceof ItemAsset) {
             final Integer integer = counts.get(asset.getIdentifier());
             if (integer != null) {
-                return Optional.of(((ItemAsset) asset).getAmount(integer));
+                return ((ItemAsset) asset).getAmount(integer);
             }
         }
-        return Optional.empty();
+        return null;
     }
 }

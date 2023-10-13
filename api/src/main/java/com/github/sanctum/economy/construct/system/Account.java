@@ -1,5 +1,5 @@
 /*
- *   Copyright 2021 Sanctum <https://github.com/the-h-team>
+ *   Copyright 2023 Sanctum <https://github.com/the-h-team>
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -15,216 +15,286 @@
  */
 package com.github.sanctum.economy.construct.system;
 
-import com.github.sanctum.economy.construct.entity.EnterpriseEntity;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Optional;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Manage assets on account with a custodian.
  *
  * @since 2.0.0
+ * @see Custodian
  * @author ms5984
  */
-public interface Account {
+public abstract class Account {
     /**
-     * Gets the custodian for this account.
+     * Gets the custodian that is responsible for this account.
      *
-     * @return the fiduciary responsible for this account
+     * @return the custodian for this account
      */
-    @NotNull Fiduciary getCustodian();
+    public abstract @NotNull Custodian getCustodian();
 
     /**
-     * Access this account from the context of the provided entity.
+     * Accesses this account from the context of the provided participant.
      *
-     * @param entity an entity
-     * @return an object with the level of access desired for the entity
-     * @throws AccessDenied if the entity is not allowed access
+     * @param participant a participant
+     * @return a view with the level of access allowed to the participant
+     * @throws AccessDenied if the participant is not allowed access
      */
-    @NotNull AccountView accessAs(@NotNull EnterpriseEntity entity) throws AccessDenied;
+    public abstract @NotNull AccountView accessAs(@NotNull Resolvable participant) throws AccessDenied;
 
     /**
-     * Allows an entity to access this account.
+     * Allows a participant to access this account.
+     * <p>
+     * A default level of access is used.
      *
-     * @param entity an entity
-     * @param level an initial level of access
-     * @throws DuplicateEntity if <code>entity</code> is already on the account
+     * @param participant a participant
+     * @return the default level of access set by the implementation
+     * @throws DuplicateParticipant if {@code participant} is already on the
+     * account
+     * @implNote This method is equivalent to {@code add(participant, null)}.
      */
-    void addEntity(@NotNull EnterpriseEntity entity, AccessLevel level) throws DuplicateEntity;
+    public @NotNull AccessLevel add(@NotNull Resolvable participant) throws DuplicateParticipant {
+        return add(participant, null);
+    }
 
     /**
-     * Sets the access level of another entity.
+     * Allows a participant to access this account.
      *
-     * @param entity another entity
-     * @param level a level of access
-     * @return an Optional describing the previous level of access, if present
+     * @param participant a participant
+     * @param level an initial level of access or null for a system-default
+     * @return {@code level} (if not {@code null}) or the default level
+     * set by the implementation
+     * @throws DuplicateParticipant if {@code participant} is already on the
+     * account
+     * @implSpec Implementations are free to define a default level of access
+     * to be used whenever {@code level} is null.
      */
-    @NotNull Optional<AccessLevel> setEntityAccess(@NotNull EnterpriseEntity entity, AccessLevel level);
+    @Contract("_, !null -> param2")
+    public abstract @NotNull AccessLevel add(@NotNull Resolvable participant, @Nullable AccessLevel level) throws DuplicateParticipant;
 
     /**
-     * Removes an entity from this account.
+     * Removes a participant from this account.
      *
-     * @param entity an entity
+     * @param participant a participant
      * @return true if access was present and removed
-     * @throws LastOwner if removing <code>entity</code>
-     * would leave the account with no owner
+     * @throws LastOwner if removing {@code participant} would leave this
+     * account without owner
      */
-    boolean removeEntity(@NotNull EnterpriseEntity entity) throws LastOwner;
+    public abstract boolean remove(@NotNull Resolvable participant) throws LastOwner;
+
+    /**
+     * Gets the access level of a participant.
+     *
+     * @param participant a participant
+     * @return the level of access, if any, or null
+     */
+    public abstract @Nullable AccessLevel getAccessLevel(@NotNull Resolvable participant);
+
+    /**
+     * Sets the access level of a participant.
+     * <p>
+     * Note that setting a participant's access level to null does
+     * <strong>not</strong> remove the participant from the account.
+     *
+     * @param participant a participant
+     * @param level a level of access or null to reset to system-default
+     * @return the participant's new level of access
+     * @throws NotAnAccountParticipant if {@code participant} is not an account participant
+     * @implSpec Implementations are free to define a default level of access
+     * to be used whenever {@code level} is null.
+     */
+    public abstract @NotNull AccessLevel setAccessLevel(@NotNull Resolvable participant, @Nullable AccessLevel level) throws NotAnAccountParticipant;
 
     /**
      * Describes (in general) a level of account access.
      * <p>
-     * <b>What action(s) are permitted by a level is
-     * left up to implementations:)</b>
+     * <strong>What actions are permitted by a level are <em>intentionally</em>
+     * left up to implementations:)</strong>
      *
      * @since 2.0.0
      * @author ms5984
      */
-    enum AccessLevel {
+    public enum AccessLevel {
         /**
-         * Can check the account.
+         * View-only account access.
+         * <p>
+         * <h2>Example permissions:</h2>
+         * <ul>
+         *     <li>View account balance</li>
+         * </ul>
          */
         VIEWER,
         /**
-         * Ordinary member.
+         * An ordinary level of account access allowing transaction.
+         * <p>
+         * <h2>Example permissions:</h2>
+         * <ul>
+         *     <li>View account balance</li>
+         *     <li>Deposit funds</li>
+         *     <li>Withdraw funds</li>
+         * </ul>
          */
         MEMBER,
         /**
-         * Can manage Viewers and Members but not Owners.
+         * An account access level with additional meta-permissions.
+         * <p>
+         * By default, co-owners can manage {@linkplain #VIEWER VIEWERS}
+         * and {@linkplain #MEMBER MEMBERS}, but not {@linkplain #OWNER OWNERS}
+         * or other co-owners.
+         * <h2>Example permissions:</h2>
+         * <ul>
+         *     <li>View account balance</li>
+         *     <li>Deposit funds</li>
+         *     <li>Withdraw funds</li>
+         *     <li>Manage {@linkplain #VIEWER viewers}</li>
+         *     <li>Manage {@linkplain #MEMBER members}</li>
+         * </ul>
          */
         CO_OWNER,
         /**
          * Full account access.
+         * <h2>Example permissions:</h2>
+         * <ul>
+         *     <li>View account balance</li>
+         *     <li>Deposit funds</li>
+         *     <li>Withdraw funds</li>
+         *     <li>Manage {@linkplain #VIEWER viewers}</li>
+         *     <li>Manage {@linkplain #MEMBER members}</li>
+         *     <li>Manage {@linkplain #CO_OWNER co-owners}</li>
+         *     <li>Manage owners</li>
+         *     <li>Close account</li>
+         * </ul>
          */
         OWNER
     }
 
     /**
-     * Raised if an entity is not permitted access to an account.
+     * Raised if a participant is not permitted access to an account.
      *
      * @since 2.0.0
      * @author ms5984
      */
-    class AccessDenied extends EntityException {
+    public static class AccessDenied extends ParticipantException {
         private static final long serialVersionUID = 1113963021969850967L;
 
         /**
-         * Constructs an exception with an Entity and a message.
+         * Constructs an exception with a participant and a message.
          *
-         * @param entity the denied entity
+         * @param participant the denied participant
          * @param message a message
          */
-        public AccessDenied(@NotNull EnterpriseEntity entity, String message) {
-            super(entity, message);
+        public AccessDenied(@NotNull Resolvable participant, String message) {
+            super(participant, message);
         }
 
         /**
-         * Constructs an exception with an Entity, a message and cause.
+         * Constructs an exception with a participant, a message and cause.
          *
-         * @param entity the denied entity
+         * @param participant the denied participant
          * @param message a message
          * @param cause a cause throwable
          */
-        public AccessDenied(@NotNull EnterpriseEntity entity, String message, Throwable cause) {
-            super(entity, message, cause);
+        public AccessDenied(@NotNull Resolvable participant, String message, Throwable cause) {
+            super(participant, message, cause);
         }
 
         /**
-         * Constructs an exception with an Entity and a cause.
+         * Constructs an exception with a participant and a cause.
          *
-         * @param entity the denied entity
+         * @param participant the denied participant
          * @param cause a cause throwable
          */
-        public AccessDenied(@NotNull EnterpriseEntity entity, Throwable cause) {
-            super(entity, cause);
+        public AccessDenied(@NotNull Resolvable participant, Throwable cause) {
+            super(participant, cause);
         }
     }
 
     /**
-     * Raised if an entity is already a member of an account.
+     * Raised if a participant is already a participant of an account.
      *
      * @since 2.0.0
      * @author ms5984
      */
-    class DuplicateEntity extends EntityException {
+    public static class DuplicateParticipant extends ParticipantException {
         private static final long serialVersionUID = -6017977336788103629L;
 
         /**
-         * Constructs an exception with an Entity and a message.
+         * Constructs an exception with a participant and a message.
          *
-         * @param entity the duplicated entity
+         * @param participant the duplicated participant
          * @param message a message
          */
-        public DuplicateEntity(@NotNull EnterpriseEntity entity, String message) {
-            super(entity, message);
+        public DuplicateParticipant(@NotNull Resolvable participant, String message) {
+            super(participant, message);
         }
 
         /**
-         * Constructs an exception with an Entity, a message and cause.
+         * Constructs an exception with a participant, a message and cause.
          *
-         * @param entity the duplicated entity
+         * @param participant the duplicated participant
          * @param message a message
          * @param cause a cause throwable
          */
-        public DuplicateEntity(@NotNull EnterpriseEntity entity, String message, Throwable cause) {
-            super(entity, message, cause);
+        public DuplicateParticipant(@NotNull Resolvable participant, String message, Throwable cause) {
+            super(participant, message, cause);
         }
 
         /**
-         * Constructs an exception with an Entity and a cause.
+         * Constructs an exception with a participant and a cause.
          *
-         * @param entity the duplicated entity
+         * @param participant the duplicated participant
          * @param cause a cause throwable
          */
-        public DuplicateEntity(@NotNull EnterpriseEntity entity, Throwable cause) {
-            super(entity, cause);
+        public DuplicateParticipant(@NotNull Resolvable participant, Throwable cause) {
+            super(participant, cause);
         }
     }
 
     /**
-     * Raised if the entity being removed from an account is the only owner.
+     * Raised if the participant being removed from an account is the only owner.
      *
      * @since 2.0.0
      * @author ms5984
      */
-    class LastOwner extends EntityException {
+    public static class LastOwner extends ParticipantException {
         private static final long serialVersionUID = -3459768126506047552L;
         protected final Account account;
 
         /**
-         * Constructs an exception with an Entity, an Account and a message.
+         * Constructs an exception with a participant, an account and a message.
          *
-         * @param owner the entity
+         * @param owner the last owning participant
          * @param account the account
          * @param message a message
          */
-        public LastOwner(@NotNull EnterpriseEntity owner, @NotNull Account account, String message) {
+        public LastOwner(@NotNull Resolvable owner, @NotNull Account account, String message) {
             super(owner, message);
             this.account = account;
         }
 
         /**
-         * Constructs an exception with an Entity,
-         * an Account, a message and cause.
+         * Constructs an exception with a participant, an account,
+         * a message and cause.
          *
-         * @param owner the entity
+         * @param owner the last owning participant
          * @param account the account
          * @param message a message
          * @param cause a cause throwable
          */
-        public LastOwner(@NotNull EnterpriseEntity owner, @NotNull Account account, String message, Throwable cause) {
+        public LastOwner(@NotNull Resolvable owner, @NotNull Account account, String message, Throwable cause) {
             super(owner, message, cause);
             this.account = account;
         }
 
         /**
-         * Constructs an exception with an Entity, an Account and a cause.
+         * Constructs an exception with a participant, an account and a cause.
          *
-         * @param owner the entity
+         * @param owner the last owning participant
          * @param account the account
          * @param cause a cause throwable
          */
-        public LastOwner(@NotNull EnterpriseEntity owner, @NotNull Account account, Throwable cause) {
+        public LastOwner(@NotNull Resolvable owner, @NotNull Account account, Throwable cause) {
             super(owner, cause);
             this.account = account;
         }
@@ -234,49 +304,52 @@ public interface Account {
          *
          * @return the account associated with this exception
          */
-        public final Account getAccount() {
+        public final @NotNull Account getAccount() {
             return account;
         }
     }
 
     /**
-     * Raised if an entity must be an existing account member.
+     * Raised if a participant must be an account participant in order
+     * to perform a particular action.
+     * <p>
+     * This exception is not specific to an access level.
      *
      * @since 2.0.0
      * @author ms5984
      */
-    class NotAMember extends EntityException {
+    public static class NotAnAccountParticipant extends ParticipantException {
         private static final long serialVersionUID = 2094168851736743929L;
 
         /**
-         * Constructs an exception with an Entity and a message.
+         * Constructs an exception with a participant and a message.
          *
-         * @param entity the denied entity
+         * @param participant the denied participant
          * @param message a message
          */
-        public NotAMember(@NotNull EnterpriseEntity entity, String message) {
-            super(entity, message);
+        public NotAnAccountParticipant(@NotNull Resolvable participant, String message) {
+            super(participant, message);
         }
 
         /**
-         * Constructs an exception with an Entity, a message and cause.
+         * Constructs an exception with a participant, a message and cause.
          *
-         * @param entity the denied entity
+         * @param participant the denied participant
          * @param message a message
          * @param cause a cause throwable
          */
-        public NotAMember(@NotNull EnterpriseEntity entity, String message, Throwable cause) {
-            super(entity, message, cause);
+        public NotAnAccountParticipant(@NotNull Resolvable participant, String message, Throwable cause) {
+            super(participant, message, cause);
         }
 
         /**
-         * Constructs an exception with an Entity and a cause.
+         * Constructs an exception with a participant and a cause.
          *
-         * @param entity the denied entity
+         * @param participant the denied participant
          * @param cause a cause throwable
          */
-        public NotAMember(@NotNull EnterpriseEntity entity, Throwable cause) {
-            super(entity, cause);
+        public NotAnAccountParticipant(@NotNull Resolvable participant, Throwable cause) {
+            super(participant, cause);
         }
     }
 }

@@ -1,5 +1,5 @@
 /*
- *   Copyright 2021 Sanctum <https://github.com/the-h-team>
+ *   Copyright 2023 Sanctum <https://github.com/the-h-team>
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@ package com.github.sanctum.economy.transaction;
 import com.github.sanctum.economy.construct.assets.Amount;
 import com.github.sanctum.economy.construct.entity.EnterpriseEntity;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * An {@link Operation#QUERY}-based transaction.
@@ -31,21 +30,19 @@ public final class QueryTransaction extends MemoryTransaction {
      * Creates a new query-based transaction object.
      *
      * @param amount an amount
-     * @param has whether the point had the amount
-     * @param info optionally, more/custom text detail
-     * @param primaries the involved entity or entities
+     * @param primaries the involved participant or participants
      */
-    public QueryTransaction(@NotNull Amount amount, boolean has, @Nullable String info, @NotNull EnterpriseEntity... primaries) {
-        super(amount, amount.getAsset(), Operation.QUERY, null, has, info, primaries);
+    public QueryTransaction(@NotNull Amount amount, @NotNull EnterpriseEntity... primaries) {
+        super(amount, amount.getAsset(), Operation.QUERY, primaries);
     }
 
     /**
-     * Whether the point has the amount.
+     * Gets the amount being tested by this transaction.
      *
-     * @return true if the amount is present
+     * @return the amount
      */
     @Override
-    public boolean isSuccess() {
-        return success;
+    public @NotNull Amount getAmount() {
+        return amount;
     }
 }

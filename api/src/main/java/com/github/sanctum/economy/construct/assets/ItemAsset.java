@@ -1,5 +1,5 @@
 /*
- *   Copyright 2022 Sanctum <https://github.com/the-h-team>
+ *   Copyright 2023 Sanctum <https://github.com/the-h-team>
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@ import org.jetbrains.annotations.NotNull;
  * @since 2.0.0
  * @author ms5984
  */
-public abstract class ItemAsset extends AssetImpl implements IntegralAsset {
+public abstract class ItemAsset extends AssetImpl {
     /**
      * The common group for all item-based assets.
      */
@@ -58,9 +58,35 @@ public abstract class ItemAsset extends AssetImpl implements IntegralAsset {
      * @param count the whole number count of the asset
      * @return a new amount object
      */
-    @Override
     public final @NotNull ItemAsset.ItemAmount getAmount(int count) {
         return new ItemAmount(count, this);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+
+        ItemAsset itemAsset = (ItemAsset) o;
+
+        return itemId.equals(itemAsset.itemId);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + itemId.hashCode();
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "ItemAsset{" +
+                "itemId='" + itemId + '\'' +
+                ", group='" + group + '\'' +
+                ", identifier='" + identifier + '\'' +
+                '}';
     }
 
     /**
@@ -86,8 +112,6 @@ public abstract class ItemAsset extends AssetImpl implements IntegralAsset {
             return amount;
         }
 
-        // TODO toString?
-
         @Override
         public boolean equals(Object o) {
             if (this == o) return true;
@@ -108,6 +132,14 @@ public abstract class ItemAsset extends AssetImpl implements IntegralAsset {
             contents count of a double-chest inventory: 9*6=54; 54*64 = 3456 total
              */
             return asset.hashCode() ^ amount * 524309;
+        }
+
+        @Override
+        public String toString() {
+            return "ItemAmount{" +
+                    "amount=" + amount +
+                    ", asset=" + asset +
+                    '}';
         }
     }
 }

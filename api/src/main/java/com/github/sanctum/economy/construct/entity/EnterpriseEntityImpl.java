@@ -37,4 +37,30 @@ class EnterpriseEntityImpl implements EnterpriseEntity {
     public final @IdentityKey @NotNull String getIdentityKey() {
         return identityKey;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        EnterpriseEntityImpl that = (EnterpriseEntityImpl) o;
+
+        if (!namespace.equals(that.namespace)) return false;
+        return identityKey.equals(that.identityKey);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = namespace.hashCode();
+        result = 31 * result + identityKey.hashCode();
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "EnterpriseEntityImpl{" +
+                "namespace='" + namespace + '\'' +
+                ", identityKey='" + identityKey + '\'' +
+                '}';
+    }
 }

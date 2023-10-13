@@ -1,5 +1,5 @@
 /*
- *   Copyright 2021 Sanctum <https://github.com/the-h-team>
+ *   Copyright 2023 Sanctum <https://github.com/the-h-team>
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -21,8 +21,6 @@ import com.github.sanctum.economy.construct.entity.EnterpriseEntity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Optional;
-
 /**
  * An {@link Operation#TOTAL}-based transaction.
  *
@@ -35,31 +33,19 @@ public final class TotalTransaction extends MemoryTransaction {
      *
      * @param amount the amount possessed by the point, if any
      * @param asset the asset being totalled
-     * @param info optionally, more/custom text detail
      * @param primaries the involved entity or entities
      */
-    public TotalTransaction(@Nullable Amount amount, @NotNull Asset asset, @Nullable String info, @NotNull EnterpriseEntity... primaries) {
-        super(amount, asset, Operation.TOTAL, null, amount != null, info, primaries);
+    public TotalTransaction(@Nullable Amount amount, @NotNull Asset asset, @NotNull EnterpriseEntity... primaries) {
+        super(amount, asset, Operation.TOTAL, primaries);
     }
 
     /**
      * Gets the total amount of {@link #getAsset()} possessed by this point.
      *
-     * @return an Optional describing an Amount
-     * @implSpec Should be empty if {@link #isSuccess()} is false.
+     * @return the amount if present or null
      */
     @Override
-    public @NotNull Optional<Amount> getAmount() {
-        return Optional.ofNullable(amount);
-    }
-
-    /**
-     * Whether the point has any amount of the specified asset.
-     *
-     * @return true if the asset is present in any amount
-     */
-    @Override
-    public boolean isSuccess() {
-        return success;
+    public @Nullable Amount getAmount() {
+        return amount;
     }
 }

@@ -1,5 +1,5 @@
 /*
- *   Copyright 2021 Sanctum <https://github.com/the-h-team>
+ *   Copyright 2023 Sanctum <https://github.com/the-h-team>
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -18,15 +18,13 @@ package com.github.sanctum.economy.construct.assets;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
-import java.math.BigDecimal;
-
 /**
  * Represents a simple, whole-number amount of an asset.
  *
  * @since 2.0.0
  */
 @ApiStatus.NonExtendable
-public interface IntegralAmount extends Amount, DecimalAmountLike {
+public interface IntegralAmount extends Amount, IntegralAmountLike {
     /**
      * Gets the integer value of this amount.
      *
@@ -35,7 +33,7 @@ public interface IntegralAmount extends Amount, DecimalAmountLike {
     int getIntegralAmount();
 
     @Override
-    default @NotNull DecimalAmount asDecimalAmount() {
-        return new DecimalAmountImpl(getAsset(), BigDecimal.valueOf(getIntegralAmount()));
+    default @NotNull IntegralAmount asIntegralAmount() {
+        return this;
     }
 }

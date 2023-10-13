@@ -1,5 +1,5 @@
 /*
- *   Copyright 2021 Sanctum <https://github.com/the-h-team>
+ *   Copyright 2023 Sanctum <https://github.com/the-h-team>
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -18,8 +18,7 @@ package com.github.sanctum.economy.construct.system;
 import com.github.sanctum.economy.construct.assets.Amount;
 import com.github.sanctum.economy.construct.assets.Asset;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Optional;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * A point that can be queried for its totals of assets.
@@ -32,7 +31,7 @@ public interface Total extends Resolvable {
      * Queries this point for an amount.
      *
      * @param asset the asset to total
-     * @return an Optional describing the amount, if present
+     * @return an amount of {@code asset} if present or null
      */
-    @NotNull Optional<? extends Amount> total(@NotNull Asset asset);
+    @Nullable Amount total(@NotNull Asset asset);
 }

@@ -1,5 +1,5 @@
 /*
- *   Copyright 2022 Sanctum <https://github.com/the-h-team>
+ *   Copyright 2023 Sanctum <https://github.com/the-h-team>
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -17,16 +17,21 @@ package com.github.sanctum.economy.construct.assets;
 
 import org.intellij.lang.annotations.Pattern;
 import org.intellij.lang.annotations.RegExp;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.annotation.Documented;
 
 /**
- * Things that are holdable and/or tradable.
+ * Things of value that are holdable and/or tradable.
  *
+ * @implNote Assets objects are immutable and safe to use in collections. If
+ * you would like to establish any additional properties, you need to create
+ * API that exposes those properties by mapping.
  * @since 2.0.0
  * @author ms5984
  */
+@ApiStatus.NonExtendable
 public interface Asset {
     /**
      * Valid groups must start with a lowercase letter; may contain lowercase
@@ -61,14 +66,16 @@ public interface Asset {
     @interface Identifier {}
 
     /**
-     * Gets a brief description of the asset's type.
+     * Gets the asset's group.
+     * <p>
+     * This is usually a brief description of the asset's type.
      * <p>
      * Built-in types include:
      * <ul>
      *     <li>{@code item} for items</li>
      * </ul>
      *
-     * @return a basic description of this asset's type
+     * @return this asset's group
      */
     @Group @NotNull String getGroup();
 
@@ -78,4 +85,17 @@ public interface Asset {
      * @return a group-unique name for this asset
      */
     @Identifier @NotNull String getIdentifier();
+
+    /**
+     * Gets an asset object with the given group and identifier.
+     * <p>
+     * Assets are immutable.
+     *
+     * @param group a valid group
+     * @param identifier a valid identifier
+     * @return an asset object
+     */
+    static Asset of(@Group @NotNull String group, @Identifier @NotNull String identifier) {
+        return new AssetImpl(group, identifier);
+    }
 }

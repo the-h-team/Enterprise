@@ -1,5 +1,5 @@
 /*
- *   Copyright 2021 Sanctum <https://github.com/the-h-team>
+ *   Copyright 2023 Sanctum <https://github.com/the-h-team>
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -18,8 +18,6 @@ package com.github.sanctum.economy.construct.system;
 import com.github.sanctum.economy.construct.entity.EnterpriseEntity;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Optional;
-
 /**
  * A point that may be resolvable to an {@link EnterpriseEntity}.
  *
@@ -28,11 +26,9 @@ import java.util.Optional;
  */
 public interface Resolvable {
     /**
-     * Resolves this point to an EnterpriseEntity, if possible.
+     * Resolves this point to an {@linkplain EnterpriseEntity}.
      *
-     * @return an Optional describing the resolved entity, if present
+     * @return the resolved entity
      */
-    default @NotNull Optional<? extends EnterpriseEntity> toEntity() {
-        return Optional.empty();
-    }
+    @NotNull EnterpriseEntity toEntity();
 }
