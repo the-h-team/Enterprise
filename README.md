@@ -21,9 +21,9 @@ economy plugins and manage each of them directly through the plugin.
 ## I am a server owner, and I need Enterprise.
 Grab the newest versions from Central right here:
 
-|Platform|Version+Downloads link|
-|---|---|
-|Spigot and Bungee|[![Spigot/Bungee Plugin on Maven Central](https://img.shields.io/maven-central/v/io.github.the-h-team/enterprise-parent?style=for-the-badge)](https://search.maven.org/artifact/io.github.the-h-team/enterprise-plugin)|
+| Platform | Version+Downloads link                                                                                                                                                                                                  |
+|----------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Bukkit   | [![Spigot/Bungee Plugin on Maven Central](https://img.shields.io/maven-central/v/io.github.the-h-team/enterprise-parent?style=for-the-badge)](https://search.maven.org/artifact/io.github.the-h-team/enterprise-plugin) |
 
 ## Using Enterprise providers
 ###### For plugin developers requiring economy support
