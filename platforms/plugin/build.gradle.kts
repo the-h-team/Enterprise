@@ -2,6 +2,8 @@ plugins {
     id("enterprise.java-conventions")
 }
 
+// TODO shadow configuration
+
 repositories {
     maven("https://jitpack.io") {
         name = "jitpack-vault"

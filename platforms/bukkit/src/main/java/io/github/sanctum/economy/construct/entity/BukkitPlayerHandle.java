@@ -40,11 +40,11 @@ public abstract class BukkitPlayerHandle {
             this.entity = entity;
         }
 
+        @SuppressWarnings("deprecation")
         @Override
         public @Nullable OfflinePlayer getOfflinePlayer() {
             final Player player = getPlayer();
             if (player != null) return player;
-            //noinspection deprecation
             final OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(entity.identifyingProperty);
             return sanityCheckOfflinePlayer(offlinePlayer);
         }
