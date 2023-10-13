@@ -1,5 +1,5 @@
 /*
- *   Copyright 2021 Sanctum <https://github.com/the-h-team>
+ *   Copyright 2023 Sanctum <https://github.com/the-h-team>
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -15,10 +15,9 @@
  */
 package com.github.sanctum.economy.construct.system;
 
-import com.github.sanctum.economy.construct.entity.EnterpriseEntity;
+import com.github.sanctum.economy.construct.entity.PlayerEntity;
+import com.github.sanctum.economy.construct.entity.PlayerHandle;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Optional;
 
 /**
  * Marks an object able to manage limited amounts of assets
@@ -27,12 +26,19 @@ import java.util.Optional;
  * @since 2.0.0
  * @author ms5984
  */
-public interface Wallet<T extends EnterpriseEntity & EnterpriseEntity.PlayerEntity<?>> extends Balance, Contextual {
+public interface Wallet<T extends PlayerHandle> extends Balance, Contextual {
     /**
-     * Resolves the player entity associated with this wallet, if possible.
+     * Gets the player handle for this wallet.
      *
-     * @return an Optional describing the resolved player entity, if present
+     * @return the player handle for this wallet
+     */
+    T getPlayerHandle();
+
+    /**
+     * Gets the player entity for this wallet.
+     *
+     * @return the player entity for this wallet
      */
     @Override
-    @NotNull Optional<T> toEntity();
+    @NotNull PlayerEntity<?> toEntity();
 }

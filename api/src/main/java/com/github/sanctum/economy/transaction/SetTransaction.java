@@ -1,5 +1,5 @@
 /*
- *   Copyright 2021 Sanctum <https://github.com/the-h-team>
+ *   Copyright 2023 Sanctum <https://github.com/the-h-team>
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -17,11 +17,11 @@ package com.github.sanctum.economy.transaction;
 
 import com.github.sanctum.economy.construct.assets.Amount;
 import com.github.sanctum.economy.construct.entity.EnterpriseEntity;
-import com.github.sanctum.economy.construct.system.Settable.SetError;
+import com.github.sanctum.economy.construct.system.Settable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Optional;
+import java.util.UUID;
 
 /**
  * An {@link Operation#SET}-based transaction.
@@ -34,31 +34,35 @@ public final class SetTransaction extends MemoryTransaction {
      * Creates a new set-based transaction.
      *
      * @param amount an amount
-     * @param exception a SetError if one has occurred
-     * @param info optionally, more/custom text detail
      * @param primaries the involved entity or entities
      */
-    public SetTransaction(@NotNull Amount amount, @Nullable SetError exception, @Nullable String info, @NotNull EnterpriseEntity... primaries) {
-        super(amount, amount.getAsset(), Operation.SET, exception, exception == null, info, primaries);
+    public SetTransaction(@NotNull Amount amount, @NotNull EnterpriseEntity... primaries) {
+        super(amount, amount.getAsset(), Operation.SET, primaries);
     }
 
     /**
-     * Gets the {@link SetError} for this transaction if it is unsuccessful.
+     * Gets the amount being set by this transaction.
      *
-     * @return an Optional describing a SetError
+     * @return the amount
      */
     @Override
-    public @NotNull Optional<SetError> getException() {
-        return Optional.ofNullable((SetError) exception);
+    public @NotNull Amount getAmount() {
+        return amount;
     }
 
-    /**
-     * Whether the amount was successfully set for the point.
-     *
-     * @return true if the amount was set successfully
-     */
-    @Override
-    public boolean isSuccess() {
-        return success;
+    static final class Result extends com.github.sanctum.economy.transaction.Result<SetTransaction, Settable.SetError> {
+
+        /**
+         * Creates a result from a UUID, transaction spec, error and success.
+         *
+         * @param uuid the unique identifier of this transaction execution
+         * @param transaction the original transaction specification
+         * @param error the error, if any
+         * @param success whether the transaction was "successful"
+         * @implSpec Success is an implementation-specific concept.
+         */
+        public Result(@NotNull UUID uuid, @NotNull SetTransaction transaction, Settable.@Nullable SetError error, boolean success) {
+            super(uuid, transaction, error, success);
+        }
     }
 }

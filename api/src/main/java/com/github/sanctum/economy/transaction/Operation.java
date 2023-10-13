@@ -1,5 +1,5 @@
 /*
- *   Copyright 2022 Sanctum <https://github.com/the-h-team>
+ *   Copyright 2023 Sanctum <https://github.com/the-h-team>
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -15,11 +15,11 @@
  */
 package com.github.sanctum.economy.transaction;
 
-import com.github.sanctum.economy.construct.system.*;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.Optional;
-import java.util.concurrent.atomic.AtomicReference;
+import com.github.sanctum.economy.construct.system.Queryable;
+import com.github.sanctum.economy.construct.system.Receiver;
+import com.github.sanctum.economy.construct.system.Settable;
+import com.github.sanctum.economy.construct.system.Source;
+import com.github.sanctum.economy.construct.system.Total;
 
 /**
  * Represents the action performed in a transaction.
@@ -31,72 +31,31 @@ public enum Operation {
     /**
      * A point is checked for an amount (true or false only).
      */
-    QUERY(Queryable.class, "{1} has {0}"),
+    QUERY(Queryable.class),
     /**
      * A point is given an amount.
      */
-    GIVE(Receiver.class, "{1} was given {0}"),
+    GIVE(Receiver.class),
     /**
      * An amount is set for a point.
      */
-    SET(Settable.class, "Asset {2} was set to {0} for {1}"),
+    SET(Settable.class),
     /**
      * An amount is taken from a point.
      */
-    TAKE(Source.class, "{0} was taken from {1}"),
+    TAKE(Source.class),
     /**
      * A point is asked for its total of an asset.
      */
-    TOTAL(Total.class, "{1} has {0} of {2}"),
+    TOTAL(Total.class),
     ;
 
     /**
      * The system class that represents this operation.
      */
     public final Class<?> interfaceClass;
-    /**
-     * The default template string for
-     * {@link MemoryTransaction#getDescription()}.
-     * <p>
-     * The format is as such:
-     * <ol start="0">
-     *     <li>Amount</li>
-     *     <li>Primary/Primaries</li>
-     *     <li>Asset</li>
-     *     <li>Success</li>
-     *     <li>Operation</li>
-     *     <li>Exception</li>
-     * </ol>
-     */
-    public final String defaultTemplate;
-    final AtomicReference<String> template;
 
-    Operation(Class<?> interfaceClass, String defaultTemplate) {
+    Operation(Class<?> interfaceClass) {
         this.interfaceClass = interfaceClass;
-        this.defaultTemplate = defaultTemplate;
-        this.template = new AtomicReference<>(defaultTemplate);
-    }
-
-    /**
-     * Gets the description template for this action.
-     * <p>
-     * Templates may be configured by the server.
-     *
-     * @return an Optional describing a description template
-     * @see #defaultTemplate
-     * @see #setTemplate(String)
-     */
-    public Optional<String> getTemplate() {
-        return Optional.ofNullable(template.get());
-    }
-
-    /**
-     * Sets a custom description template for this action.
-     *
-     * @param template a new template
-     * @see #defaultTemplate
-     */
-    public void setTemplate(@Nullable String template) {
-        this.template.set(template);
     }
 }

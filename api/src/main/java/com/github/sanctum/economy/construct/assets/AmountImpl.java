@@ -31,8 +31,6 @@ class AmountImpl implements Amount {
         return asset;
     }
 
-    // TODO toString
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -44,5 +42,12 @@ class AmountImpl implements Amount {
     @Override
     public int hashCode() {
         return asset.hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return "AmountImpl{" +
+                "asset=" + asset +
+                '}';
     }
 }

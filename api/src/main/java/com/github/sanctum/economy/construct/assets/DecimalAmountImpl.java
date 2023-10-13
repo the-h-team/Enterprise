@@ -1,5 +1,5 @@
 /*
- *   Copyright 2022 Sanctum <https://github.com/the-h-team>
+ *   Copyright 2023 Sanctum <https://github.com/the-h-team>
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -22,36 +22,37 @@ import java.math.BigDecimal;
 
 @ApiStatus.Internal
 class DecimalAmountImpl extends AmountImpl implements DecimalAmount {
-    final BigDecimal decimal;
+    final BigDecimal amount;
 
-    DecimalAmountImpl(@NotNull Asset asset, @NotNull BigDecimal decimal) {
+    DecimalAmountImpl(@NotNull Asset asset, @NotNull BigDecimal amount) {
         super(asset);
-        this.decimal = decimal;
-    }
-
-    @Override
-    public @NotNull Asset getAsset() {
-        return asset;
+        this.amount = amount;
     }
 
     @Override
     public final @NotNull BigDecimal getDecimal() {
-        return decimal;
+        return amount;
     }
-
-    // TODO toString
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof DecimalAmountImpl)) return false;
         DecimalAmountImpl that = (DecimalAmountImpl) o;
-        return asset.equals(that.asset) && decimal.compareTo(that.decimal) == 0;
+        return asset.equals(that.asset) && amount.compareTo(that.amount) == 0;
     }
 
     @Override
     public int hashCode() {
         return super.hashCode() * 31 +
-                DecimalAmount.normalize(decimal).hashCode();
+                DecimalAmount.normalize(amount).hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return "DecimalAmountImpl{" +
+                "amount=" + amount +
+                ", asset=" + asset +
+                '}';
     }
 }

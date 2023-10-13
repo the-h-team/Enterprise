@@ -1,5 +1,5 @@
 /*
- *   Copyright 2022 Sanctum <https://github.com/the-h-team>
+ *   Copyright 2023 Sanctum <https://github.com/the-h-team>
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -15,13 +15,13 @@
  */
 package com.github.sanctum.economy.construct.entity;
 
+import com.github.sanctum.economy.construct.system.Resolvable;
 import org.intellij.lang.annotations.Pattern;
 import org.intellij.lang.annotations.RegExp;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.annotation.Documented;
-import java.util.UUID;
 
 /**
  * Identifies an economically-involved actor.
@@ -36,7 +36,7 @@ import java.util.UUID;
  * @author ms5984
  */
 @ApiStatus.NonExtendable
-public interface EnterpriseEntity {
+public interface EnterpriseEntity extends Resolvable {
     /**
      * Valid namespaces must start with a lowercase letter; may contain both
      * uppercase and lowercase letters, digits, underscores and hyphens between
@@ -102,48 +102,9 @@ public interface EnterpriseEntity {
         return getIdentityKey();
     }
 
-    /**
-     * Marks an entity that represents a player using a typed property.
-     *
-     * @since 2.0.0
-     * @author ms5984
-     * @param <T> the type of the identifying property
-     */
-    interface PlayerEntity<T> extends EnterpriseEntity {
-        /**
-         * Gets the identifying property of the player.
-         *
-         * @return an identifying property of the player
-         */
-        @NotNull T getIdentifyingProperty();
-
-        /**
-         * Marks an entity that represents a player using their username.
-         *
-         * @implSpec All implementations must use {@link ByUsername#NAMESPACE}.
-         * @since 2.0.0
-         * @author ms5984
-         */
-        interface ByUsername extends PlayerEntity<String> {
-            /**
-             * The namespace of all entities identifying a player by username.
-             */
-            String NAMESPACE = "p_username";
-        }
-
-        /**
-         * Marks an entity that represents a player using their UniqueId.
-         *
-         * @implSpec All implementations must use {@link ByUniqueId#NAMESPACE}.
-         * @since 2.0.0
-         * @author ms5984
-         */
-        interface ByUniqueId extends PlayerEntity<UUID> {
-            /**
-             * The namespace of all entities identifying a player by UniqueId.
-             */
-            String NAMESPACE = "p_uid";
-        }
+    @Override
+    default @NotNull EnterpriseEntity toEntity() {
+        return this;
     }
 
     /**

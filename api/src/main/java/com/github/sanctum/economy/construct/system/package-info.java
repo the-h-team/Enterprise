@@ -13,8 +13,8 @@
  *         - Perform account capabilities per-participant
  *     <li>{@link com.github.sanctum.economy.construct.system.Balance}
  *         - A combination of other capabilities
- *     <li>{@link com.github.sanctum.economy.construct.system.Fiduciary}
- *         - TODO
+ *     <li>{@link com.github.sanctum.economy.construct.system.Custodian}
+ *         - Maintains accounts for others
  *     <li>{@link com.github.sanctum.economy.construct.system.Contextual}
  *         - Able to provide the participant's context(s)
  *     <li>{@link com.github.sanctum.economy.construct.system.Queryable}
@@ -36,7 +36,7 @@
  * <h2>State:</h2>
  * {@link com.github.sanctum.economy.construct.system.AbstractSystemException},
  * {@link com.github.sanctum.economy.construct.system.AmountException} and
- * {@link com.github.sanctum.economy.construct.system.EntityException} as well
+ * {@link com.github.sanctum.economy.construct.system.ParticipantException} as well
  * their tightly-coupled subclasses are used to provide rich responses where
  * one return type is not truly sufficient.
  * <p>
@@ -49,9 +49,9 @@
  * <h3>Entity-based:</h3>
  * <ul>
  *     <li>{@link com.github.sanctum.economy.construct.system.Account.AccessDenied}
- *     <li>{@link com.github.sanctum.economy.construct.system.Account.DuplicateEntity}
+ *     <li>{@link com.github.sanctum.economy.construct.system.Account.DuplicateParticipant}
  *     <li>{@link com.github.sanctum.economy.construct.system.Account.LastOwner}
- *     <li>{@link com.github.sanctum.economy.construct.system.Account.NotAMember}
+ *     <li>{@link com.github.sanctum.economy.construct.system.Account.NotAnAccountParticipant}
  * </ul>
  *
  * @since 2.0.0

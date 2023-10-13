@@ -21,10 +21,11 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Represents an amount of an asset.
  *
+ * @implNote Amount objects are immutable and safe to use in collections.
  * @since 2.0.0
- * @author ms5984
  * @see DecimalAmount
  * @see IntegralAmount
+ * @author ms5984
  */
 @ApiStatus.NonExtendable
 public interface Amount {
