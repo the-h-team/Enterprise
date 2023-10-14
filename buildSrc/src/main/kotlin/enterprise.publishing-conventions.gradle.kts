@@ -10,11 +10,6 @@ java {
     withJavadocJar()
 }
 
-tasks.withType<Javadoc> {
-    (options as StandardJavadocDocletOptions).addBooleanOption("Xdoclint:reference", true)
-    options.quiet()
-}
-
 // un-wire sourcesJar and javadocJar from normal assemble
 tasks.named("assemble") {
     setDependsOn(dependsOn.filterNot {
