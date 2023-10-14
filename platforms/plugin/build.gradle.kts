@@ -1,8 +1,7 @@
 plugins {
     id("enterprise.java-conventions")
+    id("enterprise.shadow-conventions")
 }
-
-// TODO shadow configuration
 
 repositories {
     maven("https://jitpack.io") {
@@ -26,5 +25,13 @@ description = "The Bukkit plugin implementation of Enterprise"
 tasks.withType<ProcessResources> {
     filesMatching(listOf("plugin.yml")) {
         expand(project.properties)
+    }
+}
+
+tasks.withType<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar> {
+    archiveFileName.set("${project.name}-${project.version}.jar")
+    archiveClassifier.set("plugin")
+    dependencies {
+        include(project(":enterprise-bukkit"))
     }
 }
