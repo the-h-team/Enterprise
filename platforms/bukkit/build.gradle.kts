@@ -1,6 +1,7 @@
 plugins {
     id("enterprise.java-conventions")
     id("enterprise.shadow-conventions")
+    id("enterprise.publishing-conventions")
 }
 
 repositories {
