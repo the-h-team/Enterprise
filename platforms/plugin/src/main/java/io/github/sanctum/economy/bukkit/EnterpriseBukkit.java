@@ -108,22 +108,26 @@ public final class EnterpriseBukkit extends JavaPlugin {
 			}
 
 			void findAndSend() {
-				final ArrayList<String> descriptions = new ArrayList<>();
+				final ArrayList<String> pluginList = new ArrayList<>();
+				final String enterprisePluginName = EnterpriseBukkit.this.getName();
 				for (Plugin plugin : plugins) {
-					if (!plugin.getDescription().getDepend().contains(EnterpriseBukkit.this.getName()) && !plugin.getDescription().getSoftDepend().contains(EnterpriseBukkit.this.getDescription().getName())) {
+					if (!plugin.getDescription().getDepend().contains(enterprisePluginName) && !plugin.getDescription().getSoftDepend().contains(enterprisePluginName)) {
 						continue;
 					}
 					if (plugin.isEnabled()) {
-						descriptions.add("&a" + plugin.getDescription().getFullName() + "&7 by &f" + joinAuthors(plugin));
+						pluginList.add("&a" + plugin.getDescription().getFullName() + "&7 by &f" + joinAuthors(plugin));
 					} else {
-						descriptions.add("&c" + plugin.getDescription().getFullName() + "&7 by &f" + joinAuthors(plugin));
+						pluginList.add("&c" + plugin.getDescription().getFullName() + "&7 by &f" + joinAuthors(plugin));
 					}
 				}
-				if (descriptions.isEmpty()) {
+				if (pluginList.isEmpty()) {
 					sender.sendMessage(translateColorCodes("&cNo detected Enterprise dependencies."));
 					return;
 				}
-				sendMessage(sender, "Detected plugins: " + String.join("; ", descriptions));
+				sendMessage(sender, "Detected plugins:");
+				for (String s : pluginList) {
+					sendMessage(sender, translateColorCodes(s));
+				}
 			}
 
 			private String joinAuthors(Plugin plugin) {
