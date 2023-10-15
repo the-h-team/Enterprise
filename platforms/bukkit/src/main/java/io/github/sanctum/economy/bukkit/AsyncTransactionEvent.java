@@ -1,5 +1,5 @@
 /*
- *   Copyright 2022 Sanctum <https://github.com/the-h-team>
+ *   Copyright 2023 Sanctum <https://github.com/the-h-team>
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@ package io.github.sanctum.economy.bukkit;
 
 import io.github.sanctum.economy.transaction.*;
 import org.bukkit.Bukkit;
+import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -31,10 +32,11 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @author ms5984
  * @param <T> the transaction type
  */
-public final class AsyncTransactionEvent<T extends MemoryTransaction> extends Event {
+public final class AsyncTransactionEvent<T extends MemoryTransaction> extends Event implements Cancellable {
     private static final HandlerList HANDLER_LIST = new HandlerList();
     static JavaPlugin plugin;
     final T transactionInfo;
+    boolean cancelled = false;
     final AtomicBoolean logged = new AtomicBoolean(false);
 
     /**
@@ -60,7 +62,7 @@ public final class AsyncTransactionEvent<T extends MemoryTransaction> extends Ev
      *
      * @return the transaction in this event
      */
-    public T getTransactionInfo() {
+    public @NotNull T getTransactionInfo() {
         return transactionInfo;
     }
 
@@ -80,6 +82,16 @@ public final class AsyncTransactionEvent<T extends MemoryTransaction> extends Ev
      */
     public void setLogged(boolean log) {
         logged.set(log);
+    }
+
+    @Override
+    public boolean isCancelled() {
+        return cancelled;
+    }
+
+    @Override
+    public void setCancelled(boolean cancelled) {
+        this.cancelled = cancelled;
     }
 
     @Override
