@@ -41,7 +41,7 @@ public final class EnterpriseBukkit extends JavaPlugin {
 	public void onEnable() {//
 		instance = this;
 		setupCommandMapField();
-		AsyncTransactionEvent.plugin = this;
+		TransactionEvent.plugin = this;
 		PluginPlatformLoader.SPIGOT.initialize();
 		new StaffCommand("enterprise", "enterprise.staff")
 				.setDescription("Manage the Enterprise plugin")
@@ -68,7 +68,7 @@ public final class EnterpriseBukkit extends JavaPlugin {
 
 	private class LoggingListener implements Listener {
 		@EventHandler
-		public void onTransactionEvent(AsyncTransactionEvent<?> e) {
+		public void onTransactionEvent(TransactionEvent<?> e) {
 			if (!e.isLogged()) return;
 			getLogger().info(e::toString);
 		}
