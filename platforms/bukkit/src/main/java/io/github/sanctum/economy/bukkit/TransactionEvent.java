@@ -23,21 +23,30 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.Iterator;
+import java.util.LinkedList;
 
 /**
  * A transaction event for Spigot plugins.
+ * <p>
+ * This event is called ahead of transaction finalization. This allows you to
+ * write your own transaction handling logic to alter or cancel processing as
+ * desired.
+ * <p>
+ * This event also allows you to replace the transaction prototype. Since
+ * prototypes are immutable, this is the proper way to change details before it
+ * is finalized.
  *
  * @since 2.0.0
  * @author ms5984
  * @param <T> the transaction type
  */
-public final class AsyncTransactionEvent<T extends MemoryTransaction> extends Event implements Cancellable {
+public final class TransactionEvent<T extends MemoryTransaction> extends Event implements Cancellable {
     private static final HandlerList HANDLER_LIST = new HandlerList();
     static JavaPlugin plugin;
-    final T transactionInfo;
+    final LinkedList<T> prototypes = new LinkedList<>();
     boolean cancelled = false;
-    final AtomicBoolean logged = new AtomicBoolean(false);
+    boolean logged;
 
     /**
      * Directly creates a new transaction event.
@@ -45,25 +54,37 @@ public final class AsyncTransactionEvent<T extends MemoryTransaction> extends Ev
      * Note: this constructor does not automatically call the event;
      * if that is desired you must do so separately.
      *
-     * @param transactionInfo a transaction
+     * @param transaction a transaction
      * @see #call(QueryTransaction)
      * @see #call(ReceiveTransaction)
      * @see #call(SetTransaction)
      * @see #call(SourceTransaction)
      * @see #call(TotalTransaction)
      */
-    public AsyncTransactionEvent(@NotNull T transactionInfo) {
-        super(true);
-        this.transactionInfo = transactionInfo;
+    public TransactionEvent(@NotNull T transaction) {
+        super(false);
+        this.prototypes.add(transaction);
     }
 
     /**
-     * Gets the transaction in this event.
+     * Gets the transaction specified in this event.
      *
-     * @return the transaction in this event
+     * @return a transaction prototype
      */
-    public @NotNull T getTransactionInfo() {
-        return transactionInfo;
+    public @NotNull T getPrototype() {
+        return prototypes.getLast();
+    }
+
+    /**
+     * Sets a new transaction prototype.
+     *
+     * @param transaction a new transaction prototype
+     * @return the last transaction prototype
+     */
+    public @NotNull T setPrototype(@NotNull T transaction) {
+        final T last = prototypes.getLast();
+        prototypes.addLast(transaction);
+        return last;
     }
 
     /**
@@ -72,16 +93,16 @@ public final class AsyncTransactionEvent<T extends MemoryTransaction> extends Ev
      * @return true if the event should be logged
      */
     public boolean isLogged() {
-        return logged.get();
+        return logged;
     }
 
     /**
      * Sets whether this event should be logged to console.
      *
-     * @param log whether to log
+     * @param logged whether to log
      */
-    public void setLogged(boolean log) {
-        logged.set(log);
+    public void setLogged(boolean logged) {
+        this.logged = logged;
     }
 
     @Override
@@ -96,11 +117,25 @@ public final class AsyncTransactionEvent<T extends MemoryTransaction> extends Ev
 
     @Override
     public String toString() {
-        return "Transaction: " + transactionInfo;
+        final StringBuilder sb = new StringBuilder("[");
+        final Iterator<T> iterator = prototypes.iterator();
+        while (iterator.hasNext()) {
+            sb.append(iterator.next().toString());
+            if (iterator.hasNext()) {
+                sb.append(", ");
+            }
+        }
+        sb.append("]");
+        return "TransactionEvent{" +
+                "prototypes=" + sb +
+                ", lastPrototype=" + prototypes.getLast() +
+                ", cancelled=" + cancelled +
+                ", logged=" + logged +
+                '}';
     }
 
-    AsyncTransactionEvent<T> call() {
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> Bukkit.getPluginManager().callEvent(AsyncTransactionEvent.this));
+    TransactionEvent<T> call() {
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> Bukkit.getPluginManager().callEvent(TransactionEvent.this));
         return this;
     }
 
@@ -120,8 +155,8 @@ public final class AsyncTransactionEvent<T extends MemoryTransaction> extends Ev
      * @param query a query transaction
      * @return the scheduled-to-be-called event
      */
-    public static AsyncTransactionEvent<QueryTransaction> call(@NotNull QueryTransaction query) {
-        return new AsyncTransactionEvent<>(query).call();
+    public static TransactionEvent<QueryTransaction> call(@NotNull QueryTransaction query) {
+        return new TransactionEvent<>(query).call();
     }
 
     /**
@@ -130,8 +165,8 @@ public final class AsyncTransactionEvent<T extends MemoryTransaction> extends Ev
      * @param give a give transaction
      * @return the scheduled-to-be-called event
      */
-    public static AsyncTransactionEvent<ReceiveTransaction> call(@NotNull ReceiveTransaction give) {
-        return new AsyncTransactionEvent<>(give).call();
+    public static TransactionEvent<ReceiveTransaction> call(@NotNull ReceiveTransaction give) {
+        return new TransactionEvent<>(give).call();
     }
 
     /**
@@ -140,8 +175,8 @@ public final class AsyncTransactionEvent<T extends MemoryTransaction> extends Ev
      * @param set a set transaction
      * @return the scheduled-to-be-called event
      */
-    public static AsyncTransactionEvent<SetTransaction> call(@NotNull SetTransaction set) {
-        return new AsyncTransactionEvent<>(set).call();
+    public static TransactionEvent<SetTransaction> call(@NotNull SetTransaction set) {
+        return new TransactionEvent<>(set).call();
     }
 
     /**
@@ -150,8 +185,8 @@ public final class AsyncTransactionEvent<T extends MemoryTransaction> extends Ev
      * @param take a take transaction
      * @return the scheduled-to-be-called event
      */
-    public static AsyncTransactionEvent<SourceTransaction> call(@NotNull SourceTransaction take) {
-        return new AsyncTransactionEvent<>(take).call();
+    public static TransactionEvent<SourceTransaction> call(@NotNull SourceTransaction take) {
+        return new TransactionEvent<>(take).call();
     }
 
     /**
@@ -160,7 +195,7 @@ public final class AsyncTransactionEvent<T extends MemoryTransaction> extends Ev
      * @param total a total transaction
      * @return the scheduled-to-be-called event
      */
-    public static AsyncTransactionEvent<TotalTransaction> call(@NotNull TotalTransaction total) {
-        return new AsyncTransactionEvent<>(total).call();
+    public static TransactionEvent<TotalTransaction> call(@NotNull TotalTransaction total) {
+        return new TransactionEvent<>(total).call();
     }
 }
