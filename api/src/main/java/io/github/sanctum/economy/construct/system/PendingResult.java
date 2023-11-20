@@ -17,42 +17,39 @@ package io.github.sanctum.economy.construct.system;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.function.Consumer;
+
 /**
- * Represents the result of an economy action.
+ * Represents the pending result of an economy action.
  *
  * @since 2.0.0
  * @author ms5984
  * @param <R> the result type
  * @param <E> the type of system error that may have occurred
  */
-public interface Result<R, E extends AbstractSystemException> {
+public abstract class PendingResult<R, E extends AbstractSystemException> {
+    /**
+     * Runs the given function with the result object once complete.
+     *
+     * @param processor a result processor
+     */
+    public abstract void onceComplete(@NotNull Consumer<Result<R, E>> processor);
 
     /**
-     * Blocks until the action is completed (may throw).
+     * Runs the given function with the result once complete.
      * <p>
-     * This is useful for try-catching the result.
+     * If the action was not successful the function will not be run.
      *
-     * @return the result or null
+     * @param consumer a result process function
      */
-    @NotNull R get() throws E;
+    public abstract void ifSuccessful(@NotNull Consumer<R> consumer);
 
     /**
-     * Creates an empty result with an error.
+     * Runs the given function with the error once complete.
+     * <p>
+     * If the action was successful the function will not be run.
      *
-     * @param error the error
-     * @return a result
+     * @param consumer an error process function
      */
-    static <E extends AbstractSystemException> Result<Void, E> empty(@NotNull E error) {
-        return new ResultImpl<>(null, error);
-    }
-
-    /**
-     * Creates a result completed without error.
-     *
-     * @param result the result
-     * @return a result
-     */
-    static <R> Result<R, AbstractSystemException> success(@NotNull R result) {
-        return new ResultImpl<>(result, null);
-    }
+    public abstract void ifFailed(@NotNull Consumer<E> consumer);
 }
