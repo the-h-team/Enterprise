@@ -34,4 +34,12 @@ public interface Total extends Resolvable {
      * @return an amount of {@code asset} if present or null
      */
     @Nullable Amount total(@NotNull Asset asset);
+
+    /**
+     * Queries this point for an amount.
+     *
+     * @param asset the asset to total
+     * @return a pending result
+     */
+    @NotNull PendingResult<Amount, ? extends AbstractSystemException> asyncTotal(@NotNull Asset asset);
 }

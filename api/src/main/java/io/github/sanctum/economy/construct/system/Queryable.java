@@ -32,4 +32,12 @@ public interface Queryable extends Resolvable {
      * @return true if this point has the amount
      */
     boolean has(@NotNull Amount amount);
+
+    /**
+     * Checks for an amount on this point.
+     *
+     * @param amount an amount of an asset
+     * @return a pending result
+     */
+    @NotNull PendingResult<Boolean, ? extends AbstractSystemException> asyncHas(@NotNull Amount amount);
 }
