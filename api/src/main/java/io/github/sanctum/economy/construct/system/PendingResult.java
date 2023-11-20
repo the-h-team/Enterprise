@@ -16,7 +16,9 @@
 package io.github.sanctum.economy.construct.system;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
 /**
@@ -42,7 +44,7 @@ public abstract class PendingResult<R, E extends AbstractSystemException> {
      *
      * @param consumer a result process function
      */
-    public abstract void ifSuccessful(@NotNull Consumer<R> consumer);
+    public abstract void ifSuccessful(@NotNull Consumer<@Nullable R> consumer);
 
     /**
      * Runs the given function with the error once complete.
@@ -52,4 +54,14 @@ public abstract class PendingResult<R, E extends AbstractSystemException> {
      * @param consumer an error process function
      */
     public abstract void ifFailed(@NotNull Consumer<E> consumer);
+
+    /**
+     * Creates a completed pending result.
+     *
+     * @param result the result
+     * @return a completed pending result
+     */
+    public static <R, E extends AbstractSystemException> @NotNull PendingResult<R, E> of(Result<@Nullable R, E> result) {
+        return new PendingResultImpl<>(CompletableFuture.completedFuture(result));
+    }
 }

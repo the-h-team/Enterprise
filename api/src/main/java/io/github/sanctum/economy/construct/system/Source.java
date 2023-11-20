@@ -42,7 +42,9 @@ public interface Source extends Resolvable {
      * @param amount an amount of an asset
      * @return a pending result
      */
-    @NotNull PendingResult<Source, SupplyError> asyncTake(@NotNull Amount amount);
+    default @NotNull PendingResult<Source, SupplyError> asyncTake(@NotNull Amount amount) {
+        return PendingResult.of(() -> take(amount));
+    }
 
     /**
      * Raised when a source is unable to provide an amount.

@@ -39,5 +39,7 @@ public interface Queryable extends Resolvable {
      * @param amount an amount of an asset
      * @return a pending result
      */
-    @NotNull PendingResult<Boolean, ? extends AbstractSystemException> asyncHas(@NotNull Amount amount);
+    default @NotNull PendingResult<Boolean, ? extends AbstractSystemException> asyncHas(@NotNull Amount amount) {
+        return PendingResult.of(Result.success(has(amount)));
+    }
 }

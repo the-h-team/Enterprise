@@ -42,7 +42,9 @@ public interface Settable extends Resolvable {
      * @param amount an amount of an asset
      * @return a pending result
      */
-    @NotNull PendingResult<Settable, SetError> asyncSet(@NotNull Amount amount);
+    default @NotNull PendingResult<Settable, SetError> asyncSet(@NotNull Amount amount) {
+        return PendingResult.of(() -> set(amount));
+    }
 
     /**
      * Raised when an amount cannot be set for a point.

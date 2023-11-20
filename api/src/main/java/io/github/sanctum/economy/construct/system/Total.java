@@ -41,5 +41,7 @@ public interface Total extends Resolvable {
      * @param asset the asset to total
      * @return a pending result
      */
-    @NotNull PendingResult<Amount, ? extends AbstractSystemException> asyncTotal(@NotNull Asset asset);
+    default @NotNull PendingResult<@Nullable Amount, ? extends AbstractSystemException> asyncTotal(@NotNull Asset asset) {
+        return PendingResult.of(Result.success(total(asset)));
+    }
 }
