@@ -13,35 +13,35 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package io.github.sanctum.economy.transaction;
+package io.github.sanctum.economy.construct.system.transactions;
 
 import io.github.sanctum.economy.construct.assets.Amount;
-import io.github.sanctum.economy.construct.system.Receiver;
-import io.github.sanctum.economy.construct.system.Resolvable;
+import io.github.sanctum.economy.construct.entity.EnterpriseEntity;
+import io.github.sanctum.economy.construct.system.Settable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
 /**
- * An {@link Operation#GIVE}-based transaction.
+ * An {@link Operation#SET}-based transaction.
  *
  * @since 2.0.0
  * @author ms5984
  */
-public final class ReceiveTransaction extends MemoryTransaction {
+public final class SetTransaction extends MemoryTransaction {
     /**
-     * Creates a new give-based transaction.
+     * Creates a new set-based transaction.
      *
      * @param amount an amount
-     * @param primaries the involved actor or actors
+     * @param primaries the involved entity or entities
      */
-    public ReceiveTransaction(@NotNull Amount amount, @NotNull Resolvable... primaries) {
-        super(amount, amount.getAsset(), Operation.GIVE, primaries);
+    public SetTransaction(@NotNull Amount amount, @NotNull EnterpriseEntity... primaries) {
+        super(amount, amount.getAsset(), Operation.SET, primaries);
     }
 
     /**
-     * Gets the amount being given by this transaction.
+     * Gets the amount being set by this transaction.
      *
      * @return the amount
      */
@@ -50,12 +50,8 @@ public final class ReceiveTransaction extends MemoryTransaction {
         return amount;
     }
 
-    /**
-     * Represents the result of a receive transaction.
-     *
-     * @since 2.0.0
-     */
-    static final class Result extends io.github.sanctum.economy.transaction.Result<ReceiveTransaction, Receiver.AcceptError> {
+    static final class Result extends io.github.sanctum.economy.construct.system.transactions.Result<SetTransaction, Settable.SetError> {
+
         /**
          * Creates a result from a UUID, transaction spec, error and success.
          *
@@ -65,7 +61,7 @@ public final class ReceiveTransaction extends MemoryTransaction {
          * @param success whether the transaction was "successful"
          * @implSpec Success is an implementation-specific concept.
          */
-        public Result(@NotNull UUID uuid, @NotNull ReceiveTransaction transaction, @Nullable Receiver.AcceptError error, boolean success) {
+        public Result(@NotNull UUID uuid, @NotNull SetTransaction transaction, Settable.@Nullable SetError error, boolean success) {
             super(uuid, transaction, error, success);
         }
     }

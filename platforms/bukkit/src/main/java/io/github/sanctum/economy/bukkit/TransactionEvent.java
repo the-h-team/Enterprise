@@ -15,7 +15,7 @@
  */
 package io.github.sanctum.economy.bukkit;
 
-import io.github.sanctum.economy.transaction.*;
+import io.github.sanctum.economy.construct.system.transactions.*;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;

@@ -13,45 +13,49 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package io.github.sanctum.economy.transaction;
+package io.github.sanctum.economy.construct.system.transactions;
 
 import io.github.sanctum.economy.construct.assets.Amount;
 import io.github.sanctum.economy.construct.entity.EnterpriseEntity;
-import io.github.sanctum.economy.construct.system.Settable;
+import io.github.sanctum.economy.construct.system.Source;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
 /**
- * An {@link Operation#SET}-based transaction.
+ * An {@link Operation#TAKE}-based transaction.
  *
  * @since 2.0.0
  * @author ms5984
  */
-public final class SetTransaction extends MemoryTransaction {
+public final class SourceTransaction extends MemoryTransaction {
     /**
-     * Creates a new set-based transaction.
+     * Creates a new take-based transaction.
      *
      * @param amount an amount
      * @param primaries the involved entity or entities
      */
-    public SetTransaction(@NotNull Amount amount, @NotNull EnterpriseEntity... primaries) {
-        super(amount, amount.getAsset(), Operation.SET, primaries);
+    public SourceTransaction(@NotNull Amount amount, @NotNull EnterpriseEntity... primaries) {
+        super(amount, amount.getAsset(), Operation.TAKE, primaries);
     }
 
     /**
-     * Gets the amount being set by this transaction.
+     * Gets the amount being taken by this transaction.
      *
      * @return the amount
      */
     @Override
-    public @NotNull Amount getAmount() {
+    public @Nullable Amount getAmount() {
         return amount;
     }
 
-    static final class Result extends io.github.sanctum.economy.transaction.Result<SetTransaction, Settable.SetError> {
-
+    /**
+     * Represents the result of a take transaction.
+     *
+     * @since 2.0.0
+     */
+    static final class Result extends io.github.sanctum.economy.construct.system.transactions.Result<SourceTransaction, Source.SupplyError> {
         /**
          * Creates a result from a UUID, transaction spec, error and success.
          *
@@ -61,7 +65,7 @@ public final class SetTransaction extends MemoryTransaction {
          * @param success whether the transaction was "successful"
          * @implSpec Success is an implementation-specific concept.
          */
-        public Result(@NotNull UUID uuid, @NotNull SetTransaction transaction, Settable.@Nullable SetError error, boolean success) {
+        public Result(@NotNull UUID uuid, @NotNull SourceTransaction transaction, @Nullable Source.SupplyError error, boolean success) {
             super(uuid, transaction, error, success);
         }
     }

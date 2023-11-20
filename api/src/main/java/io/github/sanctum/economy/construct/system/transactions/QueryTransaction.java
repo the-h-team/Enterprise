@@ -13,39 +13,36 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package io.github.sanctum.economy.transaction;
+package io.github.sanctum.economy.construct.system.transactions;
 
 import io.github.sanctum.economy.construct.assets.Amount;
-import io.github.sanctum.economy.construct.assets.Asset;
 import io.github.sanctum.economy.construct.entity.EnterpriseEntity;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
- * An {@link Operation#TOTAL}-based transaction.
+ * An {@link Operation#QUERY}-based transaction.
  *
  * @since 2.0.0
  * @author ms5984
  */
-public final class TotalTransaction extends MemoryTransaction {
+public final class QueryTransaction extends MemoryTransaction {
     /**
-     * Creates a new total-based transaction.
+     * Creates a new query-based transaction object.
      *
-     * @param amount the amount possessed by the point, if any
-     * @param asset the asset being totalled
-     * @param primaries the involved entity or entities
+     * @param amount an amount
+     * @param primaries the involved participant or participants
      */
-    public TotalTransaction(@Nullable Amount amount, @NotNull Asset asset, @NotNull EnterpriseEntity... primaries) {
-        super(amount, asset, Operation.TOTAL, primaries);
+    public QueryTransaction(@NotNull Amount amount, @NotNull EnterpriseEntity... primaries) {
+        super(amount, amount.getAsset(), Operation.QUERY, primaries);
     }
 
     /**
-     * Gets the total amount of {@link #getAsset()} possessed by this point.
+     * Gets the amount being tested by this transaction.
      *
-     * @return the amount if present or null
+     * @return the amount
      */
     @Override
-    public @Nullable Amount getAmount() {
+    public @NotNull Amount getAmount() {
         return amount;
     }
 }

@@ -13,7 +13,7 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package io.github.sanctum.economy.transaction;
+package io.github.sanctum.economy.construct.system.transactions;
 
 import io.github.sanctum.economy.construct.assets.Amount;
 import io.github.sanctum.economy.construct.assets.Asset;
