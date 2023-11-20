@@ -25,9 +25,13 @@ dependencies {
     }
 }
 
-description = "The Bukkit plugin implementation of Enterprise"
+description = "The ${Bukkit.name} plugin implementation of Enterprise"
 
 tasks.withType<ProcessResources> {
+    // wire properties referenced as task inputs (to detect changes + re-run task)
+    inputs.property("version", project.version)
+    inputs.property("rootProject.description", project.rootProject.description)
+    inputs.property("url", project.properties["url"])
     filesMatching(listOf("plugin.yml")) {
         expand(project.properties)
     }
