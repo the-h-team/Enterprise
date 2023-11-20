@@ -55,7 +55,7 @@ public final class SourceTransaction extends TransactionBase {
      *
      * @since 2.0.0
      */
-    static final class Result extends io.github.sanctum.economy.construct.system.transactions.Result<SourceTransaction, Source.SupplyError> {
+    static final class Result extends io.github.sanctum.economy.construct.system.Result<SourceTransaction, Source.SupplyError> {
         /**
          * Creates a result from a UUID, transaction spec, error and success.
          *

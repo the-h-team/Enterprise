@@ -13,9 +13,9 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package io.github.sanctum.economy.construct.system.transactions;
+package io.github.sanctum.economy.construct.system;
 
-import io.github.sanctum.economy.construct.system.AbstractSystemException;
+import io.github.sanctum.economy.construct.system.transactions.TransactionBase;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

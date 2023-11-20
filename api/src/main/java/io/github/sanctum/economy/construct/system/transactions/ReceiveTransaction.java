@@ -55,7 +55,7 @@ public final class ReceiveTransaction extends TransactionBase {
      *
      * @since 2.0.0
      */
-    static final class Result extends io.github.sanctum.economy.construct.system.transactions.Result<ReceiveTransaction, Receiver.AcceptError> {
+    static final class Result extends io.github.sanctum.economy.construct.system.Result<ReceiveTransaction, Receiver.AcceptError> {
         /**
          * Creates a result from a UUID, transaction spec, error and success.
          *
