@@ -43,13 +43,18 @@ tasks.withType<ProcessResources> {
     }
 }
 
+tasks.withType<JavaCompile> {
+    // save parameter names for Lamp
+    options.compilerArgs.add("-parameters")
+}
+
 tasks.withType<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar> {
     archiveFileName.set("${project.name}-${project.version}.jar")
     archiveClassifier.set("plugin")
     dependencies {
         include(project(":enterprise-bukkit"))
         // shade lamp
-        include(Lamp.common.notation)
-        include(Lamp.bukkit.notation)
+        include(dependency(Lamp.common.notation))
+        include(dependency(Lamp.bukkit.notation))
     }
 }
