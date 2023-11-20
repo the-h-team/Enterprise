@@ -16,6 +16,7 @@
 package io.github.sanctum.economy.construct.system;
 
 import io.github.sanctum.economy.construct.assets.Amount;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -29,9 +30,11 @@ public interface Source extends Resolvable {
      * Takes an amount from this point.
      *
      * @param amount an amount of an asset
+     * @return this point
      * @throws SupplyError if this point cannot produce the amount
      */
-    void take(@NotNull Amount amount) throws SupplyError;
+    @Contract("_ -> this")
+    @NotNull Source take(@NotNull Amount amount) throws SupplyError;
 
     /**
      * Raised when a source is unable to provide an amount.

@@ -16,6 +16,7 @@
 package io.github.sanctum.economy.construct.system;
 
 import io.github.sanctum.economy.construct.assets.Amount;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -29,9 +30,11 @@ public interface Receiver extends Resolvable {
      * Gives an amount to this point.
      *
      * @param amount an amount of an asset
+     * @return this point
      * @throws AcceptError if this point cannot accept the amount
      */
-    void give(@NotNull Amount amount) throws AcceptError;
+    @Contract("_ -> this")
+    @NotNull Receiver give(@NotNull Amount amount) throws AcceptError;
 
     /**
      * Raised when a receiver is unable to accept an amount.

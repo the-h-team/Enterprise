@@ -16,6 +16,7 @@
 package io.github.sanctum.economy.construct.system;
 
 import io.github.sanctum.economy.construct.assets.Amount;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -29,9 +30,11 @@ public interface Settable extends Resolvable {
      * Sets an amount.
      *
      * @param amount an amount of an asset
-     * @throws SetError if <code>amount</code> cannot be set for this point
+     * @return this point
+     * @throws SetError if {@code amount} cannot be set for this point
      */
-    void set(@NotNull Amount amount) throws SetError;
+    @Contract("_ -> this")
+    @NotNull Settable set(@NotNull Amount amount) throws SetError;
 
     /**
      * Raised when an amount cannot be set for a point.
