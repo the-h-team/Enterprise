@@ -16,6 +16,7 @@
 package io.github.sanctum.economy.construct.system;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Represents the result of an economy action.
@@ -32,9 +33,9 @@ public interface Result<R, E extends AbstractSystemException> {
      * <p>
      * This is useful for try-catching the result.
      *
-     * @return the result or null
+     * @return the result
      */
-    @NotNull R get() throws E;
+    @Nullable R get() throws E;
 
     /**
      * Creates an empty result with an error.
@@ -52,7 +53,7 @@ public interface Result<R, E extends AbstractSystemException> {
      * @param result the result
      * @return a result
      */
-    static <R> Result<R, AbstractSystemException> success(@NotNull R result) {
+    static <R> Result<@Nullable R, AbstractSystemException> success(@Nullable R result) {
         return new ResultImpl<>(result, null);
     }
 }

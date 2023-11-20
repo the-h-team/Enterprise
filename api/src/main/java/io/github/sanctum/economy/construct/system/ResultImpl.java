@@ -16,9 +16,7 @@
 package io.github.sanctum.economy.construct.system;
 
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.Objects;
+import org.jetbrains.annotations.Nullable;
 
 @ApiStatus.Internal
 final class ResultImpl<R, E extends AbstractSystemException> implements Result<R, E> {
@@ -31,8 +29,8 @@ final class ResultImpl<R, E extends AbstractSystemException> implements Result<R
     }
 
     @Override
-    public @NotNull R get() throws E {
+    public @Nullable R get() throws E {
         if (error != null) throw error;
-        return Objects.requireNonNull(result);
+        return result;
     }
 }
