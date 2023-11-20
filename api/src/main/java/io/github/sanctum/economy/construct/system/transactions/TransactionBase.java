@@ -29,7 +29,7 @@ import org.jetbrains.annotations.Nullable;
  * @author ms5984
  */
 @ApiStatus.NonExtendable
-public class MemoryTransaction {
+public abstract class TransactionBase {
     final Amount amount;
     final Asset asset;
     final Resolvable[] primaries;
@@ -43,10 +43,10 @@ public class MemoryTransaction {
      * @param operation a transaction type
      * @param primaries the involved participant or participants
      */
-    protected MemoryTransaction(@Nullable Amount amount,
-                                @NotNull Asset asset,
-                                @NotNull Operation operation,
-                                @NotNull Resolvable... primaries) {
+    protected TransactionBase(@Nullable Amount amount,
+                              @NotNull Asset asset,
+                              @NotNull Operation operation,
+                              @NotNull Resolvable... primaries) {
         if (amount != null && !amount.getAsset().equals(asset)) {
             throw new IllegalArgumentException("Amount asset must match transaction asset");
         }

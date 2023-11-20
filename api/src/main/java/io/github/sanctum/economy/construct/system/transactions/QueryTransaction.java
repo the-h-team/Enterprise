@@ -25,7 +25,7 @@ import org.jetbrains.annotations.NotNull;
  * @since 2.0.0
  * @author ms5984
  */
-public final class QueryTransaction extends MemoryTransaction {
+public final class QueryTransaction extends TransactionBase {
     /**
      * Creates a new query-based transaction object.
      *

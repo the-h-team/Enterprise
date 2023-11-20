@@ -41,7 +41,7 @@ import java.util.LinkedList;
  * @author ms5984
  * @param <T> the transaction type
  */
-public final class TransactionEvent<T extends MemoryTransaction> extends Event implements Cancellable {
+public final class TransactionEvent<T extends TransactionBase> extends Event implements Cancellable {
     private static final HandlerList HANDLER_LIST = new HandlerList();
     static JavaPlugin plugin;
     final LinkedList<T> prototypes = new LinkedList<>();

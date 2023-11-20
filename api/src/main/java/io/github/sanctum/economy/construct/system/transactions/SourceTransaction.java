@@ -29,7 +29,7 @@ import java.util.UUID;
  * @since 2.0.0
  * @author ms5984
  */
-public final class SourceTransaction extends MemoryTransaction {
+public final class SourceTransaction extends TransactionBase {
     /**
      * Creates a new take-based transaction.
      *
