@@ -8,9 +8,12 @@ repositories {
     // pull in bukkit's repository
     Bukkit.dependency.repository!!()
     maven("https://jitpack.io") {
-        name = "jitpack-vault"
+        name = "jitpack-deps"
         mavenContent {
+            // Allow vault
             includeModule("com.github.MilkBowl", "VaultAPI")
+            // Allow Lamp
+            includeGroup("com.github.Revxrsal.Lamp")
         }
     }
 }
@@ -18,6 +21,9 @@ repositories {
 dependencies {
     // pull in bukkit platform
     implementation(project(":enterprise-bukkit"))
+    // pull in lamp
+    implementation(Lamp.common.notation)
+    implementation(Lamp.bukkit.notation)
     // compile against VaultAPI
     compileOnly("com.github.MilkBowl:VaultAPI:1.7.1") {
         exclude(group = "org.bukkit", module = "bukkit")
@@ -42,5 +48,8 @@ tasks.withType<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar> {
     archiveClassifier.set("plugin")
     dependencies {
         include(project(":enterprise-bukkit"))
+        // shade lamp
+        include(Lamp.common.notation)
+        include(Lamp.bukkit.notation)
     }
 }
