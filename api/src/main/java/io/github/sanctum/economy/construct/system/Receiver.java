@@ -37,6 +37,14 @@ public interface Receiver extends Resolvable {
     @NotNull Receiver give(@NotNull Amount amount) throws AcceptError;
 
     /**
+     * Gives an amount to this point.
+     *
+     * @param amount an amount of an asset
+     * @return a pending result
+     */
+    @NotNull PendingResult<Receiver, AcceptError> asyncGive(@NotNull Amount amount);
+
+    /**
      * Raised when a receiver is unable to accept an amount.
      *
      * @since 2.0.0
