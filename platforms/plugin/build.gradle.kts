@@ -5,6 +5,8 @@ plugins {
 }
 
 repositories {
+    // pull in bukkit's repository
+    Bukkit.dependency.repository!!()
     maven("https://jitpack.io") {
         name = "jitpack-vault"
         mavenContent {
@@ -14,7 +16,9 @@ repositories {
 }
 
 dependencies {
+    // pull in bukkit platform
     implementation(project(":enterprise-bukkit"))
+    // compile against VaultAPI
     compileOnly("com.github.MilkBowl:VaultAPI:1.7.1") {
         exclude(group = "org.bukkit", module = "bukkit")
         exclude(group = "junit", module = "junit")
