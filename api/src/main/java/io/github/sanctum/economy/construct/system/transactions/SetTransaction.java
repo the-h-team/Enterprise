@@ -50,7 +50,7 @@ public final class SetTransaction extends TransactionBase {
         return amount;
     }
 
-    static final class Result extends io.github.sanctum.economy.construct.system.transactions.Result<SetTransaction, Settable.SetError> {
+    static final class Result extends io.github.sanctum.economy.construct.system.Result<SetTransaction, Settable.SetError> {
 
         /**
          * Creates a result from a UUID, transaction spec, error and success.
