@@ -29,7 +29,7 @@ import java.util.UUID;
  * @param <T> the type of transaction
  * @param <E> the type of system error that may have occurred
  */
-public class Result<T extends MemoryTransaction, E extends AbstractSystemException> {
+public class Result<T extends TransactionBase, E extends AbstractSystemException> {
     final UUID uuid;
     final T transaction;
     final E error;
@@ -92,7 +92,7 @@ public class Result<T extends MemoryTransaction, E extends AbstractSystemExcepti
      * @return a new result
      * @implSpec Success is an implementation-specific concept.
      */
-    public static <T extends MemoryTransaction> Result<T, ?> of(@NotNull UUID uuid, @NotNull T transaction, boolean success) {
+    public static <T extends TransactionBase> Result<T, ?> of(@NotNull UUID uuid, @NotNull T transaction, boolean success) {
         return new Result<>(uuid, transaction, success);
     }
 
@@ -105,7 +105,7 @@ public class Result<T extends MemoryTransaction, E extends AbstractSystemExcepti
      * @param success whether the transaction was "successful"
      * @implSpec Success is an implementation-specific concept.
      */
-    public static <T extends MemoryTransaction, E extends AbstractSystemException> Result<T, E> of(@NotNull UUID uuid, @NotNull T transaction, @Nullable E error, boolean success) {
+    public static <T extends TransactionBase, E extends AbstractSystemException> Result<T, E> of(@NotNull UUID uuid, @NotNull T transaction, @Nullable E error, boolean success) {
         return new Result<>(uuid, transaction, error, success);
     }
 }
