@@ -46,7 +46,7 @@ public interface Receiver extends Resolvable {
      * @param amount an amount of an asset
      * @return a pending result
      */
-    default @NotNull PendingResult<Result.NotEmpty<Receiver>, Receiver> asyncGive(@NotNull Amount amount) {
+    default @NotNull PendingResult<? extends Result.NotEmpty<Receiver>, Receiver> asyncGive(@NotNull Amount amount) {
         return PendingResult.of(() -> give(amount));
     }
 
