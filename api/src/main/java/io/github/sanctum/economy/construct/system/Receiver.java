@@ -32,9 +32,10 @@ public interface Receiver extends Resolvable {
      * @param amount an amount of an asset
      * @return this point
      * @throws AcceptError if this point cannot accept the amount
+     * @throws AbstractSystemException if a system error occurs
      */
     @Contract("_ -> this")
-    @NotNull Receiver give(@NotNull Amount amount) throws AcceptError;
+    @NotNull Receiver give(@NotNull Amount amount) throws AcceptError, AbstractSystemException;
 
     /**
      * Gives an amount to this point.
@@ -42,7 +43,7 @@ public interface Receiver extends Resolvable {
      * @param amount an amount of an asset
      * @return a pending result
      */
-    default @NotNull PendingResult<Receiver, AcceptError> asyncGive(@NotNull Amount amount) {
+    default @NotNull PendingResult<Result.NotEmpty<Receiver>, Receiver> asyncGive(@NotNull Amount amount) {
         return PendingResult.of(() -> give(amount));
     }
 

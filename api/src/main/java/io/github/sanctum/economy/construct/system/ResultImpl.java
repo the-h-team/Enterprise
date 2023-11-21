@@ -16,21 +16,46 @@
 package io.github.sanctum.economy.construct.system;
 
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-@ApiStatus.Internal
-final class ResultImpl<R, E extends AbstractSystemException> implements Result<R, E> {
-    private final R result;
-    private final E error;
+import java.util.Objects;
 
-    ResultImpl(R result, E error) {
+@ApiStatus.Internal
+class ResultImpl<R> implements Result<R> {
+    final R result;
+    final AbstractSystemException error;
+
+    ResultImpl(R result, AbstractSystemException error) {
         this.result = result;
         this.error = error;
     }
 
     @Override
-    public @Nullable R get() throws E {
+    public @Nullable R get() throws AbstractSystemException {
         if (error != null) throw error;
         return result;
+    }
+
+    static class EmptyImpl extends ResultImpl<Void> implements Empty {
+        EmptyImpl(AbstractSystemException error) {
+            super(null, error);
+        }
+    }
+
+    static class NotEmptyImpl<R> extends ResultImpl<R> implements NotEmpty<R> {
+        NotEmptyImpl(@NotNull R result) {
+            super(result, null);
+        }
+
+        NotEmptyImpl(@NotNull AbstractSystemException error) {
+            super(null, error);
+        }
+
+        @Override
+        public @NotNull R get() throws AbstractSystemException {
+            if (error != null) throw error;
+            return Objects.requireNonNull(result);
+        }
     }
 }

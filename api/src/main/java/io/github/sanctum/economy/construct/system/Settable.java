@@ -32,9 +32,10 @@ public interface Settable extends Resolvable {
      * @param amount an amount of an asset
      * @return this point
      * @throws SetError if {@code amount} cannot be set for this point
+     * @throws AbstractSystemException if a system error occurs
      */
     @Contract("_ -> this")
-    @NotNull Settable set(@NotNull Amount amount) throws SetError;
+    @NotNull Settable set(@NotNull Amount amount) throws SetError, AbstractSystemException;
 
     /**
      * Sets an amount.
@@ -42,7 +43,7 @@ public interface Settable extends Resolvable {
      * @param amount an amount of an asset
      * @return a pending result
      */
-    default @NotNull PendingResult<Settable, SetError> asyncSet(@NotNull Amount amount) {
+    default @NotNull PendingResult<Result.NotEmpty<Settable>, Settable> asyncSet(@NotNull Amount amount) {
         return PendingResult.of(() -> set(amount));
     }
 

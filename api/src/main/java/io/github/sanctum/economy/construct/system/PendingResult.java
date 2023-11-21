@@ -27,15 +27,14 @@ import java.util.function.Consumer;
  * @since 2.0.0
  * @author ms5984
  * @param <R> the result type
- * @param <E> the type of system error that may have occurred
  */
-public abstract class PendingResult<R, E extends AbstractSystemException> {
+public abstract class PendingResult<R extends Result<T>, T> {
     /**
      * Runs the given function with the result object once complete.
      *
      * @param processor a result processor
      */
-    public abstract void onceComplete(@NotNull Consumer<Result<R, E>> processor);
+    public abstract void onceComplete(@NotNull Consumer<R> processor);
 
     /**
      * Runs the given function with the result once complete.
@@ -44,7 +43,7 @@ public abstract class PendingResult<R, E extends AbstractSystemException> {
      *
      * @param consumer a result process function
      */
-    public abstract void ifSuccessful(@NotNull Consumer<@Nullable R> consumer);
+    public abstract void ifSuccessful(@NotNull Consumer<@Nullable T> consumer);
 
     /**
      * Runs the given function with the error once complete.
@@ -53,7 +52,7 @@ public abstract class PendingResult<R, E extends AbstractSystemException> {
      *
      * @param consumer an error process function
      */
-    public abstract void ifFailed(@NotNull Consumer<E> consumer);
+    public abstract void ifFailed(@NotNull Consumer<AbstractSystemException> consumer);
 
     /**
      * Creates a completed pending result.
@@ -61,7 +60,7 @@ public abstract class PendingResult<R, E extends AbstractSystemException> {
      * @param result the result
      * @return a completed pending result
      */
-    public static <R, E extends AbstractSystemException> @NotNull PendingResult<R, E> of(Result<@Nullable R, E> result) {
+    public static <R extends Result<T>, T> @NotNull PendingResult<R, T> of(@NotNull R result) {
         return new PendingResultImpl<>(CompletableFuture.completedFuture(result));
     }
 }

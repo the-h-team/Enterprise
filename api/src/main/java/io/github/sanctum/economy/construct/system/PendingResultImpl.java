@@ -24,28 +24,28 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.function.Consumer;
 
 @ApiStatus.Internal
-class PendingResultImpl<R, E extends AbstractSystemException> extends PendingResult<R, E> {
-    final CompletableFuture<Result<R, E>> result;
-    final Queue<Consumer<Result<R, E>>> onceCompleteProcessors = new ConcurrentLinkedQueue<>();
-    final Queue<Consumer<R>> ifSuccessfulProcessors = new ConcurrentLinkedQueue<>();
-    final Queue<Consumer<E>> ifFailedProcessors = new ConcurrentLinkedQueue<>();
+class PendingResultImpl<R extends Result<T>, T> extends PendingResult<R, T> {
+    final CompletableFuture<R> result;
+    final Queue<Consumer<R>> onceCompleteProcessors = new ConcurrentLinkedQueue<>();
+    final Queue<Consumer<T>> ifSuccessfulProcessors = new ConcurrentLinkedQueue<>();
+    final Queue<Consumer<AbstractSystemException>> ifFailedProcessors = new ConcurrentLinkedQueue<>();
 
-    PendingResultImpl(CompletableFuture<Result<R, E>> result) {
+    PendingResultImpl(CompletableFuture<R> result) {
         this.result = result;
     }
 
     @Override
-    public void onceComplete(@NotNull Consumer<Result<R, E>> processor) {
+    public void onceComplete(@NotNull Consumer<R> processor) {
         onceCompleteProcessors.add(processor);
     }
 
     @Override
-    public void ifSuccessful(@NotNull Consumer<R> consumer) {
+    public void ifSuccessful(@NotNull Consumer<T> consumer) {
         ifSuccessfulProcessors.add(consumer);
     }
 
     @Override
-    public void ifFailed(@NotNull Consumer<E> consumer) {
+    public void ifFailed(@NotNull Consumer<AbstractSystemException> consumer) {
         ifFailedProcessors.add(consumer);
     }
 
