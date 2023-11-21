@@ -17,6 +17,7 @@ package io.github.sanctum.economy.construct.system.accounts;
 
 import io.github.sanctum.economy.construct.system.Resolvable;
 import io.github.sanctum.economy.construct.system.exceptions.*;
+import io.github.sanctum.economy.construct.system.transactions.*;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -111,6 +112,89 @@ public abstract class Account {
      * to be used whenever {@code level} is null.
      */
     public abstract @NotNull AccessLevel setAccessLevel(@NotNull Resolvable participant, @Nullable AccessLevel level) throws NotAnAccountParticipant, AbstractSystemException;
+
+    /**
+     * Gets the custodian that is responsible for this account.
+     *
+     * @return a pending result
+     * @see #getCustodian()
+     */
+    public @NotNull PendingResult<Result.NotEmpty<Custodian>, Custodian> asyncGetCustodian() {
+        return PendingResult.of(this::getCustodian);
+    }
+
+    /**
+     * Accesses this account from the context of the provided participant.
+     *
+     * @param participant a participant
+     * @return a pending result
+     * @see #accessAs(Resolvable)
+     */
+    public @NotNull PendingResult<Result.NotEmpty<AccountView>, AccountView> asyncAccessAs(@NotNull Resolvable participant) {
+        return PendingResult.of(() -> accessAs(participant));
+    }
+
+    /**
+     * Allows a participant to access this account.
+     * <p>
+     * A default level of access is used.
+     *
+     * @param participant a participant
+     * @return a pending result
+     * @see #add(Resolvable)
+     */
+    public @NotNull PendingResult<Result.NotEmpty<AccessLevel>, AccessLevel> asyncAdd(@NotNull Resolvable participant) {
+        return PendingResult.of(() -> add(participant));
+    }
+
+    /**
+     * Allows a participant to access this account.
+     *
+     * @param participant a participant
+     * @param level an initial level of access or null for a system-default
+     * @return a pending result
+     * @see #add(Resolvable, AccessLevel)
+     */
+    public @NotNull PendingResult<Result.NotEmpty<AccessLevel>, AccessLevel> asyncAdd(@NotNull Resolvable participant, @Nullable AccessLevel level) {
+        return PendingResult.of(() -> add(participant, level));
+    }
+
+    /**
+     * Removes a participant from this account.
+     *
+     * @param participant a participant
+     * @return a pending result
+     * @see #remove(Resolvable)
+     */
+    public @NotNull PendingResult<Result.NotEmpty<Boolean>, Boolean> asyncRemove(@NotNull Resolvable participant) {
+        return PendingResult.of(() -> remove(participant));
+    }
+
+    /**
+     * Gets the access level of a participant.
+     *
+     * @param participant a participant
+     * @return a pending result
+     * @see #getAccessLevel(Resolvable)
+     */
+    public @NotNull PendingResult<Result<AccessLevel>, AccessLevel> asyncGetAccessLevel(@NotNull Resolvable participant) {
+        return PendingResult.of(() -> getAccessLevel(participant));
+    }
+
+    /**
+     * Sets the access level of a participant.
+     * <p>
+     * Note that setting a participant's access level to null does
+     * <strong>not</strong> remove the participant from the account.
+     *
+     * @param participant a participant
+     * @param level a level of access or null to reset to system-default
+     * @return a pending result
+     * @see #setAccessLevel(Resolvable, AccessLevel)
+     */
+    public @NotNull PendingResult<Result.NotEmpty<AccessLevel>, AccessLevel> asyncSetAccessLevel(@NotNull Resolvable participant, @Nullable AccessLevel level) {
+        return PendingResult.of(() -> setAccessLevel(participant, level));
+    }
 
     /**
      * Describes (in general) a level of account access.
