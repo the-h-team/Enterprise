@@ -13,8 +13,10 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package io.github.sanctum.economy.construct.system;
+package io.github.sanctum.economy.construct.system.accounts;
 
+import io.github.sanctum.economy.construct.system.Resolvable;
+import io.github.sanctum.economy.construct.system.exceptions.*;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

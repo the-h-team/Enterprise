@@ -13,48 +13,51 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package io.github.sanctum.economy.construct.system;
+package io.github.sanctum.economy.construct.system.behaviors;
 
 import io.github.sanctum.economy.construct.assets.Amount;
+import io.github.sanctum.economy.construct.system.*;
+import io.github.sanctum.economy.construct.system.exceptions.*;
+import io.github.sanctum.economy.construct.system.transactions.*;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * A point whose amounts can be set.
+ * A point from which assets can be taken.
  *
  * @since 2.0.0
  * @author ms5984
  */
-public interface Settable extends Resolvable {
+public interface Source extends Resolvable {
     /**
-     * Sets an amount.
+     * Takes an amount from this point.
      *
      * @param amount an amount of an asset
      * @return this point
-     * @throws SetError if {@code amount} cannot be set for this point
+     * @throws SupplyError if this point cannot produce the amount
      * @throws AbstractSystemException if a system error occurs
      */
     @Contract("_ -> this")
-    @NotNull Settable set(@NotNull Amount amount) throws SetError, AbstractSystemException;
+    @NotNull Source take(@NotNull Amount amount) throws SupplyError, AbstractSystemException;
 
     /**
-     * Sets an amount.
+     * Takes an amount from this point.
      *
      * @param amount an amount of an asset
      * @return a pending result
      */
-    default @NotNull PendingResult<Result.NotEmpty<Settable>, Settable> asyncSet(@NotNull Amount amount) {
-        return PendingResult.of(() -> set(amount));
+    default @NotNull PendingResult<Result.NotEmpty<Source>, Source> asyncTake(@NotNull Amount amount) {
+        return PendingResult.of(() -> take(amount));
     }
 
     /**
-     * Raised when an amount cannot be set for a point.
+     * Raised when a source is unable to provide an amount.
      *
      * @since 2.0.0
      * @author ms5984
      */
-    class SetError extends AmountException {
-        private static final long serialVersionUID = 5857783323258413601L;
+    class SupplyError extends AmountException {
+        private static final long serialVersionUID = 1018956534551717937L;
 
         /**
          * Constructs an exception with an Amount and a message.
@@ -62,7 +65,7 @@ public interface Settable extends Resolvable {
          * @param amount an amount of an asset
          * @param message a message
          */
-        public SetError(@NotNull Amount amount, String message) {
+        public SupplyError(@NotNull Amount amount, String message) {
             super(amount, message);
         }
 
@@ -73,7 +76,7 @@ public interface Settable extends Resolvable {
          * @param message a message
          * @param cause a cause throwable
          */
-        public SetError(@NotNull Amount amount, String message, Throwable cause) {
+        public SupplyError(@NotNull Amount amount, String message, Throwable cause) {
             super(amount, message, cause);
         }
 
@@ -83,7 +86,7 @@ public interface Settable extends Resolvable {
          * @param amount an amount of an asset
          * @param cause a cause throwable
          */
-        public SetError(@NotNull Amount amount, Throwable cause) {
+        public SupplyError(@NotNull Amount amount, Throwable cause) {
             super(amount, cause);
         }
     }
