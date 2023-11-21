@@ -33,8 +33,9 @@ public abstract class Account {
      * Gets the custodian that is responsible for this account.
      *
      * @return the custodian for this account
+     * @throws AbstractSystemException if a system error occurs
      */
-    public abstract @NotNull Custodian getCustodian();
+    public abstract @NotNull Custodian getCustodian() throws AbstractSystemException;
 
     /**
      * Accesses this account from the context of the provided participant.
@@ -42,8 +43,9 @@ public abstract class Account {
      * @param participant a participant
      * @return a view with the level of access allowed to the participant
      * @throws AccessDenied if the participant is not allowed access
+     * @throws AbstractSystemException if a system error occurs
      */
-    public abstract @NotNull AccountView accessAs(@NotNull Resolvable participant) throws AccessDenied;
+    public abstract @NotNull AccountView accessAs(@NotNull Resolvable participant) throws AccessDenied, AbstractSystemException;
 
     /**
      * Allows a participant to access this account.
@@ -52,11 +54,11 @@ public abstract class Account {
      *
      * @param participant a participant
      * @return the default level of access set by the implementation
-     * @throws DuplicateParticipant if {@code participant} is already on the
-     * account
+     * @throws DuplicateParticipant if {@code participant} is already on the account
+     * @throws AbstractSystemException if a system error occurs
      * @implNote This method is equivalent to {@code add(participant, null)}.
      */
-    public @NotNull AccessLevel add(@NotNull Resolvable participant) throws DuplicateParticipant {
+    public @NotNull AccessLevel add(@NotNull Resolvable participant) throws DuplicateParticipant, AbstractSystemException {
         return add(participant, null);
     }
 
@@ -67,31 +69,32 @@ public abstract class Account {
      * @param level an initial level of access or null for a system-default
      * @return {@code level} (if not {@code null}) or the default level
      * set by the implementation
-     * @throws DuplicateParticipant if {@code participant} is already on the
-     * account
+     * @throws DuplicateParticipant if {@code participant} is already on the account
+     * @throws AbstractSystemException if a system error occurs
      * @implSpec Implementations are free to define a default level of access
      * to be used whenever {@code level} is null.
      */
     @Contract("_, !null -> param2")
-    public abstract @NotNull AccessLevel add(@NotNull Resolvable participant, @Nullable AccessLevel level) throws DuplicateParticipant;
+    public abstract @NotNull AccessLevel add(@NotNull Resolvable participant, @Nullable AccessLevel level) throws DuplicateParticipant, AbstractSystemException;
 
     /**
      * Removes a participant from this account.
      *
      * @param participant a participant
      * @return true if access was present and removed
-     * @throws LastOwner if removing {@code participant} would leave this
-     * account without owner
+     * @throws LastOwner if removing {@code participant} would leave this account without owner
+     * @throws AbstractSystemException if a system error occurs
      */
-    public abstract boolean remove(@NotNull Resolvable participant) throws LastOwner;
+    public abstract boolean remove(@NotNull Resolvable participant) throws LastOwner, AbstractSystemException;
 
     /**
      * Gets the access level of a participant.
      *
      * @param participant a participant
      * @return the level of access, if any, or null
+     * @throws AbstractSystemException if a system error occurs
      */
-    public abstract @Nullable AccessLevel getAccessLevel(@NotNull Resolvable participant);
+    public abstract @Nullable AccessLevel getAccessLevel(@NotNull Resolvable participant) throws AbstractSystemException;
 
     /**
      * Sets the access level of a participant.
@@ -103,10 +106,11 @@ public abstract class Account {
      * @param level a level of access or null to reset to system-default
      * @return the participant's new level of access
      * @throws NotAnAccountParticipant if {@code participant} is not an account participant
+     * @throws AbstractSystemException if a system error occurs
      * @implSpec Implementations are free to define a default level of access
      * to be used whenever {@code level} is null.
      */
-    public abstract @NotNull AccessLevel setAccessLevel(@NotNull Resolvable participant, @Nullable AccessLevel level) throws NotAnAccountParticipant;
+    public abstract @NotNull AccessLevel setAccessLevel(@NotNull Resolvable participant, @Nullable AccessLevel level) throws NotAnAccountParticipant, AbstractSystemException;
 
     /**
      * Describes (in general) a level of account access.
