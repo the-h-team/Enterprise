@@ -35,7 +35,7 @@ public interface WalletService<N extends PlayerHandle.ByUsername, U extends Play
      * @param player the player object
      * @return the wallet object for the player, identified by username
      */
-    Wallet<N> username(@NotNull N player);
+    @NotNull Wallet<N> username(@NotNull N player);
 
     /**
      * Gets a contextual wallet object for a player by username.
@@ -44,7 +44,7 @@ public interface WalletService<N extends PlayerHandle.ByUsername, U extends Play
      * @param contexts the contexts to apply
      * @return the wallet object for the player, identified by username
      */
-    Wallet<N> username(@NotNull N player, @NotNull Context... contexts);
+    @NotNull Wallet<N> username(@NotNull N player, @NotNull Context... contexts);
 
     /**
      * Gets a wallet object for a player by UniqueId.
@@ -52,7 +52,7 @@ public interface WalletService<N extends PlayerHandle.ByUsername, U extends Play
      * @param player the player object
      * @return the wallet object for the player, identified by UniqueId
      */
-    Wallet<U> uniqueId(U player);
+    @NotNull Wallet<U> uniqueId(U player);
 
     /**
      * Gets a contextual wallet object for a player by UniqueId.
@@ -61,5 +61,5 @@ public interface WalletService<N extends PlayerHandle.ByUsername, U extends Play
      * @param contexts the contexts to apply
      * @return the wallet object for the player, identified by UniqueId
      */
-    Wallet<U> uniqueId(@NotNull U player, @NotNull Context... contexts);
+    @NotNull Wallet<U> uniqueId(@NotNull U player, @NotNull Context... contexts);
 }
