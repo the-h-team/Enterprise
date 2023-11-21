@@ -23,8 +23,6 @@ import java.util.ArrayList;
 import io.github.sanctum.economy.system.PluginPlatformLoader;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.SimpleCommandMap;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
@@ -41,13 +39,11 @@ public final class EnterpriseBukkit extends JavaPlugin {
 	public void onEnable() {//
 		instance = this;
 		setupCommandMapField();
-		TransactionEvent.plugin = this;
 		PluginPlatformLoader.SPIGOT.initialize();
 		new StaffCommand("enterprise", "enterprise.staff")
 				.setDescription("Manage the Enterprise plugin")
 				.setPermissionMessage(CustomCommand.translateColorCodes("&c&oThis is a staff-only command."))
 				.register(COMMAND_MAP);
-		getServer().getPluginManager().registerEvents(new LoggingListener(), this);
 	}
 
 	private void setupCommandMapField() {
@@ -63,14 +59,6 @@ public final class EnterpriseBukkit extends JavaPlugin {
 			COMMAND_MAP = (SimpleCommandMap) commandMapField.get(getServer());
 		} catch (IllegalAccessException e) {
 			throw new IllegalStateException(e);
-		}
-	}
-
-	private class LoggingListener implements Listener {
-		@EventHandler
-		public void onTransactionEvent(TransactionEvent<?> e) {
-			if (!e.isLogged()) return;
-			getLogger().info(e::toString);
 		}
 	}
 
