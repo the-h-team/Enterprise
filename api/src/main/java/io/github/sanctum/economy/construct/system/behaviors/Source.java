@@ -46,7 +46,7 @@ public interface Source extends Resolvable {
      * @param amount an amount of an asset
      * @return a pending result
      */
-    default @NotNull PendingResult<Result.NotEmpty<Source>, Source> asyncTake(@NotNull Amount amount) {
+    default @NotNull PendingResult<? extends Result.NotEmpty<Source>, Source> asyncTake(@NotNull Amount amount) {
         return PendingResult.of(() -> take(amount));
     }
 
