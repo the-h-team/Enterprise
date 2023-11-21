@@ -13,7 +13,7 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package io.github.sanctum.economy.construct.system;
+package io.github.sanctum.economy.construct.system.exceptions;
 
 /**
  * A checked exception base for all system errors.
@@ -21,7 +21,7 @@ package io.github.sanctum.economy.construct.system;
  * @since 2.0.0
  * @author ms5984
  */
-public abstract class AbstractSystemException extends Exception {
+public class AbstractSystemException extends Exception {
     private static final long serialVersionUID = -359957975837575116L;
 
     /**
@@ -29,7 +29,7 @@ public abstract class AbstractSystemException extends Exception {
      *
      * @param message a message
      */
-    AbstractSystemException(String message) {
+    public AbstractSystemException(String message) {
         super(message);
     }
 
@@ -39,7 +39,7 @@ public abstract class AbstractSystemException extends Exception {
      * @param message a message
      * @param cause a cause throwable
      */
-    AbstractSystemException(String message, Throwable cause) {
+    public AbstractSystemException(String message, Throwable cause) {
         super(message, cause);
     }
 
@@ -48,7 +48,7 @@ public abstract class AbstractSystemException extends Exception {
      *
      * @param cause a cause throwable
      */
-    AbstractSystemException(Throwable cause) {
+    public AbstractSystemException(Throwable cause) {
         super(cause);
     }
 }

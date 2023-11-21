@@ -13,7 +13,7 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package io.github.sanctum.economy.construct.system;
+package io.github.sanctum.economy.construct.system.exceptions;
 
 import io.github.sanctum.economy.construct.assets.Amount;
 import org.jetbrains.annotations.NotNull;
@@ -34,7 +34,7 @@ public class AmountException extends AbstractSystemException {
      * @param amount an amount of an asset
      * @param message a message
      */
-    AmountException(@NotNull Amount amount, String message) {
+    public AmountException(@NotNull Amount amount, String message) {
         super(message);
         this.amount = amount;
     }
@@ -46,7 +46,7 @@ public class AmountException extends AbstractSystemException {
      * @param message a message
      * @param cause a cause throwable
      */
-    AmountException(@NotNull Amount amount, String message, Throwable cause) {
+    public AmountException(@NotNull Amount amount, String message, Throwable cause) {
         super(message, cause);
         this.amount = amount;
     }
@@ -57,7 +57,7 @@ public class AmountException extends AbstractSystemException {
      * @param amount an amount of an asset
      * @param cause a cause throwable
      */
-    AmountException(@NotNull Amount amount, Throwable cause) {
+    public AmountException(@NotNull Amount amount, Throwable cause) {
         super(cause);
         this.amount = amount;
     }

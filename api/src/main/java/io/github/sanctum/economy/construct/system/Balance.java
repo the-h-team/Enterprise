@@ -15,6 +15,8 @@
  */
 package io.github.sanctum.economy.construct.system;
 
+import io.github.sanctum.economy.construct.system.behaviors.*;
+
 /**
  * A point that implements the functionality of {@link Queryable},
  * {@link Receiver}, {@link Settable}, {@link Source} and {@link Total}

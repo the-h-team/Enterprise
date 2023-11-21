@@ -13,8 +13,9 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package io.github.sanctum.economy.construct.system;
+package io.github.sanctum.economy.construct.system.exceptions;
 
+import io.github.sanctum.economy.construct.system.Resolvable;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -33,7 +34,7 @@ public class ParticipantException extends AbstractSystemException {
      * @param participant a resolvable participant
      * @param message a message
      */
-    ParticipantException(@NotNull Resolvable participant, String message) {
+    public ParticipantException(@NotNull Resolvable participant, String message) {
         super(message);
         this.participant = participant;
     }
@@ -45,7 +46,7 @@ public class ParticipantException extends AbstractSystemException {
      * @param message a message
      * @param cause a cause throwable
      */
-    ParticipantException(@NotNull Resolvable participant, String message, Throwable cause) {
+    public ParticipantException(@NotNull Resolvable participant, String message, Throwable cause) {
         super(message, cause);
         this.participant = participant;
     }
@@ -56,7 +57,7 @@ public class ParticipantException extends AbstractSystemException {
      * @param participant a resolvable participant
      * @param cause a cause throwable
      */
-    ParticipantException(@NotNull Resolvable participant, Throwable cause) {
+    public ParticipantException(@NotNull Resolvable participant, Throwable cause) {
         super(cause);
         this.participant = participant;
     }
