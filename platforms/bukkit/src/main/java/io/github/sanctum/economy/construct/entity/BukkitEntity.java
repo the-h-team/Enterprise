@@ -65,7 +65,7 @@ public interface BukkitEntity extends EnterpriseEntity {
          * @throws IllegalArgumentException if <code>identity</code> does not
          * meet the format of {@link EnterpriseEntity#VALID_IDENTITY_KEY}.
          */
-        public static Server identity(@NotNull @IdentityKey String identity) throws IllegalArgumentException {
+        public static Server identity(@IdentityKey @NotNull String identity) throws IllegalArgumentException {
             if (!identity.matches(VALID_IDENTITY_KEY)) {
                 throw new IllegalArgumentException("Invalid identity: " + identity);
             }
