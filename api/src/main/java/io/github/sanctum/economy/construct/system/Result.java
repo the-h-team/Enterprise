@@ -24,9 +24,28 @@ import org.jetbrains.annotations.Nullable;
  * @since 2.0.0
  * @author ms5984
  * @param <R> the result type
- * @param <E> the type of system error that may have occurred
  */
-public interface Result<R, E extends AbstractSystemException> {
+public interface Result<R> {
+
+    /**
+     * A result that is always empty or always throws.
+     */
+    interface Empty extends Result<Void> {
+        /**
+         * An empty result that never throws.
+         */
+        Empty SUCCESS = Result.empty(null);
+    }
+
+    /**
+     * A result that is always present or always throws.
+     *
+     * @param <R> the result type
+     */
+    interface NotEmpty<R> extends Result<R> {
+        @Override
+        @NotNull R get() throws AbstractSystemException;
+    }
 
     /**
      * Blocks until the action is completed (may throw).
@@ -35,17 +54,7 @@ public interface Result<R, E extends AbstractSystemException> {
      *
      * @return the result
      */
-    @Nullable R get() throws E;
-
-    /**
-     * Creates an empty result with an error.
-     *
-     * @param error the error
-     * @return a result
-     */
-    static <E extends AbstractSystemException> Result<Void, E> error(@NotNull E error) {
-        return new ResultImpl<>(null, error);
-    }
+    @Nullable R get() throws AbstractSystemException;
 
     /**
      * Creates a result completed without error.
@@ -53,7 +62,29 @@ public interface Result<R, E extends AbstractSystemException> {
      * @param result the result
      * @return a result
      */
-    static <R> Result<@Nullable R, AbstractSystemException> success(@Nullable R result) {
-        return new ResultImpl<>(result, null);
+    static <R> NotEmpty<@NotNull R> success(@NotNull R result) {
+        return new ResultImpl.NotEmptyImpl<>(result);
+    }
+
+    /**
+     * Creates a result from an error.
+     *
+     * @param resultType the class of the (missing) result type
+     * @param error the system error that occurred
+     * @return a result
+     */
+    static <R> NotEmpty<R> error(@NotNull Class<R> resultType, @NotNull AbstractSystemException error) {
+        return new ResultImpl.NotEmptyImpl<>(error);
+    }
+
+    /**
+     * Creates an empty result with an optional error.
+     *
+     * @param error the error
+     * @return a result
+     * @see Empty#SUCCESS
+     */
+    static Result.Empty empty(@Nullable AbstractSystemException error) {
+        return new ResultImpl.EmptyImpl(error);
     }
 }

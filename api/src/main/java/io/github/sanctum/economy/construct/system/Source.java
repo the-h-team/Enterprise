@@ -32,9 +32,10 @@ public interface Source extends Resolvable {
      * @param amount an amount of an asset
      * @return this point
      * @throws SupplyError if this point cannot produce the amount
+     * @throws AbstractSystemException if a system error occurs
      */
     @Contract("_ -> this")
-    @NotNull Source take(@NotNull Amount amount) throws SupplyError;
+    @NotNull Source take(@NotNull Amount amount) throws SupplyError, AbstractSystemException;
 
     /**
      * Takes an amount from this point.
@@ -42,7 +43,7 @@ public interface Source extends Resolvable {
      * @param amount an amount of an asset
      * @return a pending result
      */
-    default @NotNull PendingResult<Source, SupplyError> asyncTake(@NotNull Amount amount) {
+    default @NotNull PendingResult<Result.NotEmpty<Source>, Source> asyncTake(@NotNull Amount amount) {
         return PendingResult.of(() -> take(amount));
     }
 
