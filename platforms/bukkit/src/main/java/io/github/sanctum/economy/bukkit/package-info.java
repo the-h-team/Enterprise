@@ -1,6 +1,6 @@
 /**
- * <h1>Spigot Platform Support</h1>
- * Support for the Spigot platform.
+ * <h1>Bukkit Platform Support</h1>
+ * Support for the Bukkit platform.
  * <p>
  * This package contains platform-specific supporting classes.
  *
