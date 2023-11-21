@@ -43,7 +43,7 @@ public interface Result<R, E extends AbstractSystemException> {
      * @param error the error
      * @return a result
      */
-    static <E extends AbstractSystemException> Result<Void, E> empty(@NotNull E error) {
+    static <E extends AbstractSystemException> Result<Void, E> error(@NotNull E error) {
         return new ResultImpl<>(null, error);
     }
 
