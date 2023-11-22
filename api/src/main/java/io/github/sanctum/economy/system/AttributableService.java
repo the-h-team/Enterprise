@@ -13,26 +13,35 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-package io.github.sanctum.economy.impl;
+package io.github.sanctum.economy.system;
 
-import io.github.sanctum.economy.system.SystemImplementation;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * A service that can be attributed to a given
- * {@linkplain SystemImplementation}.
+ * A service that can be attributed to a given assembly.
  *
  * @since 2.0.0
  * @author ms5984
  */
-@ApiStatus.OverrideOnly
-public interface AttributableService {
+public abstract class AttributableService {
+    private final SystemImplementation implementationInfo;
+
+    /**
+     * Constructs a new service with the given implementation info.
+     *
+     * @param implementationInfo the implementation info
+     */
+    protected AttributableService(@NotNull SystemImplementation implementationInfo) {
+        this.implementationInfo = implementationInfo;
+    }
+
     /**
      * Gets the system implementation info associated with this service.
      *
      * @return associated implementation info
      * @implSpec Return <strong>must</strong> be constant for a given instance.
      */
-    @NotNull SystemImplementation getImplementationInfo();
+    public final @NotNull SystemImplementation getImplementationInfo() {
+        return implementationInfo;
+    }
 }

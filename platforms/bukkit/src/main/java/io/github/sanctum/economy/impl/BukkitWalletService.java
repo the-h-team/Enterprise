@@ -16,6 +16,8 @@
 package io.github.sanctum.economy.impl;
 
 import io.github.sanctum.economy.construct.entity.BukkitPlayerHandle;
+import io.github.sanctum.economy.system.*;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Provides Wallets for Bukkit players.
@@ -23,5 +25,15 @@ import io.github.sanctum.economy.construct.entity.BukkitPlayerHandle;
  * @since 2.0.0
  * @author ms5984
  */
-public abstract class BukkitWalletService implements WalletService<BukkitPlayerHandle.ByUsername, BukkitPlayerHandle.ByUniqueId> {
+public abstract class BukkitWalletService extends WalletService<BukkitPlayerHandle.ByUsername, BukkitPlayerHandle.ByUniqueId> {
+    /**
+     * Constructs a new WalletService with the given implementation info.
+     *
+     * @param implementationInfo the implementation info
+     * @see WalletService
+     * @see AttributableService
+     */
+    protected BukkitWalletService(@NotNull SystemImplementation implementationInfo) {
+        super(implementationInfo);
+    }
 }
