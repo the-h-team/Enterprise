@@ -18,6 +18,7 @@ package io.github.sanctum.economy.impl;
 import io.github.sanctum.economy.construct.entity.PlayerHandle;
 import io.github.sanctum.economy.construct.system.Context;
 import io.github.sanctum.economy.construct.system.Wallet;
+import io.github.sanctum.economy.system.*;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -28,14 +29,25 @@ import org.jetbrains.annotations.NotNull;
  * @param <N> the player-by-username handle for this implementation
  * @param <U> the player-by-uniqueId handle for this implementation
  */
-public interface WalletService<N extends PlayerHandle.ByUsername, U extends PlayerHandle.ByUniqueId> extends AttributableService {
+public abstract class WalletService<N extends PlayerHandle.ByUsername, U extends PlayerHandle.ByUniqueId> extends AttributableService {
+    /**
+     * Constructs a new WalletService with the given implementation info.
+     *
+     * @param implementationInfo the implementation info
+     * @see AttributableService
+     */
+    protected WalletService(@NotNull SystemImplementation implementationInfo) {
+        super(implementationInfo);
+    }
+
     /**
      * Gets a wallet object for a player by username.
      *
      * @param player the player object
      * @return the wallet object for the player, identified by username
      */
-    @NotNull Wallet<N> username(@NotNull N player);
+    @NotNull
+    public abstract Wallet<N> username(@NotNull N player);
 
     /**
      * Gets a contextual wallet object for a player by username.
@@ -44,7 +56,8 @@ public interface WalletService<N extends PlayerHandle.ByUsername, U extends Play
      * @param contexts the contexts to apply
      * @return the wallet object for the player, identified by username
      */
-    @NotNull Wallet<N> username(@NotNull N player, @NotNull Context... contexts);
+    @NotNull
+    public abstract Wallet<N> username(@NotNull N player, @NotNull Context... contexts);
 
     /**
      * Gets a wallet object for a player by UniqueId.
@@ -52,7 +65,8 @@ public interface WalletService<N extends PlayerHandle.ByUsername, U extends Play
      * @param player the player object
      * @return the wallet object for the player, identified by UniqueId
      */
-    @NotNull Wallet<U> uniqueId(U player);
+    @NotNull
+    public abstract Wallet<U> uniqueId(U player);
 
     /**
      * Gets a contextual wallet object for a player by UniqueId.
@@ -61,5 +75,6 @@ public interface WalletService<N extends PlayerHandle.ByUsername, U extends Play
      * @param contexts the contexts to apply
      * @return the wallet object for the player, identified by UniqueId
      */
-    @NotNull Wallet<U> uniqueId(@NotNull U player, @NotNull Context... contexts);
+    @NotNull
+    public abstract Wallet<U> uniqueId(@NotNull U player, @NotNull Context... contexts);
 }
