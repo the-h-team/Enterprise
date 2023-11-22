@@ -15,5 +15,7 @@
  */
 package io.github.sanctum.economy.system;
 
-public interface ServiceRegistry {
+import io.github.sanctum.economy.impl.AttributableService;
+
+public interface ServiceRegistry<S extends AttributableService> {
 }

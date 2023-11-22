@@ -1,5 +1,5 @@
 /*
- *   Copyright 2022 Sanctum <https://github.com/the-h-team>
+ *   Copyright 2023 Sanctum <https://github.com/the-h-team>
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -15,6 +15,8 @@
  */
 package io.github.sanctum.economy.impl;
 
+import io.github.sanctum.economy.system.SystemImplementation;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -24,11 +26,13 @@ import org.jetbrains.annotations.NotNull;
  * @since 2.0.0
  * @author ms5984
  */
+@ApiStatus.OverrideOnly
 public interface AttributableService {
     /**
      * Gets the system implementation info associated with this service.
      *
      * @return associated implementation info
+     * @implSpec Return <strong>must</strong> be constant for a given instance.
      */
     @NotNull SystemImplementation getImplementationInfo();
 }
