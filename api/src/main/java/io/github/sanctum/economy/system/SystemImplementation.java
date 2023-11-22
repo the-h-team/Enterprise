@@ -26,7 +26,7 @@ import org.jetbrains.annotations.NotNull;
  * @author ms5984
  */
 @ApiStatus.NonExtendable
-public interface SystemImplementation {
+public interface SystemImplementation extends Comparable<SystemImplementation> {
     /**
      * The default version string.
      */
