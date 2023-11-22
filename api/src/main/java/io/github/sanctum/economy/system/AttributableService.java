@@ -17,13 +17,16 @@ package io.github.sanctum.economy.system;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Comparator;
+
 /**
  * A service that can be attributed to a given assembly.
  *
  * @since 2.0.0
  * @author ms5984
  */
-public abstract class AttributableService {
+public abstract class AttributableService implements Comparable<AttributableService> {
+    private static final Comparator<AttributableService> COMPARATOR = Comparator.comparing(AttributableService::getImplementationInfo);
     private final SystemImplementation implementationInfo;
 
     /**
@@ -43,5 +46,23 @@ public abstract class AttributableService {
      */
     public final @NotNull SystemImplementation getImplementationInfo() {
         return implementationInfo;
+    }
+
+    @Override
+    public int compareTo(@NotNull AttributableService o) {
+        return COMPARATOR.compare(this, o);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof AttributableService)) return false;
+        AttributableService that = (AttributableService) o;
+        return implementationInfo.equals(that.implementationInfo);
+    }
+
+    @Override
+    public int hashCode() {
+        return implementationInfo.hashCode();
     }
 }
