@@ -18,8 +18,11 @@ package io.github.sanctum.economy.system;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Comparator;
+
 @ApiStatus.Internal
 final class SystemImplementationImpl implements SystemImplementation {
+    private static final Comparator<SystemImplementation> COMPARATOR = Comparator.comparing(SystemImplementation::getName).thenComparing(SystemImplementation::getVersion);
     final String name;
     final String version;
 
@@ -51,5 +54,10 @@ final class SystemImplementationImpl implements SystemImplementation {
         int result = name.hashCode();
         result = 31 * result + version.hashCode();
         return result;
+    }
+
+    @Override
+    public int compareTo(@NotNull SystemImplementation o) {
+        return COMPARATOR.compare(this, o);
     }
 }
