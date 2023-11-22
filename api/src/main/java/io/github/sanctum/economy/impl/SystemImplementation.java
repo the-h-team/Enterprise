@@ -1,5 +1,5 @@
 /*
- *   Copyright 2021 Sanctum <https://github.com/the-h-team>
+ *   Copyright 2023 Sanctum <https://github.com/the-h-team>
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -15,15 +15,23 @@
  */
 package io.github.sanctum.economy.impl;
 
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Exposes information about a system implementation, such as by a plugin.
  *
+ * @implNote Objects are immutable and safe to use in collections.
  * @since 2.0.0
  * @author ms5984
  */
+@ApiStatus.NonExtendable
 public interface SystemImplementation {
+    /**
+     * The default version string.
+     */
+    @NotNull String DEFAULT_VERSION = "unspecified";
+
     /**
      * Gets the name of the assembly.
      *
@@ -33,12 +41,31 @@ public interface SystemImplementation {
 
     /**
      * Gets the version of the implementation.
-     * <p>
-     * Defaults to empty string.
      *
-     * @return the version of the implementation
+     * @return the version of the implementing assembly
+     * @see #DEFAULT_VERSION
      */
-    default @NotNull String getVersion() {
-        return "";
+    @NotNull String getVersion();
+
+    /**
+     * Creates a new object with the given name and version.
+     *
+     * @param name the name of the implementing assembly
+     * @param version the version of the implementing assembly
+     * @return a new object
+     */
+    static @NotNull SystemImplementation of(@NotNull String name, @NotNull String version) {
+        return new SystemImplementationImpl(name, version);
+    }
+
+    /**
+     * Creates a new object with the given name and the default version.
+     *
+     * @param name the name of the implementing assembly
+     * @return a new object with the default version
+     * @see #DEFAULT_VERSION
+     */
+    static @NotNull SystemImplementation of(@NotNull String name) {
+        return new SystemImplementationImpl(name, DEFAULT_VERSION);
     }
 }
