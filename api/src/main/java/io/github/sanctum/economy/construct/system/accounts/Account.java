@@ -25,6 +25,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.annotation.Documented;
+import java.util.Comparator;
 
 /**
  * Manage assets on account with a custodian.
@@ -33,7 +34,12 @@ import java.lang.annotation.Documented;
  * @see Custodian
  * @author ms5984
  */
-public abstract class Account {
+public abstract class Account implements Comparable<Account> {
+    /**
+     * A comparator for accounts that compares by ID.
+     */
+    public static final Comparator<Account> COMPARATOR = Comparator.comparing(Account::getId);
+
     /**
      * The format of an account ID.
      * <p>
@@ -249,6 +255,25 @@ public abstract class Account {
      */
     public @NotNull PendingResult<? extends Result.NotEmpty<AccessLevel>, AccessLevel> asyncSetAccessLevel(@NotNull Resolvable participant, @Nullable AccessLevel level) {
         return PendingResult.of(Result.NotEmpty.lazy(() -> setAccessLevel(participant, level)));
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        // must match subclass exactly
+        if (o == null || getClass() != o.getClass()) return false;
+        Account account = (Account) o;
+        return id.equals(account.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return id.hashCode();
+    }
+
+    @Override
+    public int compareTo(@NotNull Account o) {
+        return COMPARATOR.compare(this, o);
     }
 
     /**
