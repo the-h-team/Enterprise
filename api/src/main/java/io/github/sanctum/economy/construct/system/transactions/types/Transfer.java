@@ -61,9 +61,9 @@ public abstract class Transfer implements Transaction<Result.NotEmpty<Amount>, A
         final Receiver receiver = getReceiver();
         final CompletableFuture<Result.NotEmpty<Amount>> cf = new CompletableFuture<>();
         final PendingResult<? extends Result.NotEmpty<Source>, Source> sourcePendingResult = source.asyncTake(amount);
-        sourcePendingResult.ifSuccessful(s -> {
+        sourcePendingResult.ifSuccessful(() -> {
             final PendingResult<? extends Result.NotEmpty<Receiver>, Receiver> receiverPendingResult = receiver.asyncGive(amount);
-            receiverPendingResult.ifSuccessful(r -> cf.complete(Result.success(amount)));
+            receiverPendingResult.ifSuccessful(() -> cf.complete(Result.success(amount)));
             receiverPendingResult.ifFailed(cf::completeExceptionally);
         });
         sourcePendingResult.ifFailed(cf::completeExceptionally);
@@ -95,9 +95,9 @@ public abstract class Transfer implements Transaction<Result.NotEmpty<Amount>, A
             final Receiver originalReceiver = getOriginalReceiver();
             final CompletableFuture<Result.NotEmpty<Amount>> cf = new CompletableFuture<>();
             final PendingResult<? extends Result.NotEmpty<Source>, Source> sourcePendingResult = originalSource.asyncTake(getAmount());
-            sourcePendingResult.ifSuccessful(s -> {
+            sourcePendingResult.ifSuccessful(() -> {
                 final PendingResult<? extends Result.NotEmpty<Receiver>, Receiver> receiverPendingResult = originalReceiver.asyncGive(getAmount());
-                receiverPendingResult.ifSuccessful(r -> cf.complete(Result.success(getAmount())));
+                receiverPendingResult.ifSuccessful(() -> cf.complete(Result.success(getAmount())));
                 receiverPendingResult.ifFailed(cf::completeExceptionally);
                 receiverPendingResult.ifFailed(r -> getOriginalSource().asyncGive(getAmount())); // best effort to refund the source
             });
@@ -111,9 +111,9 @@ public abstract class Transfer implements Transaction<Result.NotEmpty<Amount>, A
             final Receiver originalSource = getOriginalSource();
             final CompletableFuture<Result.NotEmpty<Amount>> cf = new CompletableFuture<>();
             final PendingResult<? extends Result.NotEmpty<Source>, Source> sourcePendingResult = originalReceiver.asyncTake(getAmount());
-            sourcePendingResult.ifSuccessful(s -> {
+            sourcePendingResult.ifSuccessful(() -> {
                 final PendingResult<? extends Result.NotEmpty<Receiver>, Receiver> receiverPendingResult = originalSource.asyncGive(getAmount());
-                receiverPendingResult.ifSuccessful(r -> cf.complete(Result.success(getAmount())));
+                receiverPendingResult.ifSuccessful(() -> cf.complete(Result.success(getAmount())));
                 receiverPendingResult.ifFailed(cf::completeExceptionally);
                 receiverPendingResult.ifFailed(r -> getOriginalReceiver().asyncGive(getAmount())); // best effort to refund the original receiver
             });

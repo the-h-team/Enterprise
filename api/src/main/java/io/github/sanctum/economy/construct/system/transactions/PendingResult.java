@@ -39,6 +39,15 @@ public abstract class PendingResult<R extends Result<T>, T> {
     public abstract void onceComplete(@NotNull Consumer<R> processor);
 
     /**
+     * Runs the given function with the result once completed successfully.
+     * <p>
+     * If the action was not successful the function will not be run.
+     *
+     * @param runnable a function
+     */
+    public abstract void ifSuccessful(@NotNull Runnable runnable);
+
+    /**
      * Runs the given function with the result once complete.
      * <p>
      * If the action was not successful the function will not be run.
