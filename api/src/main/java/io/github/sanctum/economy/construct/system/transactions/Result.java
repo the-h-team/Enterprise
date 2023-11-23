@@ -21,6 +21,11 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * Represents the result of an economy action.
+ * <p>
+ * Care should be taken if directly implementing this interface. It is possible
+ * for a result to be queried multiple times. If the result is not cached, this
+ * may result in multiple identical calls to the underlying system (which could
+ * duplicate operations). See {@link #lazy(Result)}, {@link #lazy(NotEmpty)}.
  *
  * @since 2.0.0
  * @author ms5984
@@ -56,6 +61,34 @@ public interface Result<R> {
      * @return the result
      */
     @Nullable R get() throws AbstractSystemException;
+
+    /**
+     * Creates a lazy optional result.
+     * <p>
+     * The result will be computed exactly once when {@link #get()} is first called.
+     * <p>
+     * Subsequent calls to {@link #get()} will return the cached result.
+     *
+     * @param result a result function
+     * @return a lazy result
+     */
+    static <R> Result<@Nullable R> lazy(@NotNull Result<@Nullable R> result) {
+        return new ResultImpl.LazyImpl<>(result);
+    }
+
+    /**
+     * Creates a lazy result.
+     * <p>
+     * The result will be computed exactly once when {@link #get()} is first called.
+     * <p>
+     * Subsequent calls to {@link #get()} will return the cached result.
+     *
+     * @param result a result function
+     * @return a lazy result
+     */
+    static <R> Result.NotEmpty<@NotNull R> lazy(@NotNull Result.NotEmpty<@NotNull R> result) {
+        return new ResultImpl.LazyNotEmptyImpl<>(result);
+    }
 
     /**
      * Creates a result completed without error.
