@@ -277,66 +277,22 @@ public abstract class Account implements Comparable<Account> {
     }
 
     /**
-     * Describes (in general) a level of account access.
+     * Defines (in general) a level of account access.
      * <p>
      * <strong>What actions are permitted by a level are <em>intentionally</em>
      * left up to implementations:)</strong>
      *
      * @since 2.0.0
+     * @see SimpleAccessLevel
      * @author ms5984
      */
-    public enum AccessLevel {
+    public interface AccessLevel {
         /**
-         * View-only account access.
-         * <p>
-         * <h2>Example permissions:</h2>
-         * <ul>
-         *     <li>View account balance</li>
-         * </ul>
+         * Gets the name of this access level.
+         *
+         * @return the name of this access level
          */
-        VIEWER,
-        /**
-         * An ordinary level of account access allowing transaction.
-         * <p>
-         * <h2>Example permissions:</h2>
-         * <ul>
-         *     <li>View account balance</li>
-         *     <li>Deposit funds</li>
-         *     <li>Withdraw funds</li>
-         * </ul>
-         */
-        MEMBER,
-        /**
-         * An account access level with additional meta-permissions.
-         * <p>
-         * By default, co-owners can manage {@linkplain #VIEWER VIEWERS}
-         * and {@linkplain #MEMBER MEMBERS}, but not {@linkplain #OWNER OWNERS}
-         * or other co-owners.
-         * <h2>Example permissions:</h2>
-         * <ul>
-         *     <li>View account balance</li>
-         *     <li>Deposit funds</li>
-         *     <li>Withdraw funds</li>
-         *     <li>Manage {@linkplain #VIEWER viewers}</li>
-         *     <li>Manage {@linkplain #MEMBER members}</li>
-         * </ul>
-         */
-        CO_OWNER,
-        /**
-         * Full account access.
-         * <h2>Example permissions:</h2>
-         * <ul>
-         *     <li>View account balance</li>
-         *     <li>Deposit funds</li>
-         *     <li>Withdraw funds</li>
-         *     <li>Manage {@linkplain #VIEWER viewers}</li>
-         *     <li>Manage {@linkplain #MEMBER members}</li>
-         *     <li>Manage {@linkplain #CO_OWNER co-owners}</li>
-         *     <li>Manage owners</li>
-         *     <li>Close account</li>
-         * </ul>
-         */
-        OWNER
+        @NotNull String getName();
     }
 
     /**
