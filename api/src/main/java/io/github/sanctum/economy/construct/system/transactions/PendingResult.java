@@ -28,6 +28,7 @@ import java.util.function.Consumer;
  * @since 2.0.0
  * @author ms5984
  * @param <R> the result type
+ * @param <T> the result type
  */
 public abstract class PendingResult<R extends Result<T>, T> {
     /**
@@ -63,5 +64,15 @@ public abstract class PendingResult<R extends Result<T>, T> {
      */
     public static <R extends Result<T>, T> @NotNull PendingResult<R, T> of(@NotNull R result) {
         return new PendingResultImpl<>(CompletableFuture.completedFuture(result));
+    }
+
+    /**
+     * Creates a pending result from the given future.
+     *
+     * @param future the future
+     * @return a pending result
+     */
+    public static <R extends Result<T>, T> @NotNull PendingResult<R, T> of(@NotNull CompletableFuture<R> future) {
+        return new PendingResultImpl<>(future);
     }
 }
