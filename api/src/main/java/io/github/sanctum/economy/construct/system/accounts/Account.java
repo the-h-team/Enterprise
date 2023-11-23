@@ -120,7 +120,7 @@ public abstract class Account {
      * @see #getCustodian()
      */
     public @NotNull PendingResult<Result.NotEmpty<Custodian>, Custodian> asyncGetCustodian() {
-        return PendingResult.of(this::getCustodian);
+        return PendingResult.of(Result.NotEmpty.lazy(this::getCustodian));
     }
 
     /**
@@ -131,7 +131,7 @@ public abstract class Account {
      * @see #accessAs(Resolvable)
      */
     public @NotNull PendingResult<Result.NotEmpty<AccountView>, AccountView> asyncAccessAs(@NotNull Resolvable participant) {
-        return PendingResult.of(() -> accessAs(participant));
+        return PendingResult.of(Result.NotEmpty.lazy(() -> accessAs(participant)));
     }
 
     /**
@@ -144,7 +144,7 @@ public abstract class Account {
      * @see #add(Resolvable)
      */
     public @NotNull PendingResult<Result.NotEmpty<AccessLevel>, AccessLevel> asyncAdd(@NotNull Resolvable participant) {
-        return PendingResult.of(() -> add(participant));
+        return PendingResult.of(Result.NotEmpty.lazy(() -> add(participant)));
     }
 
     /**
@@ -156,7 +156,7 @@ public abstract class Account {
      * @see #add(Resolvable, AccessLevel)
      */
     public @NotNull PendingResult<Result.NotEmpty<AccessLevel>, AccessLevel> asyncAdd(@NotNull Resolvable participant, @Nullable AccessLevel level) {
-        return PendingResult.of(() -> add(participant, level));
+        return PendingResult.of(Result.NotEmpty.lazy(() -> add(participant, level)));
     }
 
     /**
@@ -167,7 +167,7 @@ public abstract class Account {
      * @see #remove(Resolvable)
      */
     public @NotNull PendingResult<Result.NotEmpty<Boolean>, Boolean> asyncRemove(@NotNull Resolvable participant) {
-        return PendingResult.of(() -> remove(participant));
+        return PendingResult.of(Result.NotEmpty.lazy(() -> remove(participant)));
     }
 
     /**
@@ -178,7 +178,7 @@ public abstract class Account {
      * @see #getAccessLevel(Resolvable)
      */
     public @NotNull PendingResult<Result<AccessLevel>, AccessLevel> asyncGetAccessLevel(@NotNull Resolvable participant) {
-        return PendingResult.of(() -> getAccessLevel(participant));
+        return PendingResult.of(Result.lazy(() -> getAccessLevel(participant)));
     }
 
     /**
@@ -193,7 +193,7 @@ public abstract class Account {
      * @see #setAccessLevel(Resolvable, AccessLevel)
      */
     public @NotNull PendingResult<Result.NotEmpty<AccessLevel>, AccessLevel> asyncSetAccessLevel(@NotNull Resolvable participant, @Nullable AccessLevel level) {
-        return PendingResult.of(() -> setAccessLevel(participant, level));
+        return PendingResult.of(Result.NotEmpty.lazy(() -> setAccessLevel(participant, level)));
     }
 
     /**

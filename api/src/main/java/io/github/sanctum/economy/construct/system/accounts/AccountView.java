@@ -136,7 +136,7 @@ public interface AccountView extends Balance, Contextual {
      * @see #isOwner()
      */
     default @NotNull PendingResult<Result.NotEmpty<Boolean>, Boolean> asyncIsOwner() {
-        return PendingResult.of(this::isOwner);
+        return PendingResult.of(Result.NotEmpty.lazy(this::isOwner));
     }
 
     /**
@@ -146,7 +146,7 @@ public interface AccountView extends Balance, Contextual {
      * @see #isJointOwner()
      */
     default @NotNull PendingResult<Result.NotEmpty<Boolean>, Boolean> asyncIsJointOwner() {
-        return PendingResult.of(this::isJointOwner);
+        return PendingResult.of(Result.NotEmpty.lazy(this::isJointOwner));
     }
 
     /**
@@ -157,7 +157,7 @@ public interface AccountView extends Balance, Contextual {
      * @see #getAccessLevel()
      */
     default @NotNull PendingResult<Result.NotEmpty<Account.AccessLevel>, Account.AccessLevel> asyncGetAccessLevel() {
-        return PendingResult.of(this::getAccessLevel);
+        return PendingResult.of(Result.NotEmpty.lazy(this::getAccessLevel));
     }
 
     /**
@@ -168,7 +168,7 @@ public interface AccountView extends Balance, Contextual {
      * @see #getPerspective()
      */
     default @NotNull PendingResult<Result.NotEmpty<Resolvable>, Resolvable> asyncGetPerspective() {
-        return PendingResult.of(this::getPerspective);
+        return PendingResult.of(Result.NotEmpty.lazy(this::getPerspective));
     }
 
     /**
@@ -178,7 +178,7 @@ public interface AccountView extends Balance, Contextual {
      * @see #getAccount()
      */
     default @NotNull PendingResult<Result.NotEmpty<Account>, Account> asyncGetAccount() {
-        return PendingResult.of(this::getAccount);
+        return PendingResult.of(Result.NotEmpty.lazy(this::getAccount));
     }
 
     /**
@@ -190,7 +190,7 @@ public interface AccountView extends Balance, Contextual {
      * @see #add(Resolvable, Account.AccessLevel)
      */
     default @NotNull PendingResult<Result<Account.AccessLevel>, Account.AccessLevel> asyncAdd(@NotNull Resolvable participant, @Nullable Account.AccessLevel level) {
-        return PendingResult.of(() -> add(participant, level));
+        return PendingResult.of(Result.lazy(() -> add(participant, level)));
     }
 
     /**
@@ -202,7 +202,7 @@ public interface AccountView extends Balance, Contextual {
      * @see #setAccess(Resolvable, Account.AccessLevel)
      */
     default @NotNull PendingResult<Result<Account.AccessLevel>, Account.AccessLevel> asyncSetAccess(@NotNull Resolvable participant, @NotNull Account.AccessLevel level) {
-        return PendingResult.of(() -> setAccess(participant, level));
+        return PendingResult.of(Result.NotEmpty.lazy(() -> setAccess(participant, level)));
     }
 
     /**
@@ -213,6 +213,6 @@ public interface AccountView extends Balance, Contextual {
      * @see #removeMember(Resolvable)
      */
     default @NotNull PendingResult<Result.NotEmpty<Boolean>, Boolean> asyncRemoveMember(@NotNull Resolvable participant) {
-        return PendingResult.of(() -> removeMember(participant));
+        return PendingResult.of(Result.NotEmpty.lazy(() -> removeMember(participant)));
     }
 }

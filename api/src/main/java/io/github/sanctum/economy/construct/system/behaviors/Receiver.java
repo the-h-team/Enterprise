@@ -47,7 +47,7 @@ public interface Receiver extends Resolvable {
      * @return a pending result
      */
     default @NotNull PendingResult<? extends Result.NotEmpty<Receiver>, Receiver> asyncGive(@NotNull Amount amount) {
-        return PendingResult.of(() -> give(amount));
+        return PendingResult.of(Result.NotEmpty.lazy(() -> give(amount)));
     }
 
     /**

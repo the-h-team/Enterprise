@@ -47,7 +47,7 @@ public interface Settable extends Resolvable {
      * @return a pending result
      */
     default @NotNull PendingResult<? extends Result.NotEmpty<Settable>, Settable> asyncSet(@NotNull Amount amount) {
-        return PendingResult.of(() -> set(amount));
+        return PendingResult.of(Result.NotEmpty.lazy(() -> set(amount)));
     }
 
     /**

@@ -44,6 +44,6 @@ public interface Queryable extends Resolvable {
      * @return a pending result
      */
     default @NotNull PendingResult<? extends Result.NotEmpty<Boolean>, Boolean> asyncHas(@NotNull Amount amount) {
-        return PendingResult.of(() -> has(amount));
+        return PendingResult.of(Result.NotEmpty.lazy(() -> has(amount)));
     }
 }
