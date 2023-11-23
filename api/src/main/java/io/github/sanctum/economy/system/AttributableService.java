@@ -28,6 +28,7 @@ import java.util.Comparator;
 public abstract class AttributableService implements Comparable<AttributableService> {
     private static final Comparator<AttributableService> COMPARATOR = Comparator.comparing(AttributableService::getImplementationInfo);
     private final SystemImplementation implementationInfo;
+    boolean enabled = false;
 
     /**
      * Constructs a new service with the given implementation info.
@@ -48,21 +49,40 @@ public abstract class AttributableService implements Comparable<AttributableServ
         return implementationInfo;
     }
 
+    /**
+     * Checks if this service is enabled.
+     *
+     * @return true if enabled
+     */
+    public final boolean isEnabled() {
+        return enabled;
+    }
+
+    /**
+     * Sets the enabled state of this service.
+     *
+     * @param enabled the new enabled state
+     */
+    public final void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
     @Override
     public int compareTo(@NotNull AttributableService o) {
         return COMPARATOR.compare(this, o);
     }
 
     @Override
-    public boolean equals(Object o) {
+    public final boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof AttributableService)) return false;
+        // compare their classes (must match exactly)
+        if (o == null || getClass() != o.getClass()) return false;
         AttributableService that = (AttributableService) o;
         return implementationInfo.equals(that.implementationInfo);
     }
 
     @Override
-    public int hashCode() {
+    public final int hashCode() {
         return implementationInfo.hashCode();
     }
 }
