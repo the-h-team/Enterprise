@@ -34,11 +34,11 @@ public interface Settable extends Resolvable {
      *
      * @param amount an amount of an asset
      * @return this point
-     * @throws SetError if {@code amount} cannot be set for this point
+     * @throws SetException if {@code amount} cannot be set for this point
      * @throws AbstractSystemException if a system error occurs
      */
     @Contract("_ -> this")
-    @NotNull Settable set(@NotNull Amount amount) throws SetError, AbstractSystemException;
+    @NotNull Settable set(@NotNull Amount amount) throws SetException, AbstractSystemException;
 
     /**
      * Sets an amount.
@@ -56,7 +56,7 @@ public interface Settable extends Resolvable {
      * @since 2.0.0
      * @author ms5984
      */
-    class SetError extends AmountException {
+    class SetException extends AmountException {
         private static final long serialVersionUID = 5857783323258413601L;
 
         /**
@@ -65,7 +65,7 @@ public interface Settable extends Resolvable {
          * @param amount an amount of an asset
          * @param message a message
          */
-        public SetError(@NotNull Amount amount, String message) {
+        public SetException(@NotNull Amount amount, String message) {
             super(amount, message);
         }
 
@@ -76,7 +76,7 @@ public interface Settable extends Resolvable {
          * @param message a message
          * @param cause a cause throwable
          */
-        public SetError(@NotNull Amount amount, String message, Throwable cause) {
+        public SetException(@NotNull Amount amount, String message, Throwable cause) {
             super(amount, message, cause);
         }
 
@@ -86,7 +86,7 @@ public interface Settable extends Resolvable {
          * @param amount an amount of an asset
          * @param cause a cause throwable
          */
-        public SetError(@NotNull Amount amount, Throwable cause) {
+        public SetException(@NotNull Amount amount, Throwable cause) {
             super(amount, cause);
         }
     }
