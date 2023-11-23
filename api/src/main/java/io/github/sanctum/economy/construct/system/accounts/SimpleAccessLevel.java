@@ -16,6 +16,7 @@
 package io.github.sanctum.economy.construct.system.accounts;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * A simple set of account access levels.
@@ -90,5 +91,18 @@ public enum SimpleAccessLevel implements Account.AccessLevel {
     @Override
     public @NotNull String getName() {
         return label;
+    }
+
+    /**
+     * Gets a simple access level by name, if possible.
+     *
+     * @param name the name of the access level
+     * @return the access level or {@code null} if not found
+     */
+    public static @Nullable SimpleAccessLevel of(@NotNull String name) {
+        for (SimpleAccessLevel value : values()) {
+            if (value.getName().equalsIgnoreCase(name)) return value;
+        }
+        return null;
     }
 }
