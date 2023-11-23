@@ -28,6 +28,7 @@ import java.util.function.Consumer;
 class PendingResultImpl<R extends Result<T>, T> extends PendingResult<R, T> {
     final CompletableFuture<R> result;
     final Queue<Consumer<R>> onceCompleteProcessors = new ConcurrentLinkedQueue<>();
+    final Queue<Runnable> ifSuccessfulRunners = new ConcurrentLinkedQueue<>();
     final Queue<Consumer<T>> ifSuccessfulProcessors = new ConcurrentLinkedQueue<>();
     final Queue<Consumer<AbstractSystemException>> ifFailedProcessors = new ConcurrentLinkedQueue<>();
 
@@ -38,6 +39,11 @@ class PendingResultImpl<R extends Result<T>, T> extends PendingResult<R, T> {
     @Override
     public void onceComplete(@NotNull Consumer<R> processor) {
         onceCompleteProcessors.add(processor);
+    }
+
+    @Override
+    public void ifSuccessful(@NotNull Runnable runnable) {
+        ifSuccessfulRunners.add(runnable);
     }
 
     @Override
