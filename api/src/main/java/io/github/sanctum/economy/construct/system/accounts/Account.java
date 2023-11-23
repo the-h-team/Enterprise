@@ -25,7 +25,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.annotation.Documented;
-import java.util.Comparator;
 
 /**
  * Manage assets on account with a custodian.
@@ -35,11 +34,6 @@ import java.util.Comparator;
  * @author ms5984
  */
 public abstract class Account implements Comparable<Account> {
-    /**
-     * A comparator for accounts that compares by ID.
-     */
-    public static final Comparator<Account> COMPARATOR = Comparator.comparing(Account::getId);
-
     /**
      * The format of an account ID.
      * <p>
@@ -273,7 +267,7 @@ public abstract class Account implements Comparable<Account> {
 
     @Override
     public int compareTo(@NotNull Account o) {
-        return COMPARATOR.compare(this, o);
+        return id.compareTo(o.id);
     }
 
     /**
@@ -293,6 +287,22 @@ public abstract class Account implements Comparable<Account> {
          * @return the name of this access level
          */
         @NotNull String getName();
+
+        /**
+         * Gets an access level with the given name.
+         * <p>
+         * The returned access level is comparable to other
+         * access levels produced by this method.
+         *
+         * @param name a name
+         * @return an access level
+         * @implNote This method will return a {@link SimpleAccessLevel} if possible.
+         */
+        static @NotNull AccessLevel of(@NotNull String name) {
+            final SimpleAccessLevel simpleAccessLevel = SimpleAccessLevel.of(name);
+            if (simpleAccessLevel != null) return simpleAccessLevel;
+            return new AccessLevelImpl(name);
+        }
     }
 
     /**
