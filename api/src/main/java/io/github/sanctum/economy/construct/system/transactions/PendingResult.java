@@ -35,8 +35,9 @@ public abstract class PendingResult<R extends Result<T>, T> {
      * Runs the given function with the result object once complete.
      *
      * @param processor a result processor
+     * @return this pending result
      */
-    public abstract void onceComplete(@NotNull Consumer<R> processor);
+    public abstract @NotNull PendingResult<R, T> onceComplete(@NotNull Consumer<R> processor);
 
     /**
      * Runs the given function with the result once completed successfully.
@@ -44,8 +45,9 @@ public abstract class PendingResult<R extends Result<T>, T> {
      * If the action was not successful the function will not be run.
      *
      * @param runnable a function
+     * @return this pending result
      */
-    public abstract void ifSuccessful(@NotNull Runnable runnable);
+    public abstract @NotNull PendingResult<R, T> ifSuccessful(@NotNull Runnable runnable);
 
     /**
      * Runs the given function with the result once complete.
@@ -53,8 +55,9 @@ public abstract class PendingResult<R extends Result<T>, T> {
      * If the action was not successful the function will not be run.
      *
      * @param consumer a result process function
+     * @return this pending result
      */
-    public abstract void ifSuccessful(@NotNull Consumer<@Nullable T> consumer);
+    public abstract @NotNull PendingResult<R, T> ifSuccessful(@NotNull Consumer<@Nullable T> consumer);
 
     /**
      * Runs the given function with the error once complete.
@@ -62,8 +65,9 @@ public abstract class PendingResult<R extends Result<T>, T> {
      * If the action was successful the function will not be run.
      *
      * @param consumer an error process function
+     * @return this pending result
      */
-    public abstract void ifFailed(@NotNull Consumer<AbstractSystemException> consumer);
+    public abstract @NotNull PendingResult<R, T> ifFailed(@NotNull Consumer<AbstractSystemException> consumer);
 
     /**
      * Creates a completed pending result.
