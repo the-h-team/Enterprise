@@ -42,41 +42,41 @@ public abstract class ItemStore implements Balance {
     }
 
     @Override
-    public @NotNull ItemStore give(@NotNull Amount amount) throws AcceptError {
+    public @NotNull ItemStore give(@NotNull Amount amount) throws AcceptException {
         if (amount instanceof ItemAsset.ItemAmount) {
             synchronized (counts) {
                 counts.merge(amount.getAsset().getIdentifier(), ((ItemAsset.ItemAmount) amount).getIntegralAmount(), Integer::sum);
             }
             return this;
         }
-        throw new AcceptError(amount, "This asset is not supported.");
+        throw new AcceptException(amount, "This asset is not supported.");
     }
 
     @Override
-    public @NotNull ItemStore set(@NotNull Amount amount) throws SetError {
+    public @NotNull ItemStore set(@NotNull Amount amount) throws SetException {
         if (amount instanceof ItemAsset.ItemAmount) {
             synchronized (counts) {
                 counts.put(amount.getAsset().getIdentifier(), ((ItemAsset.ItemAmount) amount).getIntegralAmount());
             }
             return this;
         }
-        throw new SetError(amount, "This asset is not supported.");
+        throw new SetException(amount, "This asset is not supported.");
     }
 
     @Override
-    public @NotNull ItemStore take(@NotNull Amount amount) throws SupplyError {
+    public @NotNull ItemStore take(@NotNull Amount amount) throws SupplyException {
         if (amount instanceof ItemAsset.ItemAmount) {
             final int newAmount = ((ItemAsset.ItemAmount) amount).getIntegralAmount();
             final String fqn = amount.getAsset().getIdentifier();
             synchronized (counts) {
                 if (counts.getOrDefault(fqn, 0) < newAmount) {
-                    throw new SupplyError(amount, "Insufficient amount!");
+                    throw new SupplyException(amount, "Insufficient amount!");
                 }
                 counts.put(fqn, newAmount);
             }
             return this;
         }
-        throw new SupplyError(amount, "This asset is not supported.");
+        throw new SupplyException(amount, "This asset is not supported.");
     }
 
     @Override

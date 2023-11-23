@@ -34,11 +34,11 @@ public interface Source extends Resolvable {
      *
      * @param amount an amount of an asset
      * @return this point
-     * @throws SupplyError if this point cannot produce the amount
+     * @throws SupplyException if this point cannot produce the amount
      * @throws AbstractSystemException if a system error occurs
      */
     @Contract("_ -> this")
-    @NotNull Source take(@NotNull Amount amount) throws SupplyError, AbstractSystemException;
+    @NotNull Source take(@NotNull Amount amount) throws SupplyException, AbstractSystemException;
 
     /**
      * Takes an amount from this point.
@@ -56,7 +56,7 @@ public interface Source extends Resolvable {
      * @since 2.0.0
      * @author ms5984
      */
-    class SupplyError extends AmountException {
+    class SupplyException extends AmountException {
         private static final long serialVersionUID = 1018956534551717937L;
 
         /**
@@ -65,7 +65,7 @@ public interface Source extends Resolvable {
          * @param amount an amount of an asset
          * @param message a message
          */
-        public SupplyError(@NotNull Amount amount, String message) {
+        public SupplyException(@NotNull Amount amount, String message) {
             super(amount, message);
         }
 
@@ -76,7 +76,7 @@ public interface Source extends Resolvable {
          * @param message a message
          * @param cause a cause throwable
          */
-        public SupplyError(@NotNull Amount amount, String message, Throwable cause) {
+        public SupplyException(@NotNull Amount amount, String message, Throwable cause) {
             super(amount, message, cause);
         }
 
@@ -86,7 +86,7 @@ public interface Source extends Resolvable {
          * @param amount an amount of an asset
          * @param cause a cause throwable
          */
-        public SupplyError(@NotNull Amount amount, Throwable cause) {
+        public SupplyException(@NotNull Amount amount, Throwable cause) {
             super(amount, cause);
         }
     }

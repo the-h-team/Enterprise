@@ -42,9 +42,9 @@
  * <p>
  * <h3>Amount-based:</h3>
  * <ul>
- *     <li>{@link io.github.sanctum.economy.construct.system.behaviors.Receiver.AcceptError}
- *     <li>{@link io.github.sanctum.economy.construct.system.behaviors.Settable.SetError}
- *     <li>{@link io.github.sanctum.economy.construct.system.behaviors.Source.SupplyError}
+ *     <li>{@link io.github.sanctum.economy.construct.system.behaviors.Receiver.AcceptException}
+ *     <li>{@link io.github.sanctum.economy.construct.system.behaviors.Settable.SetException}
+ *     <li>{@link io.github.sanctum.economy.construct.system.behaviors.Source.SupplyException}
  * </ul>
  * <h3>Entity-based:</h3>
  * <ul>

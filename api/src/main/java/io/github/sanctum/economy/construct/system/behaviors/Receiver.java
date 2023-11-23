@@ -34,11 +34,11 @@ public interface Receiver extends Resolvable {
      *
      * @param amount an amount of an asset
      * @return this point
-     * @throws AcceptError if this point cannot accept the amount
+     * @throws AcceptException if this point cannot accept the amount
      * @throws AbstractSystemException if a system error occurs
      */
     @Contract("_ -> this")
-    @NotNull Receiver give(@NotNull Amount amount) throws AcceptError, AbstractSystemException;
+    @NotNull Receiver give(@NotNull Amount amount) throws AcceptException, AbstractSystemException;
 
     /**
      * Gives an amount to this point.
@@ -56,7 +56,7 @@ public interface Receiver extends Resolvable {
      * @since 2.0.0
      * @author ms5984
      */
-    class AcceptError extends AmountException {
+    class AcceptException extends AmountException {
         private static final long serialVersionUID = -5318173096317818284L;
 
         /**
@@ -65,7 +65,7 @@ public interface Receiver extends Resolvable {
          * @param amount an amount of an asset
          * @param message a message
          */
-        public AcceptError(@NotNull Amount amount, String message) {
+        public AcceptException(@NotNull Amount amount, String message) {
             super(amount, message);
         }
 
@@ -76,7 +76,7 @@ public interface Receiver extends Resolvable {
          * @param message a message
          * @param cause a cause throwable
          */
-        public AcceptError(@NotNull Amount amount, String message, Throwable cause) {
+        public AcceptException(@NotNull Amount amount, String message, Throwable cause) {
             super(amount, message, cause);
         }
 
@@ -86,7 +86,7 @@ public interface Receiver extends Resolvable {
          * @param amount an amount of an asset
          * @param cause a cause throwable
          */
-        public AcceptError(@NotNull Amount amount, Throwable cause) {
+        public AcceptException(@NotNull Amount amount, Throwable cause) {
             super(amount, cause);
         }
     }
