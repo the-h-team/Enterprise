@@ -59,4 +59,43 @@ class ResultImpl<R> implements Result<R> {
             return Objects.requireNonNull(result);
         }
     }
+
+    static class LazyImpl<R> implements Result<R> {
+        final Result<R> source;
+        boolean complete;
+        R result;
+        AbstractSystemException error;
+
+        LazyImpl(Result<R> source) {
+            this.source = source;
+        }
+
+        @Override
+        public @Nullable R get() throws AbstractSystemException {
+            synchronized(this) {
+                if (error != null) throw error;
+                if (complete) return result;
+                try {
+                    result = source.get();
+                } catch (AbstractSystemException e) {
+                    error = e;
+                    throw e;
+                } finally {
+                    complete = true;
+                }
+                return result;
+            }
+        }
+    }
+
+    static class LazyNotEmptyImpl<R> extends LazyImpl<R> implements NotEmpty<R> {
+        LazyNotEmptyImpl(Result.NotEmpty<R> source) {
+            super(source);
+        }
+
+        @Override
+        public @NotNull R get() throws AbstractSystemException {
+            return Objects.requireNonNull(super.get());
+        }
+    }
 }
