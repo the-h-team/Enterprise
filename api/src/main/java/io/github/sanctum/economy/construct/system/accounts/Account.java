@@ -18,9 +18,13 @@ package io.github.sanctum.economy.construct.system.accounts;
 import io.github.sanctum.economy.construct.system.Resolvable;
 import io.github.sanctum.economy.construct.system.exceptions.*;
 import io.github.sanctum.economy.construct.system.transactions.*;
+import org.intellij.lang.annotations.Pattern;
+import org.intellij.lang.annotations.RegExp;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.lang.annotation.Documented;
 
 /**
  * Manage assets on account with a custodian.
@@ -30,6 +34,46 @@ import org.jetbrains.annotations.Nullable;
  * @author ms5984
  */
 public abstract class Account {
+    /**
+     * The format of an account ID.
+     * <p>
+     * Generally, account IDs can be any non-empty string without whitespace.
+     * Implementations may choose to enforce stricter formats.
+     */
+    public static final @RegExp String ID_FORMAT = "^\\S+$";
+
+    /**
+     * A String representing an account ID.
+     *
+     * @see #ID_FORMAT
+     */
+    @Documented
+    @Pattern(ID_FORMAT)
+    @interface Id {}
+
+    private final @Id String id;
+
+    /**
+     * Constructs an account with an ID.
+     *
+     * @param id an ID
+     * @throws IllegalArgumentException if {@code id} is not a valid account ID
+     */
+    protected Account(@NotNull String id) {
+        if (!id.matches(ID_FORMAT)) throw new IllegalArgumentException("Invalid account ID: " + id);
+        this.id = id;
+    }
+
+    /**
+     * Gets the ID of this account.
+     *
+     * @return the ID of this account
+     */
+    @Id
+    public final @NotNull String getId() {
+        return id;
+    }
+
     /**
      * Gets the custodian that is responsible for this account.
      *
@@ -112,6 +156,17 @@ public abstract class Account {
      * to be used whenever {@code level} is null.
      */
     public abstract @NotNull AccessLevel setAccessLevel(@NotNull Resolvable participant, @Nullable AccessLevel level) throws NotAnAccountParticipant, AbstractSystemException;
+
+    /**
+     * Gets the ID of this account.
+     *
+     * @return a pending result
+     * @implNote {@link #getId()} is thread-safe; this method is provided for convenience.
+     * @see #getId()
+     */
+    public @NotNull PendingResult<? extends Result.NotEmpty<String>, String> asyncGetId() {
+        return PendingResult.of(Result.success(id));
+    }
 
     /**
      * Gets the custodian that is responsible for this account.
