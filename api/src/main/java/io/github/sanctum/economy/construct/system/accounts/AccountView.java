@@ -135,7 +135,7 @@ public interface AccountView extends Balance, Contextual {
      * @return a pending result
      * @see #isOwner()
      */
-    default @NotNull PendingResult<Result.NotEmpty<Boolean>, Boolean> asyncIsOwner() {
+    default @NotNull PendingResult<? extends Result.NotEmpty<Boolean>, Boolean> asyncIsOwner() {
         return PendingResult.of(Result.NotEmpty.lazy(this::isOwner));
     }
 
@@ -145,7 +145,7 @@ public interface AccountView extends Balance, Contextual {
      * @return a pending result
      * @see #isJointOwner()
      */
-    default @NotNull PendingResult<Result.NotEmpty<Boolean>, Boolean> asyncIsJointOwner() {
+    default @NotNull PendingResult<? extends Result.NotEmpty<Boolean>, Boolean> asyncIsJointOwner() {
         return PendingResult.of(Result.NotEmpty.lazy(this::isJointOwner));
     }
 
@@ -156,7 +156,7 @@ public interface AccountView extends Balance, Contextual {
      * @implNote {@link #getAccessLevel()} should be thread-safe; this method is provided for convenience.
      * @see #getAccessLevel()
      */
-    default @NotNull PendingResult<Result.NotEmpty<Account.AccessLevel>, Account.AccessLevel> asyncGetAccessLevel() {
+    default @NotNull PendingResult<? extends Result.NotEmpty<Account.AccessLevel>, Account.AccessLevel> asyncGetAccessLevel() {
         return PendingResult.of(Result.NotEmpty.lazy(this::getAccessLevel));
     }
 
@@ -167,7 +167,7 @@ public interface AccountView extends Balance, Contextual {
      * @implNote {@link #getPerspective()} should be thread-safe; this method is provided for convenience.
      * @see #getPerspective()
      */
-    default @NotNull PendingResult<Result.NotEmpty<Resolvable>, Resolvable> asyncGetPerspective() {
+    default @NotNull PendingResult<? extends Result.NotEmpty<Resolvable>, Resolvable> asyncGetPerspective() {
         return PendingResult.of(Result.NotEmpty.lazy(this::getPerspective));
     }
 
@@ -177,7 +177,7 @@ public interface AccountView extends Balance, Contextual {
      * @return a pending result
      * @see #getAccount()
      */
-    default @NotNull PendingResult<Result.NotEmpty<Account>, Account> asyncGetAccount() {
+    default @NotNull PendingResult<? extends Result.NotEmpty<Account>, Account> asyncGetAccount() {
         return PendingResult.of(Result.NotEmpty.lazy(this::getAccount));
     }
 
@@ -189,7 +189,7 @@ public interface AccountView extends Balance, Contextual {
      * @return a pending result
      * @see #add(Resolvable, Account.AccessLevel)
      */
-    default @NotNull PendingResult<Result<Account.AccessLevel>, Account.AccessLevel> asyncAdd(@NotNull Resolvable participant, @Nullable Account.AccessLevel level) {
+    default @NotNull PendingResult<? extends Result<Account.AccessLevel>, Account.AccessLevel> asyncAdd(@NotNull Resolvable participant, @Nullable Account.AccessLevel level) {
         return PendingResult.of(Result.lazy(() -> add(participant, level)));
     }
 
@@ -201,7 +201,7 @@ public interface AccountView extends Balance, Contextual {
      * @return a pending result
      * @see #setAccess(Resolvable, Account.AccessLevel)
      */
-    default @NotNull PendingResult<Result<Account.AccessLevel>, Account.AccessLevel> asyncSetAccess(@NotNull Resolvable participant, @NotNull Account.AccessLevel level) {
+    default @NotNull PendingResult<? extends Result<Account.AccessLevel>, Account.AccessLevel> asyncSetAccess(@NotNull Resolvable participant, @NotNull Account.AccessLevel level) {
         return PendingResult.of(Result.NotEmpty.lazy(() -> setAccess(participant, level)));
     }
 
@@ -212,7 +212,7 @@ public interface AccountView extends Balance, Contextual {
      * @return a pending result
      * @see #removeMember(Resolvable)
      */
-    default @NotNull PendingResult<Result.NotEmpty<Boolean>, Boolean> asyncRemoveMember(@NotNull Resolvable participant) {
+    default @NotNull PendingResult<? extends Result.NotEmpty<Boolean>, Boolean> asyncRemoveMember(@NotNull Resolvable participant) {
         return PendingResult.of(Result.NotEmpty.lazy(() -> removeMember(participant)));
     }
 }
