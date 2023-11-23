@@ -88,6 +88,12 @@ class ResultImpl<R> implements Result<R> {
         }
     }
 
+    static class LazyEmptyImpl extends LazyImpl<Void> implements Empty {
+        LazyEmptyImpl(Result.Empty source) {
+            super(source);
+        }
+    }
+
     static class LazyNotEmptyImpl<R> extends LazyImpl<R> implements NotEmpty<R> {
         LazyNotEmptyImpl(Result.NotEmpty<R> source) {
             super(source);
