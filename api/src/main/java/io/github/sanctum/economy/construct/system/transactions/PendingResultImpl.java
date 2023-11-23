@@ -37,23 +37,27 @@ class PendingResultImpl<R extends Result<T>, T> extends PendingResult<R, T> {
     }
 
     @Override
-    public void onceComplete(@NotNull Consumer<R> processor) {
+    public @NotNull PendingResult<R, T> onceComplete(@NotNull Consumer<R> processor) {
         onceCompleteProcessors.add(processor);
+        return this;
     }
 
     @Override
-    public void ifSuccessful(@NotNull Runnable runnable) {
+    public @NotNull PendingResult<R, T> ifSuccessful(@NotNull Runnable runnable) {
         ifSuccessfulRunners.add(runnable);
+        return this;
     }
 
     @Override
-    public void ifSuccessful(@NotNull Consumer<T> consumer) {
+    public @NotNull PendingResult<R, T> ifSuccessful(@NotNull Consumer<T> consumer) {
         ifSuccessfulProcessors.add(consumer);
+        return this;
     }
 
     @Override
-    public void ifFailed(@NotNull Consumer<AbstractSystemException> consumer) {
+    public @NotNull PendingResult<R, T> ifFailed(@NotNull Consumer<AbstractSystemException> consumer) {
         ifFailedProcessors.add(consumer);
+        return this;
     }
 
     // TODO process queues
