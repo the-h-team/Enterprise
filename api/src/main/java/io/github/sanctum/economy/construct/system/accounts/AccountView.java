@@ -37,7 +37,11 @@ public interface AccountView extends Balance, Contextual {
      * @throws AbstractSystemException if a system error occurs
      */
     default boolean isOwner() throws AbstractSystemException {
-        return getAccessLevel().compareTo(Account.AccessLevel.CO_OWNER) >= 0;
+        final Account.AccessLevel accessLevel = getAccessLevel();
+        if (accessLevel instanceof SimpleAccessLevel) {
+            return ((SimpleAccessLevel) accessLevel).compareTo(SimpleAccessLevel.CO_OWNER) >= 0;
+        }
+        return false; // fail safe
     }
 
     /**
@@ -89,7 +93,9 @@ public interface AccountView extends Balance, Contextual {
         if (!isOwner()) {
             throw new Account.AccessDenied(getPerspective(), "This participant cannot add other participants.");
         }
-        if (level != null && level.compareTo(getAccessLevel()) >= 0) {
+        final Account.AccessLevel accessLevel = getAccessLevel();
+        if (!(level instanceof SimpleAccessLevel && accessLevel instanceof SimpleAccessLevel) // fail safe
+                || ((SimpleAccessLevel) level).compareTo((SimpleAccessLevel) accessLevel) >= 0) {
             throw new Account.AccessDenied(getPerspective(), "This participant cannot grant access at the requested level.");
         }
         return getAccount().add(participant, level);
@@ -106,7 +112,9 @@ public interface AccountView extends Balance, Contextual {
      * @throws AbstractSystemException if a system error occurs
      */
     default @NotNull Account.AccessLevel setAccess(@NotNull Resolvable participant, @NotNull Account.AccessLevel level) throws Account.AccessDenied, Account.NotAnAccountParticipant, AbstractSystemException {
-        if (level.compareTo(getAccessLevel()) >= 0) {
+        final Account.AccessLevel accessLevel = getAccessLevel();
+        if (!(level instanceof SimpleAccessLevel && accessLevel instanceof SimpleAccessLevel) // fail safe
+                || ((SimpleAccessLevel) level).compareTo((SimpleAccessLevel) accessLevel) >= 0) {
             throw new Account.AccessDenied(getPerspective(), "This participant cannot edit others' access!");
         }
         throw new Account.NotAnAccountParticipant(participant, "This participant is not a participant of the account.");
