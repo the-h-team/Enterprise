@@ -16,6 +16,7 @@
 package io.github.sanctum.economy.construct.system.accounts;
 
 import io.github.sanctum.economy.construct.system.*;
+import io.github.sanctum.economy.construct.system.accounts.exceptions.*;
 import io.github.sanctum.economy.construct.system.exceptions.AbstractSystemException;
 import io.github.sanctum.economy.construct.system.transactions.*;
 import org.jetbrains.annotations.NotNull;
@@ -84,19 +85,19 @@ public interface AccountView extends Balance, Contextual {
      * @param participant a participant to add
      * @param level an initial level of access or null
      * @return {@code level} if {@code level} is not null or the default level set by the implementation
-     * @throws Account.AccessDenied if the viewer does not have permission to add participants or grant {@code level}-level access
-     * @throws Account.DuplicateParticipant if {@code participant} already has access to this account
+     * @throws AccessDenied if the viewer does not have permission to add participants or grant {@code level}-level access
+     * @throws DuplicateParticipant if {@code participant} already has access to this account
      * @throws AbstractSystemException if a system error occurs
      * @implSpec Implementations are free to define a default level of access to be used if {@code level} is null.
      */
-    default @Nullable Account.AccessLevel add(@NotNull Resolvable participant, @Nullable Account.AccessLevel level) throws Account.AccessDenied, Account.DuplicateParticipant, AbstractSystemException {
+    default @Nullable Account.AccessLevel add(@NotNull Resolvable participant, @Nullable Account.AccessLevel level) throws AccessDenied, DuplicateParticipant, AbstractSystemException {
         if (!isOwner()) {
-            throw new Account.AccessDenied(getPerspective(), "This participant cannot add other participants.");
+            throw new AccessDenied(getPerspective(), "This participant cannot add other participants.");
         }
         final Account.AccessLevel accessLevel = getAccessLevel();
         if (!(level instanceof SimpleAccessLevel && accessLevel instanceof SimpleAccessLevel) // fail safe
                 || ((SimpleAccessLevel) level).compareTo((SimpleAccessLevel) accessLevel) >= 0) {
-            throw new Account.AccessDenied(getPerspective(), "This participant cannot grant access at the requested level.");
+            throw new AccessDenied(getPerspective(), "This participant cannot grant access at the requested level.");
         }
         return getAccount().add(participant, level);
     }
@@ -107,17 +108,17 @@ public interface AccountView extends Balance, Contextual {
      * @param participant the participant whose access to edit
      * @param level a new access level
      * @return {@code participant}'s previous access level
-     * @throws Account.AccessDenied if the viewer does not have permission to set access
-     * @throws Account.NotAnAccountParticipant if {@code participant} is not an account participant
+     * @throws AccessDenied if the viewer does not have permission to set access
+     * @throws NotAnAccountParticipant if {@code participant} is not an account participant
      * @throws AbstractSystemException if a system error occurs
      */
-    default @NotNull Account.AccessLevel setAccess(@NotNull Resolvable participant, @NotNull Account.AccessLevel level) throws Account.AccessDenied, Account.NotAnAccountParticipant, AbstractSystemException {
+    default @NotNull Account.AccessLevel setAccess(@NotNull Resolvable participant, @NotNull Account.AccessLevel level) throws AccessDenied, NotAnAccountParticipant, AbstractSystemException {
         final Account.AccessLevel accessLevel = getAccessLevel();
         if (!(level instanceof SimpleAccessLevel && accessLevel instanceof SimpleAccessLevel) // fail safe
                 || ((SimpleAccessLevel) level).compareTo((SimpleAccessLevel) accessLevel) >= 0) {
-            throw new Account.AccessDenied(getPerspective(), "This participant cannot edit others' access!");
+            throw new AccessDenied(getPerspective(), "This participant cannot edit others' access!");
         }
-        throw new Account.NotAnAccountParticipant(participant, "This participant is not a participant of the account.");
+        throw new NotAnAccountParticipant(participant, "This participant is not a participant of the account.");
     }
 
     /**
@@ -125,16 +126,16 @@ public interface AccountView extends Balance, Contextual {
      *
      * @param participant the participant to remove
      * @return true if access was present and removed
-     * @throws Account.AccessDenied if the viewer is not permitted to remove other participants
-     * @throws Account.NotAnAccountParticipant if {@code participant} is not a participant of the account
-     * @throws Account.LastOwner if removing {@code participant} would leave the account with no owner
+     * @throws AccessDenied if the viewer is not permitted to remove other participants
+     * @throws NotAnAccountParticipant if {@code participant} is not a participant of the account
+     * @throws LastOwner if removing {@code participant} would leave the account with no owner
      * @throws AbstractSystemException if a system error occurs
      */
-    default boolean removeMember(@NotNull Resolvable participant) throws Account.AccessDenied, Account.NotAnAccountParticipant, Account.LastOwner, AbstractSystemException {
+    default boolean removeMember(@NotNull Resolvable participant) throws AccessDenied, NotAnAccountParticipant, LastOwner, AbstractSystemException {
         if (!isOwner()) {
-            throw new Account.AccessDenied(getPerspective(), "This participant cannot edit others' access!");
+            throw new AccessDenied(getPerspective(), "This participant cannot edit others' access!");
         }
-        throw new Account.NotAnAccountParticipant(participant, "This participant is not a participant of the account.");
+        throw new NotAnAccountParticipant(participant, "This participant is not a participant of the account.");
     }
 
     /**

@@ -48,10 +48,10 @@
  * </ul>
  * <h3>Entity-based:</h3>
  * <ul>
- *     <li>{@link io.github.sanctum.economy.construct.system.accounts.Account.AccessDenied}
- *     <li>{@link io.github.sanctum.economy.construct.system.accounts.Account.DuplicateParticipant}
- *     <li>{@link io.github.sanctum.economy.construct.system.accounts.Account.LastOwner}
- *     <li>{@link io.github.sanctum.economy.construct.system.accounts.Account.NotAnAccountParticipant}
+ *     <li>{@link io.github.sanctum.economy.construct.system.accounts.exceptions.AccessDenied}
+ *     <li>{@link io.github.sanctum.economy.construct.system.accounts.exceptions.DuplicateParticipant}
+ *     <li>{@link io.github.sanctum.economy.construct.system.accounts.exceptions.LastOwner}
+ *     <li>{@link io.github.sanctum.economy.construct.system.accounts.exceptions.NotAnAccountParticipant}
  * </ul>
  *
  * @since 2.0.0
