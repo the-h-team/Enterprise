@@ -27,7 +27,7 @@ import org.jetbrains.annotations.Nullable;
  * @since 2.0.0
  * @author ms5984
  */
-public abstract class BukkitPlayerHandle {
+public abstract class BukkitPlayerHandle implements PlayerHandle {
     /**
      * A player handle identified by username.
      *
@@ -61,7 +61,9 @@ public abstract class BukkitPlayerHandle {
     }
 
     /**
-     * A player handle identified by UniqueId.
+     * A player handle identified by the player's UniqueId.
+     *
+     * @since 2.0.0
      */
     public static class ByUniqueId extends BukkitPlayerHandle implements PlayerHandle.ByUniqueId {
         final PlayerEntity.ByUniqueId entity;
