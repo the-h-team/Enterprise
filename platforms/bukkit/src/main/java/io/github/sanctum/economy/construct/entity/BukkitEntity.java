@@ -15,6 +15,7 @@
  */
 package io.github.sanctum.economy.construct.entity;
 
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.ConsoleCommandSender;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -27,6 +28,40 @@ import org.jetbrains.annotations.NotNull;
  */
 @ApiStatus.NonExtendable
 public interface BukkitEntity extends EnterpriseEntity {
+    /**
+     * Marker interface for Bukkit-native player handles.
+     *
+     * @since 2.0.0
+     */
+    interface PlayerHandle {
+        /**
+         * Gets a username-based player handle from a Bukkit player object.
+         * <p>
+         * Supports online and offline players.
+         *
+         * @param player the player
+         * @return a new player handle
+         * @throws IllegalArgumentException if {@link OfflinePlayer#getName()} returns null
+         */
+        static @NotNull BukkitPlayerHandle.ByUsername byUsername(@NotNull OfflinePlayer player) {
+            final String name = player.getName();
+            if (name == null) throw new IllegalArgumentException("player#getName() returned null");
+            return new BukkitPlayerHandle.ByUsername(new PlayerEntity.ByUsername(name));
+        }
+
+        /**
+         * Gets a UniqueId-based player handle from a Bukkit player object.
+         * <p>
+         * Supports online and offline players.
+         *
+         * @param player the player
+         * @return a new player handle
+         */
+        static @NotNull BukkitPlayerHandle.ByUniqueId byUniqueId(@NotNull OfflinePlayer player) {
+            return new BukkitPlayerHandle.ByUniqueId(new PlayerEntity.ByUniqueId(player.getUniqueId()));
+        }
+    }
+
     /**
      * Native implementation for the local server.
      *

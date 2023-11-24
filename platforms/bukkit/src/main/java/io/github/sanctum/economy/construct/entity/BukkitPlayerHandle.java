@@ -27,7 +27,7 @@ import org.jetbrains.annotations.Nullable;
  * @since 2.0.0
  * @author ms5984
  */
-public abstract class BukkitPlayerHandle implements PlayerHandle {
+public abstract class BukkitPlayerHandle implements PlayerHandle, BukkitEntity.PlayerHandle {
     /**
      * A player handle identified by username.
      *
@@ -36,6 +36,11 @@ public abstract class BukkitPlayerHandle implements PlayerHandle {
     public static class ByUsername extends BukkitPlayerHandle implements PlayerHandle.ByUsername {
         final PlayerEntity.ByUsername entity;
 
+        /**
+         * Creates a player handle by username from the respective player entity.
+         *
+         * @param entity a player entity by username
+         */
         public ByUsername(@NotNull PlayerEntity.ByUsername entity) {
             this.entity = entity;
         }
@@ -68,6 +73,11 @@ public abstract class BukkitPlayerHandle implements PlayerHandle {
     public static class ByUniqueId extends BukkitPlayerHandle implements PlayerHandle.ByUniqueId {
         final PlayerEntity.ByUniqueId entity;
 
+        /**
+         * Creates a player handle by UniqueId from the respective player entity.
+         *
+         * @param entity a player entity by UniqueId
+         */
         public ByUniqueId(@NotNull PlayerEntity.ByUniqueId entity) {
             this.entity = entity;
         }
