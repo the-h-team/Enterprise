@@ -33,7 +33,7 @@ public abstract class BukkitPlayerHandle implements PlayerHandle, BukkitEntity.P
      *
      * @since 2.0.0
      */
-    public static class ByUsername extends BukkitPlayerHandle implements PlayerHandle.ByUsername {
+    public static class ByUsername extends BukkitPlayerHandle implements io.github.sanctum.economy.construct.entity.PlayerHandle.ByUsername {
         final PlayerEntity.ByUsername entity;
 
         /**
@@ -70,7 +70,7 @@ public abstract class BukkitPlayerHandle implements PlayerHandle, BukkitEntity.P
      *
      * @since 2.0.0
      */
-    public static class ByUniqueId extends BukkitPlayerHandle implements PlayerHandle.ByUniqueId {
+    public static class ByUniqueId extends BukkitPlayerHandle implements io.github.sanctum.economy.construct.entity.PlayerHandle.ByUniqueId {
         final PlayerEntity.ByUniqueId entity;
 
         /**
