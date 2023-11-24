@@ -57,6 +57,17 @@ public final class AmountPair {
         return second;
     }
 
+    /**
+     * Gets a new amount pair with the amounts swapped.
+     * <p>
+     * Useful for reverse operations.
+     *
+     * @return a new amount pair
+     */
+    public @NotNull AmountPair swap() {
+        return new AmountPair(second, first);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
