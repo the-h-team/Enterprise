@@ -18,23 +18,21 @@ package io.github.sanctum.economy.construct.entity;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.ConsoleCommandSender;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * A type of entity derived from a Bukkit-native structure.
+ * Marker interface for entities derived from Bukkit-native structures.
  *
  * @since 2.0.0
  * @author ms5984
  */
-@ApiStatus.NonExtendable
-public interface BukkitEntity extends EnterpriseEntity {
+public interface BukkitEntity {
     /**
      * Marker interface for Bukkit-native player handles.
      *
      * @since 2.0.0
      */
-    interface PlayerHandle {
+    interface PlayerHandle extends BukkitEntity {
         /**
          * Gets a username-based player handle from a Bukkit player object.
          * <p>
