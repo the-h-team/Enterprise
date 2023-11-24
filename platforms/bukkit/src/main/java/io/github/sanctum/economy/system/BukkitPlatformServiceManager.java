@@ -59,13 +59,13 @@ public class BukkitPlatformServiceManager extends PlatformServiceManager {
      *
      * @return the service manager instance for Bukkit
      * @throws IllegalStateException if the PlatformServiceManager singleton
-     * is not a SpigotServiceManager instance
+     * is not a {@linkplain BukkitPlatformServiceManager} instance
      */
     public static @NotNull BukkitPlatformServiceManager getInstance() {
         try {
             return (BukkitPlatformServiceManager) instance;
         } catch (ClassCastException e) {
-            throw new IllegalStateException("The platform service manager is not a BukkitPlatformServiceManager instance!");
+            throw new IllegalStateException("The platform service manager is not a " + BukkitPlatformServiceManager.class.getSimpleName() + " instance!", e);
         }
     }
 }
