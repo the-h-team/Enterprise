@@ -38,19 +38,20 @@ class EnterpriseEntityImpl implements EnterpriseEntity {
         return identityKey;
     }
 
+    // equals and hashCode are final to prevent subclasses from breaking the
+    // equals and hashCode contract
     @Override
-    public boolean equals(Object o) {
+    public final boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
+        // accept subclasses
+        if (!(o instanceof EnterpriseEntityImpl)) return false;
         EnterpriseEntityImpl that = (EnterpriseEntityImpl) o;
-
         if (!namespace.equals(that.namespace)) return false;
         return identityKey.equals(that.identityKey);
     }
 
     @Override
-    public int hashCode() {
+    public final int hashCode() {
         int result = namespace.hashCode();
         result = 31 * result + identityKey.hashCode();
         return result;
