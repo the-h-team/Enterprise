@@ -24,17 +24,25 @@ import org.jetbrains.annotations.NotNull;
  * Represents a trade of two assets between two participants.
  * <p>
  * A trade is essentially two {@linkplain Transfer transfers} of different
- * asset type between two participants.
+ * asset type between two participants and is implemented as such.
+ * <p>
+ * Trades are naturally {@linkplain Transaction.Reversible reversible}, making
+ * use of {@link AmountPair#swap()} to swap the order and thus direction of the
+ * resulting transfers.
  *
  * @since 2.0.0
  * @see Transfer
  * @author ms5984
  */
-public abstract class Trade implements Transaction<Result.NotEmpty<AmountPair>, AmountPair> {
+public abstract class Trade implements Transaction<Result.NotEmpty<AmountPair>, AmountPair>, Transaction.Reversible<Result.NotEmpty<AmountPair>, AmountPair> {
     private final AmountPair amounts;
 
     /**
      * Creates a new trade of the given amounts.
+     * <p>
+     * {@code first} will be taken from the first participant and given to the
+     * second participant, while {@code second} will be taken from the second
+     * participant and given to the first participant.
      *
      * @param first the first amount
      * @param second the second amount
@@ -45,8 +53,13 @@ public abstract class Trade implements Transaction<Result.NotEmpty<AmountPair>, 
 
     /**
      * Creates a new trade of the given amounts.
+     * <p>
+     * The first amount of the pair will be taken from the first participant
+     * and given to the second participant, while the second amount will be
+     * taken from the second participant and given to the first participant.
      *
      * @param amounts the amounts to trade
+     * @see AmountPair
      */
     public Trade(@NotNull AmountPair amounts) {
         this.amounts = amounts;
