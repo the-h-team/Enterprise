@@ -209,8 +209,8 @@ public abstract class Transfer implements Transaction<Result.NotEmpty<Amount>, A
     /**
      * The possible exceptional outcomes of a transfer.
      * <p>
-     * Note that {@link #GIVE_FAILED_TAKE_REVERSED} is only possible
-     * if the transfer is reversible.
+     * Note that {@link #GIVE_FAILED_TAKE_REVERSED} is only possible if
+     * the sender supports receiving or the transfer is reversible.
      *
      * @since 2.0.0
      */
@@ -240,7 +240,7 @@ public abstract class Transfer implements Transaction<Result.NotEmpty<Amount>, A
         private final ExceptionalOutcome outcome;
 
         /**
-         * Constructs a new error with the given outcome and cause.
+         * Constructs a new exception with the given outcome and cause.
          *
          * @param participant the participant
          * @param outcome an exceptional outcome
