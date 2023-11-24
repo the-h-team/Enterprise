@@ -15,6 +15,7 @@
  */
 package io.github.sanctum.economy.construct.entity;
 
+import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.ConsoleCommandSender;
 import org.jetbrains.annotations.ApiStatus;
@@ -74,37 +75,37 @@ public interface BukkitEntity extends EnterpriseEntity {
          */
         public static final @Namespace String NAMESPACE = "server";
 
-        private Server(@NotNull String identity) {
-            super(NAMESPACE, identity);
+        private Server(@NotNull String identityKey) {
+            super(NAMESPACE, EnterpriseEntity.verifyIdentityKey(identityKey));
         }
 
         /**
          * Gets an entity for the server that specifically
          * identifies the console command sender.
          *
-         * @param console the console command sender instance
          * @return a new server entity
-         * @implNote Uses {@link ConsoleCommandSender#getName()}
-         * as the value for <code>identity</code>.
+         * @implNote Uses {@link Bukkit#getConsoleSender()} and
+         * {@link ConsoleCommandSender#getName()} as the value for
+         * {@code identityKey}.
          */
-        public static Server console(@NotNull ConsoleCommandSender console) {
-            return new Server(console.getName());
+        public static Server console() {
+            try {
+                return new Server(Bukkit.getConsoleSender().getName());
+            } catch (IllegalArgumentException e) {
+                throw new IllegalStateException("Unexpected value for ConsoleCommandSender#getName()", e);
+            }
         }
 
         /**
-         * Gets an entity associated with the server with
-         * an arbitrary identifier component.
+         * Gets a server-associated entity with an arbitrary identity key.
          *
-         * @param identity a custom identifier
-         * @return a new, custom server entity
-         * @throws IllegalArgumentException if <code>identity</code> does not
+         * @param identityKey an identity key
+         * @return a new server-associated entity
+         * @throws IllegalArgumentException if {@code identityKey} does not
          * meet the format of {@link EnterpriseEntity#VALID_IDENTITY_KEY}.
          */
-        public static Server identity(@IdentityKey @NotNull String identity) throws IllegalArgumentException {
-            if (!identity.matches(VALID_IDENTITY_KEY)) {
-                throw new IllegalArgumentException("Invalid identity: " + identity);
-            }
-            return new Server(identity);
+        public static Server identityKey(@NotNull String identityKey) throws IllegalArgumentException {
+            return new Server(identityKey);
         }
     }
 }

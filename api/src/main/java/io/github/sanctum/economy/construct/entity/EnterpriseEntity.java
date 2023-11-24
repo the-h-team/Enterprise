@@ -113,7 +113,7 @@ public interface EnterpriseEntity extends Resolvable {
      * This class is entirely meant for use by other economy plugins; Enterprise
      * is made with many entities pre-defined, including players (both by username
      * or by UniqueId), the local server console/proxy, custom "server accounts"
-     * and fiduciaries (a new type of entity that maintain accounts for others).
+     * and custodians (a new type of entity that maintain accounts for others).
      * <p>
      * If your use case does not fall within any of the above--for instance, you
      * want to make an item shop plugin--this is likely the class to start with.
@@ -121,23 +121,42 @@ public interface EnterpriseEntity extends Resolvable {
      * @since 2.0.0
      * @author ms5984
      */
-    abstract class Custom implements EnterpriseEntity {
-        protected final @Namespace String namespace;
-        protected final @IdentityKey String identityKey;
-
-        protected Custom(@Namespace @NotNull String namespace, @IdentityKey @NotNull String identityKey) {
-            this.namespace = namespace;
-            this.identityKey = identityKey;
+    abstract class Custom extends EnterpriseEntityImpl implements EnterpriseEntity {
+        /**
+         * Constructs a custom entity.
+         *
+         * @param namespace the namespace of this entity
+         * @param identityKey the identity key of this entity
+         * @throws IllegalArgumentException if {@code namespace} does not validate
+         * against {@link #VALID_NAMESPACE} or if {@code identityKey} does not
+         * validate against {@link #VALID_IDENTITY_KEY}
+         */
+        protected Custom(@NotNull String namespace, @NotNull String identityKey) {
+            super(verifyNamespace(namespace), verifyIdentityKey(identityKey));
         }
+    }
 
-        @Override
-        public @Namespace @NotNull String getNamespace() {
-            return namespace;
-        }
+    /**
+     * Verifies that a namespace is valid.
+     *
+     * @param namespace a namespace to verify
+     * @return the namespace if valid
+     * @throws IllegalArgumentException if {@code namespace} does not validate against {@link #VALID_NAMESPACE}
+     */
+    static @NotNull String verifyNamespace(@NotNull String namespace) throws IllegalArgumentException {
+        if (!namespace.matches(VALID_NAMESPACE)) throw new IllegalArgumentException("Invalid namespace: " + namespace);
+        return namespace;
+    }
 
-        @Override
-        public @IdentityKey @NotNull String getIdentityKey() {
-            return identityKey;
-        }
+    /**
+     * Verifies that an identity key is valid.
+     *
+     * @param identityKey an identity key to verify
+     * @return the identity key if valid
+     * @throws IllegalArgumentException if {@code identityKey} does not validate against {@link #VALID_IDENTITY_KEY}
+     */
+    static @NotNull String verifyIdentityKey(@NotNull String identityKey) throws IllegalArgumentException {
+        if (!identityKey.matches(VALID_IDENTITY_KEY)) throw new IllegalArgumentException("Invalid identity key: " + identityKey);
+        return identityKey;
     }
 }
